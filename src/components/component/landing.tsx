@@ -130,9 +130,9 @@ export function Landing() {
                                         />
                                         <div className="font-semibold">Jane Doe</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                                            "Carpool App has been a game-changer for my daily commute. I've saved so
+                                            Carpool App has been a game-changer for my daily commute. I&apos;ve saved so
                                             much money and made new
-                                            friends."
+                                            friends.
                                         </div>
                                     </div>
                                 </div>
@@ -151,9 +151,9 @@ export function Landing() {
                                         />
                                         <div className="font-semibold">John Smith</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                                            "I was hesitant at first, but Carpool App has made my commute so much more
+                                            I was hesitant at first, but Carpool App has made my commute so much more
                                             enjoyable. Highly
-                                            recommended!"
+                                            recommended!
                                         </div>
                                     </div>
                                 </div>
@@ -172,9 +172,9 @@ export function Landing() {
                                         />
                                         <div className="font-semibold">Sarah Lee</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                                            "Carpool App has been a lifesaver for me. I've saved so much time and money,
-                                            and it's been great
-                                            meeting new people."
+                                            Carpool App has been a lifesaver for me. I&apos;ve saved so much time and money,
+                                            and it&apos;s been great
+                                            meeting new people.
                                         </div>
                                     </div>
                                 </div>
@@ -196,9 +196,9 @@ export function Landing() {
                                         />
                                         <div className="font-semibold">Michael Chen</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                                            "I was skeptical at first, but Carpool App has been a game-changer. It's so
+                                            I was skeptical at first, but Carpool App has been a game-changer. It&apos;s so
                                             convenient and has
-                                            saved me a ton of money."
+                                            saved me a ton of money.
                                         </div>
                                     </div>
                                 </div>
@@ -217,9 +217,9 @@ export function Landing() {
                                         />
                                         <div className="font-semibold">Emily Wang</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                                            "I love using Carpool App. It's been a great way to connect with my
+                                            I love using Carpool App. It&apos;s been a great way to connect with my
                                             community and reduce my carbon
-                                            footprint."
+                                            footprint.
                                         </div>
                                     </div>
                                 </div>
@@ -238,9 +238,9 @@ export function Landing() {
                                         />
                                         <div className="font-semibold">David Lee</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                                            "Carpool App has been a game-changer for me. I've saved so much time and
-                                            money, and it's been
-                                            great meeting new people."
+                                            Carpool App has been a game-changer for me. I&apos;ve saved so much time and
+                                            money, and it&apos;s been
+                                            great meeting new people.
                                         </div>
                                     </div>
                                 </div>
@@ -264,30 +264,7 @@ export function Landing() {
     )
 }
 
-function CarIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path
-                d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-            <circle cx="7" cy="17" r="2"/>
-            <path d="M9 17h6"/>
-            <circle cx="17" cy="17" r="2"/>
-        </svg>
-    )
-}
-
-
+// @ts-ignore
 function TreesIcon(props) {
     return (
         <svg
@@ -311,6 +288,7 @@ function TreesIcon(props) {
 }
 
 
+// @ts-ignore
 function UsersIcon(props) {
     return (
         <svg
@@ -334,6 +312,7 @@ function UsersIcon(props) {
 }
 
 
+// @ts-ignore
 function WalletIcon(props) {
     return (
         <svg

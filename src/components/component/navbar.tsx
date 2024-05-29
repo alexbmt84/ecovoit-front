@@ -95,6 +95,7 @@ export function Navbar() {
   )
 }
 
+// @ts-ignore
 function BriefcaseIcon(props) {
   return (
     <svg
@@ -116,6 +117,7 @@ function BriefcaseIcon(props) {
 }
 
 
+// @ts-ignore
 function HomeIcon(props) {
   return (
     <svg
@@ -137,6 +139,7 @@ function HomeIcon(props) {
 }
 
 
+// @ts-ignore
 function InfoIcon(props) {
   return (
     <svg
@@ -159,6 +162,7 @@ function InfoIcon(props) {
 }
 
 
+// @ts-ignore
 function MailIcon(props) {
   return (
     <svg
@@ -180,6 +184,7 @@ function MailIcon(props) {
 }
 
 
+// @ts-ignore
 function MenuIcon(props) {
   return (
     <svg
@@ -202,6 +207,7 @@ function MenuIcon(props) {
 }
 
 
+// @ts-ignore
 function MountainIcon(props) {
   return (
     <svg
@@ -222,6 +228,7 @@ function MountainIcon(props) {
 }
 
 
+// @ts-ignore
 function XIcon(props) {
   return (
     <svg
