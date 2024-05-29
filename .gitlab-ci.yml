@@ -1,0 +1,36 @@
+image: node:latest
+
+before_script:
+  - apt update && apt install
+
+stages:
+  - build
+  - test
+  - staging
+
+Build:
+  stage: build
+  before_script:
+    - yarn config set cache-folder .yarn
+    - yarn install
+  script:
+    - yarn build
+
+Test:
+  stage: test
+  before_script:
+    - yarn config set cache-folder .yarn
+    - yarn install --frozen-lockfile
+  script:
+    # Installs Chrome
+    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub |  apt-key add -
+    - echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' |  tee /etc/apt/sources.list.d/google-chrome.list
+    - apt-get update
+    - apt-get install google-chrome-stable -y
+    - yarn test
+
+Deploy to Staging:
+  stage: staging
+  script:
+    - echo "Ready to deploy !"
+    - echo "Nice shot !"
