@@ -3,10 +3,10 @@ import {useState} from 'react';
 
 const useAuth = () => {
 
+    axios.defaults.withXSRFToken = true;
     const csrfToken = typeof window !== 'undefined' ? localStorage.getItem('csrfToken') : null
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
     const login = async (email: string, password: string) => {
 
             setLoading(true);
