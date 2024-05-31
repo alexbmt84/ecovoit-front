@@ -26,9 +26,10 @@ import {Input} from "@/components/ui/input"
 import {Button} from "@/components/ui/button"
 import Link from "next/link"
 import useAuth from '@/hooks/useAuth';
+import useCSRFToken from "@/hooks/useCSRFToken";
 
 export function LoginForm() {
-
+    useCSRFToken();
     const {login, loading, error} = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
