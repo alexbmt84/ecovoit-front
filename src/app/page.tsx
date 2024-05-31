@@ -1,8 +1,8 @@
-import Image from "next/image";
 import {Navbar} from "@/components/component/navbar";
 import {Landing} from "@/components/component/landing";
 
 export default function Home() {
+
     return (
         <>
             <Navbar/>
