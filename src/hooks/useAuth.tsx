@@ -3,8 +3,7 @@ import {useState} from 'react';
 
 const useAuth = () => {
 
-    const csrfToken = localStorage.getItem('csrfToken'); // Récupérer le token depuis localStorage
-
+    const csrfToken = typeof window !== 'undefined' ? localStorage.getItem('csrfToken') : null
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
