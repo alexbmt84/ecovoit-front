@@ -3,6 +3,8 @@ import axios from "axios";
 
 const useCSRFToken = () => {
     axios.defaults.withXSRFToken = true;
+    axios.defaults.withCredentials = true;
+
     useEffect(() => {
         async function fetchCSRFToken() {
             try {
