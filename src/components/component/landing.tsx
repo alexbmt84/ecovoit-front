@@ -36,7 +36,7 @@ export function Landing() {
                             className="grid max-w-[1300px] mx-auto gap-4 px-4 sm:px-6 md:px-10 md:grid-cols-2 md:gap-16">
                             <div>
                                 <h1 className="lg:leading-tighter text-3xl mb-5 font-bold tracking-tighter sm:text-4xl md:text-5xl xl:text-[3.4rem] 2xl:text-[3.75rem]">
-                                    Simplifiez vos trajets avec Ecovoit.
+                                    Simplifiez vos trajets avec Ecovoit
                                 </h1>
                                 <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
                                     Réduisez votre empreinte carbone,
