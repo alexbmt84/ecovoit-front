@@ -18,7 +18,6 @@ const useUser = () => {
         const fetchUserData = async () => {
 
             const token = sessionStorage.getItem('access_token');
-            console.log(token);
             if (!token) {
                 router.push('/login');
                 return;

@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { useState } from 'react';
+import {useState} from 'react';
+import {useRouter} from "next/navigation";
 
 const useAuth = () => {
     axios.defaults.withCredentials = true;
@@ -7,6 +8,7 @@ const useAuth = () => {
     const csrfToken = typeof window !== 'undefined' ? localStorage.getItem('csrfToken') : null;
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const router = useRouter();
 
     const login = async (email: string, password: string, onSuccess: () => void) => {
         setLoading(true);
@@ -36,7 +38,14 @@ const useAuth = () => {
         }
     };
 
-    return { login, loading, error };
+    const logout = () => {
+        sessionStorage.removeItem('access_token');
+        localStorage.removeItem('csrfToken');
+        router.push('/');
+    };
+
+    return {login, loading, error, logout};
 };
+
 
 export default useAuth;

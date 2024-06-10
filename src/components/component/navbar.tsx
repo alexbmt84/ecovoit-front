@@ -17,12 +17,25 @@
  - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
  - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
  **/
+
+"use client";
+
 import {Button} from "@/components/ui/button"
 import {SheetTrigger, SheetClose, SheetContent, Sheet} from "@/components/ui/sheet"
 import Link from "next/link"
 import Image from "next/image";
+import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
 
-export function Navbar() {
+// @ts-ignore
+export function Navbar({onLogout, isLoggedIn}) {
+
+    const router = useRouter();
+
+    const redirectToLogin = () => {
+        router.push('/login');
+    };
+
     return (
         <header
             className="flex h-16 w-full items-center justify-between bg-white px-4 shadow-sm dark:bg-gray-950 md:px-6">
@@ -43,34 +56,44 @@ export function Navbar() {
                         </SheetClose>
                     </div>
                     <nav className="grid gap-4 px-4 py-6">
-                        <Link
-                            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                            href="#"
-                        >
-                            <HomeIcon className="h-5 w-5"/>
-                            Accueil
-                        </Link>
-                        <Link
-                            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                            href="#"
-                        >
-                            <InfoIcon className="h-5 w-5"/>
-                            Mes trajets
-                        </Link>
-                        <Link
-                            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                            href="#"
-                        >
-                            <BriefcaseIcon className="h-5 w-5"/>
-                            Services
-                        </Link>
-                        <Link
-                            className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                            href="#"
-                        >
-                            <MailIcon className="h-5 w-5"/>
-                            Contact
-                        </Link>
+                        {isLoggedIn ? (
+                            <>
+                                <Link
+                                    className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
+                                    href="#"
+                                >
+                                    <HomeIcon className="h-5 w-5"/>
+                                    Accueil
+                                </Link>
+                                <Link
+                                    className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
+                                    href="#"
+                                >
+                                    <InfoIcon className="h-5 w-5"/>
+                                    Mes trajets
+                                </Link>
+                                <Link
+                                    className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
+                                    href="#"
+                                >
+                                    <BriefcaseIcon className="h-5 w-5"/>
+                                    Services
+                                </Link>
+                                <Link
+                                    className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
+                                    href="#"
+                                >
+                                    <MailIcon className="h-5 w-5"/>
+                                    Contact
+                                </Link>
+
+                                <Button onClick={onLogout}
+                                        className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Déconnexion</Button>
+                            </>
+                        ) : (
+                            <Button onClick={redirectToLogin}
+                                    className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Connexion</Button>
+                        )}
                     </nav>
                 </SheetContent>
             </Sheet>
@@ -78,18 +101,28 @@ export function Navbar() {
                 <EcovoitLogo/>
             </Link>
             <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-                <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
-                    Accueil
-                </Link>
-                <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
-                    Mes trajets
-                </Link>
-                <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
-                    Services
-                </Link>
-                <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
-                    Contact
-                </Link>
+                {isLoggedIn ? (
+                    <>
+                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
+                            Accueil
+                        </Link>
+                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
+                            Mes trajets
+                        </Link>
+                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
+                            Services
+                        </Link>
+                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
+                            Contact
+                        </Link>
+
+                        <Button onClick={onLogout}
+                                className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Déconnexion</Button>
+                    </>
+                ) : (
+                    <Button onClick={redirectToLogin}
+                            className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Connexion</Button>
+                )}
             </nav>
         </header>
     )
@@ -209,7 +242,7 @@ function MenuIcon(props) {
 
 function EcovoitLogo() {
     return (
-        <Image src={"/img/logo.png"} alt={"ecovoit logo"} width={50} height={50} />
+        <Image src={"/img/logo.png"} alt={"ecovoit logo"} width={50} height={50}/>
     )
 }
 
