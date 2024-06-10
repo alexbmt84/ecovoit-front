@@ -27,20 +27,21 @@ import {Button} from "@/components/ui/button"
 import Link from "next/link"
 import useAuth from '@/hooks/useAuth';
 import useCSRFToken from "@/hooks/useCSRFToken";
+import {useRouter} from "next/navigation";
 
 export function LoginForm() {
     useCSRFToken();
+
+    const router = useRouter();
     const {login, loading, error} = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        const userData = await login(email, password);
-        if (userData) {
-            console.log('Connexion réussie', userData);
-            // Redirection ou gestion de session ici
-        }
+        // @ts-ignore
+        await login(email, password);
+        router.push('/home');
     };
 
     return (
@@ -66,7 +67,6 @@ export function LoginForm() {
                             Connexion
                         </Button>
                     </form>
-                    {error && <p className="text-red-500">{error}</p>}
                     <div className="flex items-center justify-between">
                         <Link
                             className="text-sm mx-auto font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
