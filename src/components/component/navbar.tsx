@@ -26,6 +26,7 @@ import Link from "next/link"
 import Image from "next/image";
 import {redirect} from "next/navigation";
 import {useRouter} from "next/navigation";
+import { ProfileDropdown } from "@/components/component/";
 
 // @ts-ignore
 export function Navbar({onLogout, isLoggedIn}) {
@@ -103,21 +104,16 @@ export function Navbar({onLogout, isLoggedIn}) {
             <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
                 {isLoggedIn ? (
                     <>
-                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
-                            Accueil
+                        <Link className="p-2 transition-colors rounded-xl border-2 border-cyan-500 bg-white text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-gray-50/90" href="#">
+                            Reserver un trajet
                         </Link>
-                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
+                        <Link className="p-2 transition-colors rounded-xl border-2 border-cyan-500 bg-white text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-gray-50/90" href="#">
                             Mes trajets
                         </Link>
-                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
-                            Services
+                        <Link className="p-2 transition-colors rounded-xl border-2 border-cyan-500 bg-white text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-gray-50/90" href="#">
+                            M&apos;e-co-voit
                         </Link>
-                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
-                            Contact
-                        </Link>
-
-                        <Button onClick={onLogout}
-                                className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Déconnexion</Button>
+                        <ProfileDropdown/>
                     </>
                 ) : (
                     <Button onClick={redirectToLogin}
