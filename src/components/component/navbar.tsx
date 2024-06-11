@@ -36,6 +36,10 @@ export function Navbar({onLogout, isLoggedIn}) {
         router.push('/login');
     };
 
+    const redirectToHome = () => {
+        router.push('/home');
+    };
+
     return (
         <header
             className="flex h-16 w-full items-center justify-between bg-white px-4 shadow-sm dark:bg-gray-950 md:px-6">
@@ -103,25 +107,25 @@ export function Navbar({onLogout, isLoggedIn}) {
             <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
                 {isLoggedIn ? (
                     <>
-                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
+                        <Button className="transition-colors hover:text-gray-500 dark:hover:text-gray-50 bg-white hover:bg-white text-black">
                             Accueil
-                        </Link>
-                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
+                        </Button>
+                        <Link className="transition-colors hover:text-gray-500 dark:hover:text-gray-50" href="#">
                             Mes trajets
                         </Link>
-                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
+                        <Link className="transition-colors hover:text-gray-500 dark:hover:text-gray-50" href="#">
                             Services
                         </Link>
-                        <Link className="transition-colors hover:text-gray-900 dark:hover:text-gray-50" href="#">
+                        <Link className="transition-colors hover:text-gray-500 dark:hover:text-gray-50" href="#">
                             Contact
                         </Link>
 
                         <Button onClick={onLogout}
-                                className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Déconnexion</Button>
+                                className="transition-colors hover:text-gray-500 dark:hover:text-gray-50">Déconnexion</Button>
                     </>
                 ) : (
                     <Button onClick={redirectToLogin}
-                            className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Connexion</Button>
+                            className="transition-colors hover:text-gray-500 dark:hover:text-gray-50">Connexion</Button>
                 )}
             </nav>
         </header>
