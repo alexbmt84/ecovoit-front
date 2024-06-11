@@ -30,6 +30,7 @@ const Home = () => {
             <Navbar onLogout={logout} isLoggedIn={isLoggedIn}/>
             <main className="flex min-h-screen flex-col items-center p-24">
                 <div className="container mx-auto px-4 md:px-6 lg:px-8">
+
                     <div className="max-w-2xl mx-auto text-center">
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 md:text-4xl">
                             Bienvenue, {userData.first_name} {userData.last_name} !
