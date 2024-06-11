@@ -6,23 +6,21 @@
 import {CardTitle, CardHeader, CardContent, CardFooter, Card} from "@/components/ui/card"
 import {Input} from "@/components/ui/input"
 import {Button} from "@/components/ui/button"
-import {ScrollArea} from "@/components/ui/scroll-area"
-import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar"
 
-export function HomeCards() {
+export function SearchTripCard() {
     return (
-        <div className="flex flex-col gap-8 p-4 bg-gray-100 sm:flex-row sm:p-8">
-            <Card className="w-full sm:w-[350px]">
+        <div className="flex flex-col">
+            <Card className="w-full sm:w-[550px]">
                 <CardHeader>
-                    <CardTitle>Où allez-vous aujourd&apos;hui ?</CardTitle>
+                    <CardTitle className={"text-center"}>Où allez-vous aujourd&apos;hui ?</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="space-y-4">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 mt-5">
                             <MapPinIcon className="h-5 w-5 text-gray-400"/>
                             <Input placeholder="Ville de départ"/>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 py-3">
                             <MapPinIcon className="h-5 w-5 text-gray-400"/>
                             <Input placeholder="Ville d'arrivée"/>
                         </div>
@@ -40,49 +38,7 @@ export function HomeCards() {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button className="w-full">Gooo !!!</Button>
-                </CardFooter>
-            </Card>
-            <Card className="w-full sm:w-[350px]">
-                <CardHeader>
-                    <CardTitle>On vous propose !</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <ScrollArea className="space-y-4">
-                        {[...Array(5)].map((_, i) => (
-                            <div key={i} className="flex items-center space-x-4">
-                                <Avatar>
-                                    <AvatarImage src="https://api.multiavatar.com/ecovoit.png" />
-                                    <AvatarFallback>Em</AvatarFallback>
-                                </Avatar>
-                                <div className="flex-grow">
-                                    <div className="flex items-center space-x-2 font-semibold">
-                                        <MapPinIcon className="h-4 w-4 text-gray-400"/>
-                                        <div>Avignon</div>
-                                    </div>
-                                    <div className="text-sm text-gray-500">
-                                        <div className="flex items-center space-x-2">
-                                            <ClockIcon className="h-4 w-4"/>
-                                            <div>Depart: 8h00</div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2 font-semibold">
-                                        <MapPinIcon className="h-4 w-4 text-gray-400"/>
-                                        <div>Nextech</div>
-                                    </div>
-                                    <div className="text-sm text-gray-500">
-                                        <div className="flex items-center space-x-2">
-                                            <ClockIcon className="h-4 w-4"/>
-                                            <div>Arrivé: 8h25</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </ScrollArea>
-                </CardContent>
-                <CardFooter>
-                    <Button className="w-full">Sélectionner</Button>
+                    <Button className="w-full mt-2">Go !</Button>
                 </CardFooter>
             </Card>
         </div>
@@ -118,7 +74,6 @@ function CalendarDaysIcon(props) {
     )
 }
 
-
 // @ts-ignore
 function MapPinIcon(props) {
     return (
@@ -139,28 +94,6 @@ function MapPinIcon(props) {
         </svg>
     )
 }
-
-// @ts-ignore
-function ClockIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <circle cx="12" cy="12" r="10"/>
-            <polyline points="12 6 12 12 16 14"/>
-        </svg>
-    )
-}
-
 
 // @ts-ignore
 function UserIcon(props) {

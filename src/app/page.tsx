@@ -5,7 +5,7 @@ import {Landing} from "@/components/component/landing";
 import useAuth from "@/hooks/useAuth";
 import {useIsLoggedIn} from "@/hooks/useIsLoggedIn";
 
-export default function Home() {
+export default function Page() {
 
     const {logout} = useAuth();
     const isLoggedIn = useIsLoggedIn();

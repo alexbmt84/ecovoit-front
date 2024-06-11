@@ -129,14 +129,14 @@ export function Landing() {
                                             alt="Avatar"
                                             className="mx-auto rounded-full"
                                             height="60"
-                                            src="/placeholder.svg"
+                                            src="https://api.multiavatar.com/leaa.png"
                                             style={{
                                                 aspectRatio: "60/60",
                                                 objectFit: "cover",
                                             }}
                                             width="60"
                                         />
-                                        <div className="font-semibold">Jane Doe</div>
+                                        <div className="font-semibold">Léa</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
                                             Ecovoit a changé la donne pour mes trajets quotidiens.
                                             J&apos;ai économisé beaucoup d&apos;argent et je me suis fait de nouveaux
@@ -150,14 +150,14 @@ export function Landing() {
                                             alt="Avatar"
                                             className="mx-auto rounded-full"
                                             height="60"
-                                            src="/placeholder.svg"
+                                            src="https://api.multiavatar.com/julien.png "
                                             style={{
                                                 aspectRatio: "60/60",
                                                 objectFit: "cover",
                                             }}
                                             width="60"
                                         />
-                                        <div className="font-semibold">John Smith</div>
+                                        <div className="font-semibold">Julien</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
                                             J&apos;étais hésitant au début, mais Ecovoit a
                                             rendu mon trajet tellement plus agréable. Hautement recommandé !
@@ -170,14 +170,14 @@ export function Landing() {
                                             alt="Avatar"
                                             className="mx-auto rounded-full"
                                             height="60"
-                                            src="/placeholder.svg"
+                                            src="https://api.multiavatar.com/saraccroche.png"
                                             style={{
                                                 aspectRatio: "60/60",
                                                 objectFit: "cover",
                                             }}
                                             width="60"
                                         />
-                                        <div className="font-semibold">Sarah Lee</div>
+                                        <div className="font-semibold">Sarah</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
                                             Avec Ecovoit, j&apos;ai économisé du temps,
                                             de l&apos;argent et j&apos;ai eu le plaisir de rencontrer de nouvelles
@@ -194,14 +194,14 @@ export function Landing() {
                                             alt="Avatar"
                                             className="mx-auto rounded-full"
                                             height="60"
-                                            src="/placeholder.svg"
+                                            src="https://api.multiavatar.com/micha.png"
                                             style={{
                                                 aspectRatio: "60/60",
                                                 objectFit: "cover",
                                             }}
                                             width="60"
                                         />
-                                        <div className="font-semibold">Michael Chen</div>
+                                        <div className="font-semibold">Michael</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
                                             J&apos;étais sceptique au début,
                                             mais l&apos;application s&apos;est avérée être tellement pratique !
@@ -215,14 +215,14 @@ export function Landing() {
                                             alt="Avatar"
                                             className="mx-auto rounded-full"
                                             height="60"
-                                            src="/placeholder.svg"
+                                            src="https://api.multiavatar.com/ealjlk.png"
                                             style={{
                                                 aspectRatio: "60/60",
                                                 objectFit: "cover",
                                             }}
                                             width="60"
                                         />
-                                        <div className="font-semibold">Emily Wang</div>
+                                        <div className="font-semibold">Emilie</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
                                             J&apos;adore utiliser cette application.
                                             C&apos;est un excellent moyen de réduire mon empreinte carbone.
@@ -235,14 +235,14 @@ export function Landing() {
                                             alt="Avatar"
                                             className="mx-auto rounded-full"
                                             height="60"
-                                            src="/placeholder.svg"
+                                            src="https://api.multiavatar.com/nassimm.png"
                                             style={{
                                                 aspectRatio: "60/60",
                                                 objectFit: "cover",
                                             }}
                                             width="60"
                                         />
-                                        <div className="font-semibold">David Lee</div>
+                                        <div className="font-semibold">Nassim</div>
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
                                             Merci Ecovoit ! J&apos;ai pu partager mes frais d&apos;essence et commencer
                                             à faire de belles économies chaque mois !
