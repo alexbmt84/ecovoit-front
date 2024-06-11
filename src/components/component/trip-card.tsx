@@ -80,6 +80,7 @@ export function TripCard(props) {
   )
 }
 
+// @ts-ignore
 function ClockIcon(props) {
   return (
     <svg
@@ -101,6 +102,7 @@ function ClockIcon(props) {
 }
 
 
+// @ts-ignore
 function DollarSignIcon(props) {
   return (
     <svg
@@ -122,6 +124,7 @@ function DollarSignIcon(props) {
 }
 
 
+// @ts-ignore
 function MapPinIcon(props) {
   return (
     <svg
@@ -143,6 +146,7 @@ function MapPinIcon(props) {
 }
 
 
+// @ts-ignore
 function UsersIcon(props) {
   return (
     <svg
