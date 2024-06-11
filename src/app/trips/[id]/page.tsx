@@ -44,6 +44,7 @@ export default function Page() {
 
             try {
                 const response = await axios.get(`https://api.ecovoit.tech/api/trips/${params.id}`, {
+
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
