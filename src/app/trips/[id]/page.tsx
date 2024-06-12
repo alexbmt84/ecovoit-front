@@ -3,11 +3,10 @@
 import {useEffect, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
 import axios from "axios";
-import {Navbar} from "@/components/component/navbar";
-import useAuth from "@/hooks/useAuth";
 import {useIsLoggedIn} from "@/hooks/useIsLoggedIn";
 import {TripCard} from "@/components/component/trip-card";
 import {Loader} from "@/components/component/loader";
+import {useAuth} from "@/context/authContext";
 
 export default function Page() {
     interface UserData {
@@ -29,8 +28,7 @@ export default function Page() {
     const params = useParams();
     const router = useRouter();
     const [trip, setTrip] = useState<TripData>();
-    const {logout} = useAuth();
-    const isLoggedIn = useIsLoggedIn();
+    const {isAuthenticated, logout} = useAuth();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -65,13 +63,14 @@ export default function Page() {
 
     if (loading) {
         return <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <Loader/>
+            <div className="fixed inset-0 flex items-center justify-center">
+                <Loader/>
+            </div>
         </main>
     }
 
     return (
         <>
-            <Navbar onLogout={logout} isLoggedIn={isLoggedIn}/>
             <main className="flex min-h-screen flex-col items-center p-24">
                 <div className="container mx-auto px-4 md:px-6 lg:px-8">
                     <div>

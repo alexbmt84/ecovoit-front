@@ -24,13 +24,16 @@ import {Button} from "@/components/ui/button"
 import {SheetTrigger, SheetClose, SheetContent, Sheet} from "@/components/ui/sheet"
 import Link from "next/link"
 import Image from "next/image";
-import {redirect} from "next/navigation";
 import {useRouter} from "next/navigation";
+import {useIsLoggedIn} from "@/hooks/useIsLoggedIn";
+import {useAuth} from "@/context/authContext";
 
 // @ts-ignore
-export function Navbar({onLogout, isLoggedIn}) {
+export function Navbar() {
 
     const router = useRouter();
+    const {isAuthenticated, logout} = useAuth();
+
 
     const redirectToLogin = () => {
         router.push('/login');
@@ -51,27 +54,38 @@ export function Navbar({onLogout, isLoggedIn}) {
                     </Button>
                 </SheetTrigger>
                 <SheetContent className="w-[300px] bg-white shadow-lg dark:bg-gray-950" side="left">
-                    <div className="flex h-16 items-center justify-between px-4">
-                        <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
-                            <EcovoitLogo/>
-                        </Link>
-                        <SheetClose>
-                            <XIcon className="h-6 w-6"/>
-                        </SheetClose>
-                    </div>
+                    {isAuthenticated ? (
+                        <div className="flex h-16 items-center justify-between px-4">
+                            <Link className="flex items-center gap-2 text-lg font-semibold" href="/home">
+                                <EcovoitLogo/>
+                            </Link>
+                            <SheetClose>
+                                <XIcon className="h-6 w-6"/>
+                            </SheetClose>
+                        </div>
+                    ) : (
+                        <div className="flex h-16 items-center justify-between px-4">
+                            <Link className="flex items-center gap-2 text-lg font-semibold" href="/">
+                                <EcovoitLogo/>
+                            </Link>
+                            <SheetClose>
+                                <XIcon className="h-6 w-6"/>
+                            </SheetClose>
+                        </div>
+                    )}
                     <nav className="grid gap-4 px-4 py-6">
-                        {isLoggedIn ? (
+                        {isAuthenticated ? (
                             <>
                                 <Link
                                     className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                                    href="#"
+                                    href={"/home"}
                                 >
                                     <HomeIcon className="h-5 w-5"/>
                                     Accueil
                                 </Link>
                                 <Link
                                     className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                                    href="#"
+                                    href={"/mytrips"}
                                 >
                                     <InfoIcon className="h-5 w-5"/>
                                     Mes trajets
@@ -91,7 +105,7 @@ export function Navbar({onLogout, isLoggedIn}) {
                                     Contact
                                 </Link>
 
-                                <Button onClick={onLogout}
+                                <Button onClick={logout}
                                         className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Déconnexion</Button>
                             </>
                         ) : (
@@ -101,16 +115,23 @@ export function Navbar({onLogout, isLoggedIn}) {
                     </nav>
                 </SheetContent>
             </Sheet>
-            <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
-                <EcovoitLogo/>
-            </Link>
+            {isAuthenticated ? (
+                <Link className="flex items-center gap-2 text-lg font-semibold" href={"/home"}>
+                    <EcovoitLogo/>
+                </Link>
+            ) : (
+                <Link className="flex items-center gap-2 text-lg font-semibold" href="/">
+                    <EcovoitLogo/>
+                </Link>
+            )}
             <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-                {isLoggedIn ? (
+                {isAuthenticated ? (
                     <>
-                        <Button className="transition-colors hover:text-gray-500 dark:hover:text-gray-50 bg-white hover:bg-white text-black">
+                        <Link
+                            className="transition-colors hover:text-gray-500 dark:hover:text-gray-50 text-black" href={"/home"}>
                             Accueil
-                        </Button>
-                        <Link className="transition-colors hover:text-gray-500 dark:hover:text-gray-50" href="#">
+                        </Link>
+                        <Link className="transition-colors hover:text-gray-500 dark:hover:text-gray-50" href={"/mytrips"}>
                             Mes trajets
                         </Link>
                         <Link className="transition-colors hover:text-gray-500 dark:hover:text-gray-50" href="#">
@@ -120,7 +141,7 @@ export function Navbar({onLogout, isLoggedIn}) {
                             Contact
                         </Link>
 
-                        <Button onClick={onLogout}
+                        <Button onClick={logout}
                                 className="transition-colors hover:text-gray-500 dark:hover:text-gray-50">Déconnexion</Button>
                     </>
                 ) : (

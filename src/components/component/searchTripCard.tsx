@@ -38,7 +38,7 @@ export function SearchTripCard() {
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Button className="w-full mt-2">Go !</Button>
+                    <Button className="w-full mt-5 mb-3">Go !</Button>
                 </CardFooter>
             </Card>
         </div>
