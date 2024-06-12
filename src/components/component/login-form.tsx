@@ -25,24 +25,35 @@ import {Label} from "@/components/ui/label"
 import {Input} from "@/components/ui/input"
 import {Button} from "@/components/ui/button"
 import Link from "next/link"
-import useAuth from '@/hooks/useAuth';
 import useCSRFToken from "@/hooks/useCSRFToken";
 import {useRouter} from "next/navigation";
 import {Navbar} from "@/components/component/navbar";
+import {useAuth} from "@/context/authContext";
 
 export function LoginForm() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string|null>(null);
+
     useCSRFToken();
 
     const router = useRouter();
-    const {login, loading, error} = useAuth();
+    const {login} = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (event: { preventDefault: () => void; }) => {
         event.preventDefault();
-        // @ts-ignore
-        await login(email, password);
-        router.push('/home');
+
+        setLoading(true)
+
+        login(email, password)
+            .then(()=> {
+                router.push('/home');
+            }).catch((error) => {
+                setError(error.response ? error.response.data : error.message);
+            }).finally(() => {
+                setLoading(false)
+            })
     };
 
     return (

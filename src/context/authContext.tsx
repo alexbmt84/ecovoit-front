@@ -2,10 +2,11 @@
 
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {useRouter} from 'next/navigation';
+import axios from "axios";
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    login: () => void;
+    login: (email: string, password: string) => Promise<void>;
     logout: () => void;
 }
 
@@ -13,6 +14,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // @ts-ignore
 export const AuthProvider = ({children}) => {
+
+    const csrfToken = typeof window !== 'undefined' ? localStorage.getItem('csrfToken') : null;
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const router = useRouter();
 
@@ -28,13 +31,24 @@ export const AuthProvider = ({children}) => {
         return () => window.removeEventListener('storage', checkAuth);
     }, []);
 
-    const login = () => {
+    const login = async (email: string, password: string) => {
+        const response = await axios.post('https://api.ecovoit.tech/api/login', {
+            email,
+            password
+        }, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            }
+        });
+
+        sessionStorage.setItem('access_token', response.data.access_token);
         setIsAuthenticated(true);
     };
 
     const logout = () => {
         sessionStorage.removeItem('access_token');
         setIsAuthenticated(false);
+        localStorage.removeItem('csrfToken');
         router.push('/login');
     };
 
