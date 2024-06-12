@@ -20,14 +20,24 @@ To read more about using these font, please visit the Next.js documentation:
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
 import { DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 
-export function ProfileDropdown() {
+interface ProfileDropdownProps {
+  onLogout: () => void;
+  size?: 'small' | 'normal'
+}
+
+export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProps) {
+  const avatarSizeClass = size === 'small' ? 'h-5 w-5' : 'h-10 w-10';
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="h-10 w-10 cursor-pointer">
+      <div className="flex items-center gap-2 cursor-pointer">
+        <Avatar className={`${avatarSizeClass}`}>
           <AvatarImage alt="avatar" src="/img/sticker2.jpg" />
           <AvatarFallback>JP</AvatarFallback>
         </Avatar>
+        {size === 'small' && <p className="text-sm font-medium">Mon Profil</p>}
+      </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 p-2">
         <DropdownMenuItem>
@@ -44,24 +54,17 @@ export function ProfileDropdown() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <SettingsIcon className="h-4 w-4" />
-          <span>Mon profil</span>
+          <SettingsIcon className="h-4 w-4 mr-2" />
+          <span>Modifier</span>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <LogOutIcon className="h-4 w-4"/>
+        <DropdownMenuItem onClick={onLogout}>
+          <LogOutIcon className="h-4 w-4 mr-2"/>
           <span>Logout</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
 }
-
-<Button onClick={onLogout}
-                                className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Déconnexion</Button>
-                    </>
-                ) : (
-                    <Button onClick={redirectToLogin}
-                            className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Connexion</Button>
 
 // @ts-ignore
 function LogOutIcon(props) {
