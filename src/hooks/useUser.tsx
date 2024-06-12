@@ -5,6 +5,7 @@ import axios from 'axios';
 const useUser = () => {
 
     type UserData = {
+        id: number;
         first_name: string;
         last_name: string;
     };
