@@ -3,11 +3,18 @@
  * @see https://v0.dev/t/Dot2toYsY84
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
+
+"use client";
+
 import {CardTitle, CardHeader, CardContent, CardFooter, Card} from "@/components/ui/card"
 import {Input} from "@/components/ui/input"
 import {Button} from "@/components/ui/button"
+import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
+import {useState} from "react";
 
 export function SearchTripCard() {
+    const [value, setValue] = useState();
+
     return (
         <div className="flex flex-col">
             <Card className="w-full sm:w-[550px]">
@@ -18,22 +25,48 @@ export function SearchTripCard() {
                     <div className="space-y-4">
                         <div className="flex items-center space-x-2 mt-5">
                             <MapPinIcon className="h-5 w-5 text-gray-400"/>
-                            <Input placeholder="Ville de départ"/>
+                            <GooglePlacesAutocomplete
+                                apiKey={"AIzaSyDxnbqlXcwX93UYD9GqYzX2g_-N01zL33c"}
+                                apiOptions={{language: 'fr', region: 'fr'}}
+                                selectProps={{
+                                    placeholder: 'Ville de départ',
+                                    styles: {
+                                        input: (provided) => ({
+                                            ...provided,
+                                            minWidth: "450px",
+                                        }),
+                                    }
+                                }}
+
+                            />
                         </div>
                         <div className="flex items-center space-x-2 py-3">
                             <MapPinIcon className="h-5 w-5 text-gray-400"/>
-                            <Input placeholder="Ville d'arrivée"/>
+                            <GooglePlacesAutocomplete
+                                apiKey={"AIzaSyDxnbqlXcwX93UYD9GqYzX2g_-N01zL33c"}
+                                apiOptions={{language: 'fr', region: 'fr'}}
+                                selectProps={{
+                                    placeholder: 'Ville d\'arrivée',
+                                    styles: {
+                                        input: (provided) => ({
+                                            ...provided,
+                                            minWidth: "450px",
+                                        }),
+                                    }
+                                }}
+
+                            />
                         </div>
                         <div className="flex items-center space-x-2">
                             <CalendarDaysIcon className="h-5 w-5 text-gray-400"/>
-                            <Input placeholder="Mardi 10 octobre"/>
+                            <Input type={"date"} placeholder="Mardi 10 octobre"/>
                         </div>
                         <Button className="justify-start text-blue-600" variant="ghost">
                             Ajouter un retour
                         </Button>
                         <div className="flex items-center space-x-2">
                             <UserIcon className="h-5 w-5 text-gray-400"/>
-                            <Input placeholder="1 passager(ère)"/>
+                            <Input type={"number"} placeholder="1 passager(ère)"/>
                         </div>
                     </div>
                 </CardContent>
