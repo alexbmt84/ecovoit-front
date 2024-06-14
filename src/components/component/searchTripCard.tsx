@@ -25,7 +25,7 @@ export function SearchTripCard() {
     const [arrivalValue, setArrivalValue] = useState<Option | null>(null);
     const [startDate, setStartDate] = useState<string>('');
     const [endDate, setEndDate] = useState<string>('');
-    const [passenger, setPassenger] = useState<string>("1");
+    const [passenger, setPassenger] = useState<string>("");
     const [showReturnDate, setShowReturnDate] = useState(false);
 
     const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +83,7 @@ export function SearchTripCard() {
                                         value,
                                         onChange: setValue,
                                         placeholder: 'Adresse de départ',
+                                        required: true,
                                         styles: {
                                             input: (provided) => ({
                                                 ...provided,
@@ -96,10 +97,12 @@ export function SearchTripCard() {
                             <div className="flex items-center space-x-2 py-3">
                                 <MapPinIcon className="h-5 w-5 text-gray-400"/>
                                 <GooglePlacesAutocomplete
+
                                     apiKey={"AIzaSyDxnbqlXcwX93UYD9GqYzX2g_-N01zL33c"}
                                     apiOptions={{language: 'fr', region: 'fr'}}
                                     selectProps={{
                                         placeholder: 'Adresse d\'arrivée',
+                                        required: true,
                                         styles: {
                                             input: (provided) => ({
                                                 ...provided,
@@ -121,7 +124,8 @@ export function SearchTripCard() {
                                 <div className="flex items-center space-x-2">
                                     <CalendarDaysIcon className="h-5 w-5 text-gray-400"/>
                                     <Input type="date" placeholder="yyyy-mm-dd" onChange={handleEndDateChange}
-                                           value={endDate}/>
+                                           value={endDate}
+                                    />
                                 </div>
                             }
                             {!showReturnDate && (
@@ -132,8 +136,10 @@ export function SearchTripCard() {
                             )}
                             <div className="flex items-center space-x-2">
                                 <UserIcon className="h-5 w-5 text-gray-400"/>
-                                <Input type={"number"} placeholder={passenger} onChange={handlePassengerChange}
-                                       value={passenger}/>
+                                <Input type={"number"} placeholder={passenger ? passenger : "Nombre de passagers"} onChange={handlePassengerChange}
+                                       value={passenger}
+                                       required={true}
+                                />
                             </div>
                         </div>
                     </CardContent>
@@ -143,7 +149,7 @@ export function SearchTripCard() {
                 </form>
             </Card>
         </div>
-)
+    )
 }
 
 // @ts-ignore
