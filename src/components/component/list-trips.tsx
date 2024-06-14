@@ -85,6 +85,15 @@ export function ListTrips() {
 
     }, []);
 
+    function toTitleCase(str:string) {
+        return str.replace(
+            /\w\S*/g,
+            function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
+            }
+        );
+    }
+
     return (
         <Card className="w-full max-w-2xl">
             <CardHeader>
@@ -103,9 +112,9 @@ export function ListTrips() {
                                 <div className="flex-1 grid gap-1">
                                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                         <MapPinIcon className="w-4 h-4"/>
-                                        <span>{trip.departure}</span>
+                                        <span>{toTitleCase(trip.departure)}</span>
                                         <ArrowRightIcon className="w-4 h-4"/>
-                                        <span>{trip.destination}</span>
+                                        <span>{toTitleCase(trip.destination)}</span>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <ClockIcon className="h-4 w-4"/>
