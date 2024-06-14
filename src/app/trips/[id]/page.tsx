@@ -3,7 +3,6 @@
 import {useEffect, useState} from "react";
 import {useParams, useRouter} from "next/navigation";
 import axios from "axios";
-import {useIsLoggedIn} from "@/hooks/useIsLoggedIn";
 import {TripCard} from "@/components/component/trip-card";
 import {Loader} from "@/components/component/loader";
 import {useAuth} from "@/context/authContext";
@@ -61,6 +60,16 @@ export default function Page() {
         }
     }, [params.id]); // Depend on params.id to refetch when it changes
 
+    function toTitleCase(str:string|undefined) {
+        return str?.replace(
+            /\w\S*/g,
+            function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
+            }
+        );
+    }
+
+
     if (loading) {
         return <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <div className="fixed inset-0 flex items-center justify-center">
@@ -75,8 +84,8 @@ export default function Page() {
                 <div className="container mx-auto px-4 md:px-6 lg:px-8">
                     <div>
                         <TripCard key={trip?.id}
-                                  tripDeparture={trip?.departure}
-                                  tripDestination={trip?.destination}
+                                  tripDeparture={toTitleCase(trip?.departure)}
+                                  tripDestination={toTitleCase(trip?.destination)}
                                   tripDriverFirstName={trip?.users[0].first_name}
                                   tripDriverLastName={trip?.users[0].last_name}
                         />
