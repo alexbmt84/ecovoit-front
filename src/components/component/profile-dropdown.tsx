@@ -19,6 +19,8 @@ To read more about using these font, please visit the Next.js documentation:
 **/
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
 import { DropdownMenuTrigger, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
+import useUser from "@/hooks/useUser";
+import {useRouter} from "next/navigation";
 
 interface ProfileDropdownProps {
   onLogout: () => void;
@@ -26,7 +28,13 @@ interface ProfileDropdownProps {
 }
 
 export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProps) {
+  const router = useRouter();
   const avatarSizeClass = size === 'small' ? 'h-5 w-5' : 'h-10 w-10';
+  const {userData} = useUser();
+
+  const redirectToProfil = () => {
+    router.push('./profil');
+};
 
   return (
     <DropdownMenu>
@@ -47,13 +55,13 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
               <AvatarFallback>JP</AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <p className="text-sm font-medium">Gaetan Dustou</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400">gaetan@gmail.com</p>
+              <p className="text-sm font-medium">{userData?.first_name} {userData?.last_name}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400">{userData?.email}</p>
             </div>
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={redirectToProfil}>
           <SettingsIcon className="h-4 w-4 mr-2" />
           <span>Modifier</span>
         </DropdownMenuItem>

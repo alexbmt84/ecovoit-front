@@ -26,7 +26,6 @@ import Link from "next/link"
 import Image from "next/image";
 import {useRouter} from "next/navigation";
 import { ProfileDropdown } from "@/components/component/profile-dropdown";
-import {useIsLoggedIn} from "@/hooks/useIsLoggedIn";
 import {useAuth} from "@/context/authContext";
 
 // @ts-ignore
@@ -34,6 +33,7 @@ export function Navbar() {
 
     const router = useRouter();
     const {isAuthenticated, logout} = useAuth();
+
 
 
     const redirectToLogin = () => {
@@ -51,7 +51,7 @@ export function Navbar() {
                 <SheetTrigger asChild>
                     <Button className="md:hidden" size="icon" variant="outline">
                         <MenuIcon className="h-6 w-6"/>
-                        <span className="sr-only">Toggle navigation menu</span>
+                        <span className="sr-only">Menu</span>
                     </Button>
                 </SheetTrigger>
                 <SheetContent className="w-[300px] bg-white shadow-lg dark:bg-gray-950" side="left">
