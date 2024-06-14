@@ -24,17 +24,24 @@ import {Button} from "@/components/ui/button"
 import {SheetTrigger, SheetClose, SheetContent, Sheet} from "@/components/ui/sheet"
 import Link from "next/link"
 import Image from "next/image";
-import {redirect} from "next/navigation";
 import {useRouter} from "next/navigation";
 import { ProfileDropdown } from "@/components/component/profile-dropdown";
+import {useIsLoggedIn} from "@/hooks/useIsLoggedIn";
+import {useAuth} from "@/context/authContext";
 
 // @ts-ignore
-export function Navbar({onLogout, isLoggedIn}) {
+export function Navbar() {
 
     const router = useRouter();
+    const {isAuthenticated, logout} = useAuth();
+
 
     const redirectToLogin = () => {
         router.push('/login');
+    };
+
+    const redirectToHome = () => {
+        router.push('/home');
     };
 
     return (
@@ -48,27 +55,38 @@ export function Navbar({onLogout, isLoggedIn}) {
                     </Button>
                 </SheetTrigger>
                 <SheetContent className="w-[300px] bg-white shadow-lg dark:bg-gray-950" side="left">
-                    <div className="flex h-16 items-center justify-between px-4">
-                        <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
-                            <EcovoitLogo/>
-                        </Link>
-                        <SheetClose>
-                            <XIcon className="h-6 w-6"/>
-                        </SheetClose>
-                    </div>
+                    {isAuthenticated ? (
+                        <div className="flex h-16 items-center justify-between px-4">
+                            <Link className="flex items-center gap-2 text-lg font-semibold" href="/home">
+                                <EcovoitLogo/>
+                            </Link>
+                            <SheetClose>
+                                <XIcon className="h-6 w-6"/>
+                            </SheetClose>
+                        </div>
+                    ) : (
+                        <div className="flex h-16 items-center justify-between px-4">
+                            <Link className="flex items-center gap-2 text-lg font-semibold" href="/">
+                                <EcovoitLogo/>
+                            </Link>
+                            <SheetClose>
+                                <XIcon className="h-6 w-6"/>
+                            </SheetClose>
+                        </div>
+                    )}
                     <nav className="grid gap-4 px-4 py-6">
-                        {isLoggedIn ? (
+                        {isAuthenticated ? (
                             <>
                                 <Link
                                     className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                                    href="#"
+                                    href={"/home"}
                                 >
                                     <CalendarDaysIcon className="h-5 w-5"/>
                                     Reserver un trajet
                                 </Link>
                                 <Link
                                     className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                                    href="#"
+                                    href={"/mytrips"}
                                 >
                                     <TargetIcon className="h-5 w-5"/>
                                     Mes trajets
@@ -82,7 +100,7 @@ export function Navbar({onLogout, isLoggedIn}) {
                                 </Link>
 
                                 <div className="flex items-center gap-2">
-                                    <ProfileDropdown onLogout={onLogout} size="small"></ProfileDropdown>
+                                    <ProfileDropdown onLogout={logout} size="small"></ProfileDropdown>
                                 </div>
                             </>
                         ) : (
@@ -92,11 +110,17 @@ export function Navbar({onLogout, isLoggedIn}) {
                     </nav>
                 </SheetContent>
             </Sheet>
-            <Link className="flex items-center gap-2 text-lg font-semibold" href="#">
-                <EcovoitLogo/>
-            </Link>
+            {isAuthenticated ? (
+                <Link className="flex items-center gap-2 text-lg font-semibold" href={"/home"}>
+                    <EcovoitLogo/>
+                </Link>
+            ) : (
+                <Link className="flex items-center gap-2 text-lg font-semibold" href="/">
+                    <EcovoitLogo/>
+                </Link>
+            )}
             <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
-                {isLoggedIn ? (
+                {isAuthenticated ? (
                     <>
                         <Link className="p-2 transition-colors rounded-xl border-2 border-cyan-500 bg-white text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-gray-50/90" href="#">
                             Reserver un trajet
@@ -107,11 +131,11 @@ export function Navbar({onLogout, isLoggedIn}) {
                         <Link className="p-2 transition-colors rounded-xl border-2 border-cyan-500 bg-white text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-gray-50/90" href="#">
                             M&apos;e-co-voit
                         </Link>
-                        <ProfileDropdown onLogout={onLogout}/>
+                        <ProfileDropdown onLogout={logout}/>
                     </>
                 ) : (
                     <Button onClick={redirectToLogin}
-                            className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Connexion</Button>
+                            className="transition-colors hover:text-gray-500 dark:hover:text-gray-50">Connexion</Button>
                 )}
             </nav>
         </header>

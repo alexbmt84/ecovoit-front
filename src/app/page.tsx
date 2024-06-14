@@ -1,20 +1,24 @@
 "use client";
 
-import {Navbar} from "@/components/component/navbar";
+import {useEffect, useState} from 'react';
 import {Landing} from "@/components/component/landing";
-import useAuth from "@/hooks/useAuth";
-import {useIsLoggedIn} from "@/hooks/useIsLoggedIn";
+import {useAuth} from "@/context/authContext";
+import {useRouter} from "next/navigation";
 
-export default function Home() {
+export default function Page() {
+    const {isAuthenticated, logout} = useAuth();
 
-    const {logout} = useAuth();
-    const isLoggedIn = useIsLoggedIn();
+    const router = useRouter();
+    useEffect(() => {
+        if (isAuthenticated) {
+            router.push("/home");
+        }
+    }, [isAuthenticated, router]);
 
     return (
         <>
-            <Navbar onLogout={logout} isLoggedIn={isLoggedIn}/>
             <main className="flex min-h-screen flex-col items-center justify-between p-24">
-             <Landing/>
+                <Landing/>
             </main>
         </>
     );
