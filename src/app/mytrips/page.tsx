@@ -6,6 +6,7 @@ import {TripCard} from "@/components/component/trip-card";
 import {Loader} from "@/components/component/loader";
 import useUser from "@/hooks/useUser";
 import {useRouter} from "next/navigation";
+import {SpinnerWheel} from "@/components/component/spinner-wheel";
 
 export default function Page() {
 
@@ -66,7 +67,7 @@ export default function Page() {
     if (userLoading || loading) {
         return <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <div className="fixed inset-0 flex items-center justify-center">
-                <Loader/>
+                <SpinnerWheel/>
             </div>
         </main>;
     }
