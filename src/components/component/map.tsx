@@ -3,6 +3,7 @@ import {GoogleMap, useJsApiLoader, DirectionsRenderer} from '@react-google-maps/
 import {useSearchParams} from "next/navigation";
 import axios from "axios";
 import {useRouter} from "next/navigation";
+import {SpinnerWheel} from "@/components/component/spinner-wheel";
 
 type DirectionsResult = google.maps.DirectionsResult;
 
@@ -22,6 +23,8 @@ interface MapComponentProps {
     currentArrival: string;
     currentVehicle: string | null;
     currentUser: string | null;
+    startLoading: () => void;
+    stopLoading: () => void;
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({
@@ -29,7 +32,9 @@ const MapComponent: React.FC<MapComponentProps> = ({
                                                        currentDeparture,
                                                        currentArrival,
                                                        currentVehicle,
-                                                       currentUser
+                                                       currentUser,
+                                                       startLoading,
+                                                       stopLoading
                                                    }) => {
     const {isLoaded} = useJsApiLoader({
         id: 'google-map-script',
@@ -40,6 +45,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     const searchParams = useSearchParams();
     const [directions, setDirections] = useState<DirectionsResult | null>(null);
     const [trips, setTrips] = useState<[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const departure = searchParams.get('departure');
     const arrival = searchParams.get('arrival');
@@ -56,6 +62,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
     useEffect(() => {
         async function fetchAllData() {
+            startLoading();
             const token = sessionStorage.getItem('access_token');
             if (!token) {
                 router.push('/login');
@@ -76,7 +83,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                     // @ts-ignore
                     setTrips(tripsData)
                     tripInformations(departure || '', arrival || '', leg.distance.text.replace("km", ""), formattedDuration, tripsData, vehicle, user);
-
+                    stopLoading();
                 } else {
                     console.log("Error while fetching trip");
                 }
@@ -173,7 +180,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
         >
             {directions && <DirectionsRenderer directions={directions}/>}
         </GoogleMap>
-    ) : <div>Loading map...</div>;
+    ) : <div></div>;
 };
 
 export default React.memo(MapComponent);
