@@ -1,17 +1,34 @@
 import React, {useState, Suspense, SVGProps} from 'react';
 import MapComponent from "@/components/component/map";
 import {Button} from "@/components/ui/button";
-import {useRouter} from "next/navigation";
+import UserIcon from "@/components/icons/UserIcon";
+import CarIcon from "@/components/icons/CarIcon";
+import {ArrowRightIcon} from "@/components/icons/Arrows";
+import {ArrowDownIcon} from "@/components/icons/Arrows";
 
 export function MapContainer() {
 
-    const router = useRouter();
+    interface User {
+        first_name: string;
+    }
+    interface Trip {
+        id: React.Key | null | undefined;
+        departure: string;
+        destination: string;
+        distance: string;
+        duration: string;
+        vehicle: { model: string };
+        user: string;
+        users: [User];
+    }
 
     interface TripInformation {
         departure: string;
         arrival: string;
         distance: string;
         duration: string;
+        model: string|null;
+        user: string|null;
         trips: any[];
     }
 
@@ -20,17 +37,32 @@ export function MapContainer() {
         arrival: '',
         distance: '',
         duration: '',
-        trips: []
+        model: '',
+        user: '',
+        trips: [],
     });
 
-    const handleTripInformations = (departure: string, arrival: string, distance: string, duration: string, trips: any[]) => {
-        setTripInformations({departure, arrival, distance, duration, trips});
+    const [trips, setTrips] = useState<any | []>([]);
+    const [currentTrip, setCurrentTrip] = useState({departure: '', arrival: '', vehicle: '', user: ''});
+
+    const handleTripInformations = (
+        departure: string,
+        arrival: string,
+        distance: string,
+        duration: string,
+        trips: any[],
+        model: string|null,
+        user?: string|null
+    ) => {
+        setTripInformations({departure, arrival, distance, duration, trips, model: model ?? "", user: user ?? ""});
+        console.log((tripInformations))
+        setTrips(trips);
     };
 
-    // @ts-ignore
-    const redirectTripId = (id) => {
-        router.push(`/trips/${id}`)
-    }
+    const handleTripButtonClick = (trip: Trip) => {
+
+        setCurrentTrip({ departure: trip.departure, arrival: trip.destination, vehicle: trip.vehicle.model, user: trip.users[0].first_name });
+    };
 
     function toTitleCase(str: string) {
         return str.replace(
@@ -46,16 +78,21 @@ export function MapContainer() {
             <div className="flex flex-row">
                 <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 md:text-4xl flex flex-row">
                     <MapPinIcon className="w-7 h-7 mt-1 mr-2"/>
-                    <span>{tripInformations.departure}</span>
+                    <span>{toTitleCase(tripInformations.departure)}</span>
                     <ArrowRightIcon className="w-7 h-7 mt-2 mx-2"/>
-                    <span>{tripInformations.arrival}</span>
+                    <span>{toTitleCase(tripInformations.arrival)}</span>
                 </h1>
             </div>
             <div className="flex h-[700px] flex-row">
                 <div className="flex-1 bg-gray-100 dark:bg-gray-900">
                     <div className="relative h-full w-full">
                         <Suspense fallback={<div>Loading Map...</div>}>
-                            <MapComponent tripInformations={handleTripInformations}/>
+                            <MapComponent tripInformations={handleTripInformations}
+                                          currentDeparture={currentTrip.departure}
+                                          currentArrival={currentTrip.arrival}
+                                          currentVehicle={currentTrip.vehicle}
+                                          currentUser={currentTrip.user}
+                            />
                         </Suspense>
                     </div>
                 </div>
@@ -64,15 +101,45 @@ export function MapContainer() {
                         <div className="grid gap-1">
                             <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Distance</div>
                             <div className="text-3xl font-bold">
-                                <span>{tripInformations.distance}</span>
+
+                                <span>{tripInformations.distance} kilomètres</span>
                             </div>
                         </div>
-                        <div className="grid gap-1 mt-2">
-                            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Durée du trajet</div>
-                            <div className="text-3xl font-bold">
-                                <span>{tripInformations.duration}</span>
+
+                        {tripInformations.duration ? (
+                            <div className="grid gap-1 mt-2">
+                                <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Durée du trajet
+                                </div>
+                                <div className="text-3xl font-bold">
+                                    <span>{tripInformations.duration}</span>
+                                </div>
                             </div>
-                        </div>
+
+                        ):(
+                            <div></div>
+                        )}
+
+                        {tripInformations.user && (
+                                <div className="mt-2 flex text-gray-500">
+                                    <UserIcon className="mr-2 h-5 w-5"/>
+                                    <div className="text-sm font-bold">
+                                        <span>{tripInformations.user}</span>
+                                    </div>
+                                </div>
+                        )}
+
+                        {tripInformations.model ? (
+                            <div className="mt-2 flex text-gray-500">
+                                <CarIcon className="mr-2 h-5 w-5"/>
+                                <div className="text-sm font-bold">
+                                    <span>{tripInformations.model}</span>
+                                </div>
+                            </div>
+
+                        ) : (
+                            <div></div>
+                        )}
+
                         <Button className="w-full mt-5" size="lg">
                             <CarIcon className="mr-2 h-5 w-5"/>
                             Créer ce trajet
@@ -85,12 +152,7 @@ export function MapContainer() {
                     <div className="flex flex-col gap-6 bg-white dark:bg-gray-950 overflow-y-auto"
                          style={{maxHeight: '500px'}}>
                         {tripInformations.trips.length > 0 ? (
-                            tripInformations.trips.map((trip: {
-                                id: React.Key | null | undefined;
-                                departure: string;
-                                destination: string;
-                                distance: string;
-                            }) => (
+                            tripInformations.trips.map((trip) => (
                                 <div key={trip.id} className={"flex justify-between"}>
                                     <div className={"flex flex-col"}>
 
@@ -114,8 +176,15 @@ export function MapContainer() {
                                                 {trip.distance} km
                                             </p>
                                         </div>
+                                        <div className={"flex space-x-1"}>
+                                            <CarIcon className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-0.5"/>
+                                            <p>
+                                                {trip.vehicle?.model}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <Button size="sm" variant="outline" onClick={() => redirectTripId(trip.id)}>
+                                    <Button size="sm" variant="outline"
+                                            onClick={() => handleTripButtonClick(trip)}>
                                         Voir
                                     </Button>
                                 </div>
@@ -128,70 +197,6 @@ export function MapContainer() {
             </div>
         </div>
     );
-}
-
-// @ts-ignore
-function CarIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path
-                d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-            <circle cx="7" cy="17" r="2"/>
-            <path d="M9 17h6"/>
-            <circle cx="17" cy="17" r="2"/>
-        </svg>
-    )
-}
-
-function ArrowRightIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M5 12h14"/>
-            <path d="m12 5 7 7-7 7"/>
-        </svg>
-    )
-}
-
-function ArrowDownIcon(props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M12 5v14"/>
-            <path d="m19 12-7 7-7-7"/>
-        </svg>
-    )
 }
 
 // @ts-ignore

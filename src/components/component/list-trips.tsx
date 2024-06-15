@@ -39,6 +39,8 @@ export function ListTrips() {
         destination: string;
         distance: number;
         status: number;
+        vehicle: {model:string};
+        model: string;
         departure_time: string;
         users: UserData[];
     };
@@ -94,6 +96,26 @@ export function ListTrips() {
         );
     }
 
+    // @ts-ignore
+    const handleSubmit = async (departure, arrival, startDate, model, user) => {
+
+        // Constructing the URL with query parameters
+        // @ts-ignore
+        // @ts-ignore
+        const searchParams = new URLSearchParams({
+            departure: departure,
+            arrival: arrival,
+            startDate: startDate,
+            user: user,
+            vehicle: model,
+            endDate: '',
+            passengers: '',
+        }).toString();
+
+        // Navigate to the search results page with parameters
+        router.push(`/search-results?${searchParams}`);
+    };
+
     return (
         <Card className="w-full max-w-2xl">
             <CardHeader>
@@ -141,7 +163,7 @@ export function ListTrips() {
                                         </div>
                                     )}
                                 </div>
-                                <Button size="sm" variant="outline" onClick={() => redirectTripId(trip.id)}>
+                                <Button size="sm" variant="outline" onClick={() => handleSubmit(trip.departure, trip.destination, trip.departure_time, trip.vehicle.model, trip.users[0].first_name)}>
                                     Voir
                                 </Button>
                             </div>
