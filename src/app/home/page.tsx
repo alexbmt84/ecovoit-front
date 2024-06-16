@@ -2,7 +2,6 @@
 
 import useUser from "@/hooks/useUser";
 import {SearchTripCard} from "@/components/component/searchTripCard";
-import {Loader} from "@/components/component/loader";
 import {ListTrips} from "@/components/component/list-trips";
 import {useAuth} from "@/context/authContext";
 import {SpinnerWheel} from "@/components/component/spinner-wheel";

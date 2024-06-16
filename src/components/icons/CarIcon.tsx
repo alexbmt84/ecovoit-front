@@ -1,5 +1,6 @@
-// @ts-ignore
-function CarIcon(props) {
+import { JSX, SVGProps } from "react";
+
+export const CarIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
     return (
         <svg
             {...props}
@@ -21,5 +22,3 @@ function CarIcon(props) {
         </svg>
     )
 }
-
-export default CarIcon;
