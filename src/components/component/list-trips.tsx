@@ -39,6 +39,8 @@ export function ListTrips() {
         destination: string;
         distance: number;
         status: number;
+        vehicle: {model:string};
+        model: string;
         departure_time: string;
         users: UserData[];
     };
@@ -85,6 +87,35 @@ export function ListTrips() {
 
     }, []);
 
+    function toTitleCase(str:string) {
+        return str.replace(
+            /\w\S*/g,
+            function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
+            }
+        );
+    }
+
+    // @ts-ignore
+    const handleSubmit = async (departure, arrival, startDate, model, user) => {
+
+        // Constructing the URL with query parameters
+        // @ts-ignore
+        // @ts-ignore
+        const searchParams = new URLSearchParams({
+            departure: departure,
+            arrival: arrival,
+            startDate: startDate,
+            user: user,
+            vehicle: model,
+            endDate: '',
+            passengers: '',
+        }).toString();
+
+        // Navigate to the search results page with parameters
+        router.push(`/search-results?${searchParams}`);
+    };
+
     return (
         <Card className="w-full max-w-2xl">
             <CardHeader>
@@ -103,9 +134,9 @@ export function ListTrips() {
                                 <div className="flex-1 grid gap-1">
                                     <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                         <MapPinIcon className="w-4 h-4"/>
-                                        <span>{trip.departure}</span>
+                                        <span>{toTitleCase(trip.departure)}</span>
                                         <ArrowRightIcon className="w-4 h-4"/>
-                                        <span>{trip.destination}</span>
+                                        <span>{toTitleCase(trip.destination)}</span>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <ClockIcon className="h-4 w-4"/>
@@ -132,7 +163,7 @@ export function ListTrips() {
                                         </div>
                                     )}
                                 </div>
-                                <Button size="sm" variant="outline" onClick={() => redirectTripId(trip.id)}>
+                                <Button size="sm" variant="outline" onClick={() => handleSubmit(trip.departure, trip.destination, trip.departure_time, trip.vehicle.model, trip.users[0].first_name)}>
                                     Voir
                                 </Button>
                             </div>
