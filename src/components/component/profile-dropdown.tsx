@@ -33,7 +33,7 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
   const {userData} = useUser();
 
   const redirectToProfil = () => {
-    router.push('./profil');
+    router.push('./my-profil');
 };
 
   return (

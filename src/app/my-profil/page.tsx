@@ -1,12 +1,12 @@
 "use client";
 
-import {Profil} from "@/components/component/profil";
+import {MyProfil} from "@/components/component/my-profil";
 
 export default function Login() {
 
     return (
         <>
-            <Profil/>
+            <MyProfil/>
         </>
     );
 }

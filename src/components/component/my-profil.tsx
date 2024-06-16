@@ -23,7 +23,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import useUser from "@/hooks/useUser";
 
-export function Profil() {
+export function MyProfil() {
 
   const {userData} = useUser();
 
