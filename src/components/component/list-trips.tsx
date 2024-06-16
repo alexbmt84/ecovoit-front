@@ -125,7 +125,7 @@ export function ListTrips() {
 
                                             <UserIcon className="w-4 h-4 mt-1"/>
                                             <ul>
-                                                <Link href="#">
+                                                <Link href={`/profil/${trip.users[0].id}`}>
                                                     <li>{trip.users[0].first_name}</li>
                                                 </Link>
                                             </ul>

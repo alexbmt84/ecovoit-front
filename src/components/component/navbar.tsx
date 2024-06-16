@@ -50,7 +50,7 @@ export function Navbar() {
                 <SheetTrigger asChild>
                     <Button className="md:hidden" size="icon" variant="outline">
                         <MenuIcon className="h-6 w-6"/>
-                        <span className="sr-only">Toggle navigation menu</span>
+                        <span className="sr-only">Basculer le menu de navigation</span>
                     </Button>
                 </SheetTrigger>
                 <SheetContent className="w-[300px] bg-white shadow-lg dark:bg-gray-950" side="left">
