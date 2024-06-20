@@ -6,13 +6,13 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 
 interface UserData {
+    establishment_id: number;
     id: number;
     first_name: string;
     last_name: string;
     email: string;
-    car_model: string;
-    available_seats: number;
-    university: string;
+    
+    model: string;
 }
 
 interface ProfilProps {
@@ -20,6 +20,13 @@ interface ProfilProps {
 }
 
 export const Profil: React.FC<ProfilProps> = ({ user }) => {
+    const getEstablishmentName = (id: number) => {
+        if (id === 1) {
+            return "Avignon tête de fion";
+        } else {
+            return "Pertuis ptit kiki";
+        }
+    };
     return (
         <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg dark:bg-gray-950">
             <div className="flex items-center space-x-6">
@@ -50,15 +57,15 @@ export const Profil: React.FC<ProfilProps> = ({ user }) => {
                 </div>
                 <div className="space-y-2">
                     <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Car Model</div>
-                    <div>{user.car_model}</div>
+                    <div>{user.model}</div>
                 </div>
                 <div className="space-y-2">
-                    <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Available Seats</div>
-                    <div>{user.available_seats}</div>
+                    <div className="text-sm font-medium text-gray-500 dark:text-gray-400">truc</div>
+                    <div>truc</div>
                 </div>
                 <div className="space-y-2">
                     <div className="text-sm font-medium text-gray-500 dark:text-gray-400">University</div>
-                    <div>{user.university}</div>
+                    <div>{getEstablishmentName(user.establishment_id)}</div>
                 </div>
             </div>
             <Separator className="my-6" />
