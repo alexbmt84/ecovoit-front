@@ -1,6 +1,6 @@
-import { JSX, SVGProps } from "react";
+import React from "react";
 
-export const UserIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+export const WalletIcon = (props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>) => {
     return (
         <svg
             {...props}
@@ -14,8 +14,9 @@ export const UserIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <path
+                d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/>
+            <path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>
         </svg>
     )
 }

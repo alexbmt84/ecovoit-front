@@ -1,6 +1,6 @@
 import { JSX, SVGProps } from "react";
 
-export const UserIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+export const MapPinIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
     return (
         <svg
             {...props}
@@ -14,8 +14,8 @@ export const UserIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+            <circle cx="12" cy="10" r="3"/>
         </svg>
     )
 }

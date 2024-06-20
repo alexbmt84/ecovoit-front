@@ -1,6 +1,6 @@
-import { JSX, SVGProps } from "react";
+import React from "react";
 
-export const UserIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) => {
+export const DollarSignIcon = (props: React.JSX.IntrinsicAttributes & React.SVGProps<SVGSVGElement>) => {
     return (
         <svg
             {...props}
@@ -14,8 +14,8 @@ export const UserIcon = (props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
+            <line x1="12" x2="12" y1="2" y2="22" />
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
         </svg>
     )
 }

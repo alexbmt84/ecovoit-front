@@ -3,7 +3,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {TripCard} from "@/components/component/trip-card";
-import {Loader} from "@/components/component/loader";
 import useUser from "@/hooks/useUser";
 import {useRouter} from "next/navigation";
 import {SpinnerWheel} from "@/components/component/spinner-wheel";
