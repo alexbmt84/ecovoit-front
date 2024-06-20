@@ -1,72 +1,84 @@
+// pages/profil/[id].tsx
+
 "use client";
 
-import { useEffect, useState } from 'react'
-import { useParams }from "next/navigation";
-import Profil from '@/components/component/profil'
-import axios from 'axios'
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import axios from "axios";
+import Profil from "@/components/component/profil"; // Importer le composant Profil
+import { Loader } from "@/components/component/loader"; // Importer un composant Loader
 
-const ProfilPage = () => {
-    interface UserData {
-        id: number;
-        first_name: string;
-        last_name: string;
+// Composant de la page de profil
+export default function ProfilPage() {
+    const params = useParams(); // Récupère les paramètres de l'URL (ici, l'ID de l'utilisateur)
+    const router = useRouter();
+    const [user, setUser] = useState(null); // State pour stocker les données de l'utilisateur
+    const [loading, setLoading] = useState(true); // State pour gérer l'état de chargement
+    const [error, setError] = useState<string | null>(null); // State pour gérer les erreurs
+
+    // Effectue une requête pour récupérer les données de l'utilisateur
+    useEffect(() => {
+        const getUser = async () => {
+            setLoading(true);
+            const token = sessionStorage.getItem('access_token');
+            if (!token) {
+                router.push('/login');
+                return;
+            }
+
+            try {
+                const response = await axios.get(`https://api.ecovoit.tech/api/users/${params.id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                setUser(response.data); // Met à jour les données de l'utilisateur
+                setError(null); // Réinitialise l'erreur
+            } catch (error) {
+                console.error('Failed to fetch user data:', error);
+                setError('User not found or an error occurred while fetching user data'); // Met à jour l'erreur
+            } finally {
+                setLoading(false); // Met fin à l'état de chargement
+            }
+        };
+
+        if (params.id) {
+            getUser(); // Appelle la fonction pour récupérer les données de l'utilisateur
+        }
+    }, [params.id]);
+
+    // Affiche un loader si les données sont en cours de chargement
+    if (loading) {
+        return (
+            <main className="flex min-h-screen flex-col items-center justify-between p-24">
+                <div className="fixed inset-0 flex items-center justify-center">
+                    <Loader />
+                </div>
+            </main>
+        );
     }
 
-    type TripData = {
-        id: number;
-        departure: string;
-        destination: string;
-        distance: number;
-        status: number;
-        departure_time: string;
-        users: UserData[];
-    };
-    type UserProfile = {
-      first_name: string;
-      last_name: string;
-      email: string;
-      trips: TripData[];
-      car: string;
-      about: string;
-    };
-  //const router = useRouter()
-  const { id } = useParams()
-
-  const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState<UserProfile | null>(null);
-
-  useEffect(() => {
-    if (id) {
-      axios.get(`/api/user/${id}`)
-        .then((response) => {
-          setUserData(response.data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching user data:", error);
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
+    // Affiche un message d'erreur si une erreur est survenue
+    if (error) {
+        return (
+            <main className="flex min-h-screen flex-col items-center p-24">
+                <div className="container mx-auto px-4 md:px-6 lg:px-8">
+                    <div className="text-red-500">{error}</div>
+                </div>
+            </main>
+        );
     }
-  }, [id])
 
-  if (!userData) {
-    return <div>Loading...</div>
-  }
-
-  return <Profil 
-  first_name={userData.first_name}
-  last_name={userData.last_name}
-  email={userData.email}
-  trips={userData.trips}
-  car={userData.car}
-  about={userData.about} 
-  />
+    // Affiche les données de l'utilisateur ou un message si l'utilisateur n'est pas trouvé
+    return (
+        <main className="flex min-h-screen flex-col items-center p-24">
+            <div className="container mx-auto px-4 md:px-6 lg:px-8">
+                {user ? (
+                    <Profil user={user} /> // Utilise le composant Profil pour afficher les données de l'utilisateur
+                ) : (
+                    <div>User not found</div>
+                )}
+            </div>
+        </main>
+    );
 }
-
-export default ProfilPage
-function setLoading(arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
-
