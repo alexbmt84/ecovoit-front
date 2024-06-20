@@ -62,8 +62,11 @@ export const Profil: React.FC<ProfilProps> = ({ user }) => {
                 </div>
             </div>
             <Separator className="my-6" />
-            <Link href="#" passHref>
-                <a className="inline-flex items-center gap-2 text-gray-900 hover:underline dark:text-gray-50">
+            <Link
+                href="#"
+                passHref
+                className="inline-flex items-center gap-2 text-gray-900 hover:underline dark:text-gray-50">
+                <a>
                     View Offered Rides
                 </a>
             </Link>
