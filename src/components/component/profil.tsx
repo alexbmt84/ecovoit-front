@@ -66,9 +66,9 @@ export const Profil: React.FC<ProfilProps> = ({ user }) => {
                 href="#"
                 passHref
                 className="inline-flex items-center gap-2 text-gray-900 hover:underline dark:text-gray-50">
-                <a>
+                
                     View Offered Rides
-                </a>
+                
             </Link>
         </div>
     );
