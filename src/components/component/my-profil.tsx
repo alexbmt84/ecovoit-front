@@ -4,6 +4,11 @@ import { Button } from "@/components/ui/button";
 import useUser from "@/hooks/useUser";
 import { useState, useEffect } from "react";
 
+/**
+ * TODO
+ * regex for phone and inputs number
+ */
+
 export function MyProfil() {
   const { userData, updateUser } = useUser();
   const [formData, setFormData] = useState({
