@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 /**
  * TODO
  * regex for phone and inputs number
- * revoir ma copie
  */
 
 export function MyProfil() {
@@ -110,6 +109,7 @@ export function MyProfil() {
               placeholder={userData?.last_name}
               type="text"
               value={formData.last_name}
+              pattern="^[A-Za-zÀ-ÖØ-öø-ÿ'-\s]+$"
               onChange={handleChange}
             />
           </div>
@@ -123,6 +123,7 @@ export function MyProfil() {
               placeholder={userData?.first_name}
               type="text"
               value={formData.first_name}
+              pattern="^^[A-Za-zÀ-ÖØ-öø-ÿ'-\s]+$"
               onChange={handleChange}
             />
           </div>
@@ -147,7 +148,8 @@ export function MyProfil() {
               className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               id="phone_number"
               placeholder={userData?.phone_number}
-              type="text"
+              type="tel"
+              pattern='(\d{2}){5}'
               value={formData.phone_number}
               onChange={handleChange}
             />
