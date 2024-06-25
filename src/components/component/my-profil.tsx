@@ -28,11 +28,11 @@ export function MyProfil() {
         first_name: userData.first_name,
         email: userData.email,
         phone_number: userData.phone_number,
-        Vehicle: userData.vesicule
+        //Vehicle: userData.vesicule
       });
     }
   }, [userData]);
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -166,9 +166,9 @@ export function MyProfil() {
               <Input
                 className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 id="vehicle"
-                placeholder={userData?.vehicle}
+                placeholder={userData?.last_name}
                 type="text"
-                value={formData?.vehicle}
+                value={formData?.last_name}
                 onChange={handleChange}
               />
             </div>
@@ -180,9 +180,9 @@ export function MyProfil() {
               <Input
                 className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 id="place"
-                placeholder={userData?.place}
+                placeholder={userData?.last_name}
                 type="number"
-                value={formData?.place}
+                value={formData?.last_name}
                 min="1" max="10"
                 onChange={handleChange}
               />
@@ -201,9 +201,9 @@ export function MyProfil() {
                     <Input
                       className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       id="vehicle"
-                      placeholder={userData?.vehicle}
+                      placeholder={userData?.first_name}
                       type="text"
-                      value={formData?.vehicle}
+                      value={formData?.first_name}
                       onChange={handleChange}
                     />
                   </div>
@@ -215,9 +215,9 @@ export function MyProfil() {
                     <Input
                       className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       id="place"
-                      placeholder={userData?.place}
+                      placeholder={userData?.first_name}
                       type="number"
-                      value={formData?.place}
+                      value={formData?.first_name}
                       min="1" max="10"
                       onChange={handleChange}
                     />
