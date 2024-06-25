@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 /**
  * TODO
  * regex for phone and inputs number
+ * revoir ma copie
  */
 
 export function MyProfil() {
