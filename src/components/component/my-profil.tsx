@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useUser from "@/hooks/useUser";
 import { useState, useEffect } from "react";
+import "../../../public/json/extensions_domains.json";
 
 /**
  * TODO
@@ -27,7 +28,8 @@ export function MyProfil() {
         last_name: userData.last_name,
         first_name: userData.first_name,
         email: userData.email,
-        phone_number: userData.phone_number
+        phone_number: userData.phone_number,
+        Vehicle: userData.vesicule
       });
     }
   }, [userData]);
@@ -136,6 +138,7 @@ export function MyProfil() {
               id="email"
               placeholder={userData?.email}
               type="email"
+              pattern='^[\w-\.]+@([\w-]+\.)+[\w-]$'
               value={formData.email}
               onChange={handleChange}
             />
@@ -151,6 +154,20 @@ export function MyProfil() {
               type="tel"
               pattern='(\d{2}){5}'
               value={formData.phone_number}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="last_name">
+              Vésicule
+            </Label>
+            <Input
+              className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              id="vehicle"
+              placeholder={userData?.vehicle}
+              type="text"
+              value={formData?.vehicle}
+              //pattern="^[A-Za-zÀ-ÖØ-öø-ÿ'-\s]+$"
               onChange={handleChange}
             />
           </div>

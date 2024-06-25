@@ -10,6 +10,7 @@ const useUser = () => {
         last_name: string;
         email: string;
         phone_number: string;
+        
     };
 
     const [userData, setUserData] = useState<UserData | null>(null);
