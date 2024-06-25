@@ -2,9 +2,8 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useUser from "@/hooks/useUser";
-import { useState, useEffect } from "react";
+import React, { useState,useEffect } from 'react';
 import "../../../public/json/extensions_domains.json";
-
 /**
  * TODO
  * regex for phone and inputs number
@@ -78,6 +77,7 @@ export function MyProfil() {
     }
 };
 
+
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] bg-gray-100 dark:bg-gray-900 p-6">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
@@ -145,7 +145,7 @@ export function MyProfil() {
           </div>
           <div>
             <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="phone_number">
-              Telephone
+              Téléphone
             </Label>
             <Input
               className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -157,21 +157,74 @@ export function MyProfil() {
               onChange={handleChange}
             />
           </div>
-          <div>
-            <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="last_name">
-              Vésicule
-            </Label>
-            <Input
-              className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              id="vehicle"
-              placeholder={userData?.vehicle}
-              type="text"
-              value={formData?.vehicle}
-              //pattern="^[A-Za-zÀ-ÖØ-öø-ÿ'-\s]+$"
-              onChange={handleChange}
-            />
+
+          <div className="flex gap-4">
+            <div className="flex-grow">
+              <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="vehicle">
+                Vésicule
+              </Label>
+              <Input
+                className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                id="vehicle"
+                placeholder={userData?.vehicle}
+                type="text"
+                value={formData?.vehicle}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="w-1/3">
+              <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="place">
+                places :
+              </Label>
+              <Input
+                className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                id="place"
+                placeholder={userData?.place}
+                type="number"
+                value={formData?.place}
+                min="1" max="10"
+                onChange={handleChange}
+              />
+            </div>
           </div>
-          
+
+              <button>[+]</button>
+                <p>
+                  Deuxième véhicule
+                </p>
+                <div className="flex gap-4">
+                  <div className="flex-grow">
+                    <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="vehicle">
+                      Vésicule
+                    </Label>
+                    <Input
+                      className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      id="vehicle"
+                      placeholder={userData?.vehicle}
+                      type="text"
+                      value={formData?.vehicle}
+                      onChange={handleChange}
+                    />
+                  </div>
+
+                  <div className="w-1/3">
+                    <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="place">
+                      places :
+                    </Label>
+                    <Input
+                      className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      id="place"
+                      placeholder={userData?.place}
+                      type="number"
+                      value={formData?.place}
+                      min="1" max="10"
+                      onChange={handleChange}
+                    />
+                  </div>
+                </div>
+
+
           <Button
             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             type="submit"
