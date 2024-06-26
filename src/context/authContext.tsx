@@ -1,14 +1,10 @@
 "use client";
 
 import React, {createContext, useContext, useEffect, useState} from 'react';
+import {AuthContextType} from "@/types/AuthContextType";
 import {useRouter} from 'next/navigation';
 import axios from "axios";
-
-interface AuthContextType {
-    isAuthenticated: boolean;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => void;
-}
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -32,7 +28,7 @@ export const AuthProvider = ({children}) => {
     }, []);
 
     const login = async (email: string, password: string) => {
-        const response = await axios.post('https://api.ecovoit.tech/api/login', {
+        const response = await axios.post(`${apiUrl}/api/login`, {
             email,
             password
         }, {
