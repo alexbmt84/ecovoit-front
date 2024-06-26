@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
+import { VehicleData } from "@/hooks/useVehicle";
 import axios from 'axios';
 
 const useUser = () => {
@@ -10,7 +11,7 @@ const useUser = () => {
         last_name: string;
         email: string;
         phone_number: string;
-        vehicles: Vehicles;
+        vehicles: VehicleData;
     };
 
     const [userData, setUserData] = useState<UserData | null>(null);
@@ -79,7 +80,9 @@ const useUser = () => {
         }
     };
 
-    return {userData, loading, updateUser};
+   
+
+    return { userData, loading, updateUser};
 
 };
 

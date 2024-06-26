@@ -1,26 +1,26 @@
+import React, { useState, useEffect } from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useUser from "@/hooks/useUser";
-import React, { useState,useEffect } from 'react';
-import "../../../public/json/extensions_domains.json";
-/**
- * TODO
- * regex for phone and inputs number
- */
+import useVehicle, { VehicleData } from "@/hooks/useVehicle";
 
 export function MyProfil() {
   const { userData, updateUser } = useUser();
+  const { addVehicle, updateVehicle, deleteVehicle, vehicleData } = useVehicle();
+
   const [formData, setFormData] = useState({
     last_name: "",
     first_name: "",
     email: "",
-    phone_number: ""
+    phone_number: "",
+    vehicles: [] as Partial<VehicleData>[],
   });
-
+  
+  
   const [success, setSuccess] = useState('');
-  const [error, setError] = useState('')
-
+  const [error, setError] = useState<string|undefined>('');
+  
   useEffect(() => {
     if (userData) {
       setFormData({
@@ -28,22 +28,28 @@ export function MyProfil() {
         first_name: userData.first_name,
         email: userData.email,
         phone_number: userData.phone_number,
-        //Vehicle: userData.vesicule
+        vehicles: vehicleData,
       });
     }
-  }, [userData]);
+  }, [userData, vehicleData]);
   
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value
-    });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number | null = null, field: string | null = null) => {
+    if (index !== null && field !== null) {
+      const newVehicles = [...formData.vehicles];
+      newVehicles[index] = { ...newVehicles[index], [field]: e.target.value };
+      setFormData({ ...formData, vehicles: newVehicles });
+    } else {
+      setFormData({
+        ...formData,
+        [e.target.id]: e.target.value
+      });
+    }
   };
 
   const getModifiedFields = (original: any, updated: any) => {
     const modifiedFields: any = {};
     for (const key in updated) {
-      if (updated[key] !== original[key]) {
+      if (JSON.stringify(updated[key]) !== JSON.stringify(original[key])) {
         modifiedFields[key] = updated[key];
       }
     }
@@ -53,29 +59,57 @@ export function MyProfil() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-
     if (userData?.id) {
-
-        const modifiedData = getModifiedFields(userData, formData);
-        if (Object.keys(modifiedData).length > 0) {
-            try {
-                const response = await updateUser(userData.id, modifiedData);
-                if (response.ok) {
-                    setSuccess("User updated successfully.");
-                } else {
-                    setError(`Failed to update user: ${response.error}`);
-                }
-            } catch (error) {
-                console.error('Error updating user:', error);
-                setError('Failed to update user');
-            }
-        } else {
-            setError("No changes to update.");
+      const modifiedData = getModifiedFields(userData, formData);
+      if (Object.keys(modifiedData).length > 0) {
+        try {
+          const response = await updateUser(userData.id, modifiedData);
+          if (response.ok) {
+            setSuccess("User updated successfully.");
+          } else {
+            setError(`Failed to update user: ${response.error}`);
+          }
+        } catch (error) {
+          console.error('Error updating user:', error);
+          setError('Failed to update user');
         }
+      } else {
+        setError("No changes to update.");
+      }
     } else {
-        setError("User ID is missing.");
+      setError("User ID is missing.");
     }
-};
+  };
+
+  const handleAddVehicle = () => {
+    setFormData({
+      ...formData,
+      vehicles: [...formData.vehicles, { id: Date.now(), model: "", immatriculation: "", places: 1, picture: "" }]
+    });
+  };
+
+  const handleDeleteVehicle = async (vehicleId: number) => {
+    const response = await deleteVehicle(vehicleId);
+    if (!response.ok) {
+      setError(response.error);
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        vehicles: prevState.vehicles.filter((vehicle) => vehicle.id !== vehicleId),
+      }));
+      setSuccess("Vehicle deleted successfully.");
+    }
+  };
+
+  const handleUpdateVehicle = async (vehicleId: number, updatedData: Partial<VehicleData>) => {
+    const response = await updateVehicle(vehicleId, updatedData);
+    if (!response.ok) {
+      setError(response.error);
+    } else {
+      setSuccess("Vehicle updated successfully.");
+    }
+  };
+
 
 
   return (
@@ -88,10 +122,7 @@ export function MyProfil() {
               className="rounded-full w-full h-full object-cover"
               height={128}
               src="/img/sticker2.jpg"
-              style={{
-                aspectRatio: "128/128",
-                objectFit: "cover",
-              }}
+              style={{ aspectRatio: "128/128", objectFit: "cover" }}
               width={128}
             />
             <div className="absolute bottom-0 right-0 bg-gray-900 dark:bg-gray-700 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer">
@@ -125,7 +156,7 @@ export function MyProfil() {
               placeholder={userData?.first_name}
               type="text"
               value={formData.first_name}
-              pattern="^^[A-Za-zÀ-ÖØ-öø-ÿ'-\s]+$"
+              pattern="^[A-Za-zÀ-ÖØ-öø-ÿ'-\s]+$"
               onChange={handleChange}
             />
           </div>
@@ -138,7 +169,7 @@ export function MyProfil() {
               id="email"
               placeholder={userData?.email}
               type="email"
-              pattern='^[\w-\.]+@([\w-]+\.)+[\w-]$'
+              pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
               value={formData.email}
               onChange={handleChange}
             />
@@ -152,78 +183,75 @@ export function MyProfil() {
               id="phone_number"
               placeholder={userData?.phone_number}
               type="tel"
-              pattern='(\d{2}){5}'
+              pattern="(\d{2}){5}"
               value={formData.phone_number}
               onChange={handleChange}
             />
           </div>
 
-          <div className="flex gap-4">
-            <div className="flex-grow">
-              <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="vehicle">
-                Vésicule
-              </Label>
-              <Input
-                className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                id="vehicle"
-                placeholder={userData?.last_name}
-                type="text"
-                value={formData?.last_name}
-                onChange={handleChange}
-              />
+          {formData.vehicles.map((vehicle, index) => (
+            
+            <div key={index} className="flex gap-4">
+              <div className="flex-grow">
+                <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor={`vehicle_${index}_model`}>
+                  Modèle
+                </Label>
+                <Input
+                  className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  id={`model-${index}`}
+                  placeholder={vehicle.model}
+                  type="text"
+                  value={vehicle.model}
+                  onChange={(e) => handleChange(e, index, 'model')}
+                />
+              </div>
+              <div className="flex-grow">
+                <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor={`vehicle_${index}_immatriculation`}>
+                  Immatriculation
+                </Label>
+                <Input
+                  className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  id={`immatriculation-${index}`}
+                  placeholder={vehicle.immatriculation}
+                  type="text"
+                  value={vehicle.immatriculation}
+                  onChange={(e) => handleChange(e, index, 'immatriculation')}
+                />
+              </div>
+              <div className="w-1/3">
+                <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor={`vehicle_${index}_places`}>
+                  Places
+                </Label>
+                <Input
+                  className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  id={`places-${index}`}
+                  placeholder="2"
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={vehicle.places}
+                  onChange={(e) => handleChange(e, index, 'places')}
+                />
+              </div>
+              {vehicle.id !== undefined && (
+              <Button
+                className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 mt-4"
+                type="button"
+                onClick={() => handleDeleteVehicle(vehicle.id!)}
+              >
+                X
+              </Button>
+            )}
             </div>
+          ))}
 
-            <div className="w-1/3">
-              <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="place">
-                places :
-              </Label>
-              <Input
-                className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                id="place"
-                placeholder={userData?.last_name}
-                type="number"
-                value={formData?.last_name}
-                min="1" max="10"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-              <button>[+]</button>
-                <p>
-                  Deuxième véhicule
-                </p>
-                <div className="flex gap-4">
-                  <div className="flex-grow">
-                    <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="vehicle">
-                      Vésicule
-                    </Label>
-                    <Input
-                      className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      id="vehicle"
-                      placeholder={userData?.first_name}
-                      type="text"
-                      value={formData?.first_name}
-                      onChange={handleChange}
-                    />
-                  </div>
-
-                  <div className="w-1/3">
-                    <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="place">
-                      places :
-                    </Label>
-                    <Input
-                      className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      id="place"
-                      placeholder={userData?.first_name}
-                      type="number"
-                      value={formData?.first_name}
-                      min="1" max="10"
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-
+          <Button
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
+            type="button"
+            onClick={handleAddVehicle}
+          >
+            Ajouter un véhicule
+          </Button>
 
           <Button
             className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
@@ -233,7 +261,6 @@ export function MyProfil() {
           </Button>
           {error && <p className="mt-4 text-center text-red-500">{error}</p>}
           {success && <p className="mt-4 text-center text-green-500">{success}</p>}
-
         </form>
       </div>
     </div>
