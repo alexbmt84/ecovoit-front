@@ -9,6 +9,7 @@ import {ArrowRightIcon} from "@/components/icons/Arrows";
 import {MapPinIcon} from "@/components/icons/MapPinIcon";
 import {UserIcon} from "@/components/icons/UserIcon";
 import {ClockIcon} from "@/components/icons/ClockIcon";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export function ListTrips() {
 
@@ -49,7 +50,7 @@ export function ListTrips() {
                     return;
                 }
 
-                const response = await axios.get('https://api.ecovoit.tech/api/trips?limit=10', {
+                const response = await axios.get(`${apiUrl}/api/trips?limit=10`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

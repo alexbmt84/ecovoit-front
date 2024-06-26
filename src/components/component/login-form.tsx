@@ -7,7 +7,6 @@ import {Button} from "@/components/ui/button"
 import Link from "next/link"
 import useCSRFToken from "@/hooks/useCSRFToken";
 import {useRouter} from "next/navigation";
-import {Navbar} from "@/components/component/navbar";
 import {useAuth} from "@/context/authContext";
 
 export function LoginForm() {
