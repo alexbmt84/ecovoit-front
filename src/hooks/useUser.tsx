@@ -1,6 +1,7 @@
 import {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 import axios from 'axios';
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const useUser = () => {
 
@@ -26,7 +27,7 @@ const useUser = () => {
 
             try {
 
-                const response = await axios.post('https://api.ecovoit.tech/api/me', undefined, {
+                const response = await axios.post(`${apiUrl}/api/me`, undefined, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

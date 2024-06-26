@@ -1,7 +1,8 @@
 import axios from "axios";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export async function fetchTrips(token: string, paramsObj: Record<string, string>): Promise<any> {
-    const baseUrl = 'https://api.ecovoit.tech/api/trips';
+    const baseUrl = `${apiUrl}/api/trips`;
     const params = new URLSearchParams(paramsObj).toString();
 
     try {

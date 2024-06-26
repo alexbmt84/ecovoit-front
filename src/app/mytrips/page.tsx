@@ -6,6 +6,7 @@ import {TripCard} from "@/components/component/trip-card";
 import useUser from "@/hooks/useUser";
 import {useRouter} from "next/navigation";
 import {SpinnerWheel} from "@/components/component/spinner-wheel";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Page() {
 
@@ -45,7 +46,7 @@ export default function Page() {
                     Authorization: `Bearer ${token}`
                 }
             };
-            axios.get(`https://api.ecovoit.tech/api/users/${userData.id}/trips`, config)
+            axios.get(`${apiUrl}/api/users/${userData.id}/trips`, config)
                 .then(response => {
                     setTrips(response.data);
                     setLoading(false);
