@@ -6,6 +6,7 @@ import axios from "axios";
 import {TripCard} from "@/components/component/trip-card";
 import {Loader} from "@/components/component/loader";
 import {useAuth} from "@/context/authContext";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Page() {
     interface UserData {
@@ -40,7 +41,7 @@ export default function Page() {
             }
 
             try {
-                const response = await axios.get(`https://api.ecovoit.tech/api/trips/${params.id}`, {
+                const response = await axios.get(`${apiUrl}/api/trips/${params.id}`, {
 
                     headers: {
                         'Authorization': `Bearer ${token}`

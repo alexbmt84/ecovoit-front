@@ -2,9 +2,9 @@
 
 import useUser from "@/hooks/useUser";
 import {SearchTripCard} from "@/components/component/searchTripCard";
-import {Loader} from "@/components/component/loader";
 import {ListTrips} from "@/components/component/list-trips";
 import {useAuth} from "@/context/authContext";
+import {SpinnerWheel} from "@/components/component/spinner-wheel";
 
 const Home = () => {
 
@@ -14,7 +14,7 @@ const Home = () => {
     if (loading) {
         return <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <div className="fixed inset-0 flex items-center justify-center">
-                <Loader/>
+                <SpinnerWheel/>
             </div>
         </main>
     }

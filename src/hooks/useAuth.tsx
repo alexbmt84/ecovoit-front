@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {useState} from 'react';
 import {useRouter} from "next/navigation";
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 
 const useAuth = () => {
     axios.defaults.withCredentials = true;
@@ -15,7 +17,7 @@ const useAuth = () => {
         setError(null);
 
         try {
-            const response = await axios.post('https://api.ecovoit.tech/api/login', {
+            const response = await axios.post(`${apiUrl}/api/login`, {
                 email,
                 password
             }, {
