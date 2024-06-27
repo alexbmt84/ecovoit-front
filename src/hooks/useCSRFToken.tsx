@@ -18,7 +18,6 @@ const useCSRFToken = () => {
         }
 
         fetchCSRFToken();
-
     }, []);
 };
 
