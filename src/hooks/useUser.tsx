@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 import { VehicleData } from "@/hooks/useVehicle";
 import axios from 'axios';
+import {token} from "stylis";
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const useUser = () => {
@@ -19,13 +20,15 @@ const useUser = () => {
     const [userData, setUserData] = useState<UserData | null>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+    const token = sessionStorage.getItem('access_token');
+
 
     useEffect(() => {
 
         const fetchUserData = async () => {
 
-            const token = sessionStorage.getItem('access_token');
             if (!token) {
+                setLoading(false);
                 router.push('/login');
                 return;
             }
@@ -52,7 +55,7 @@ const useUser = () => {
 
         fetchUserData();
 
-    }, [router]);
+    }, [router, token]);
 
     const updateUser = async (id: number, updatedData: Partial<UserData>) => {
         const token = sessionStorage.getItem('access_token');
