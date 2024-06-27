@@ -4,13 +4,10 @@ import {Button} from "@/components/ui/button"
 import {SheetTrigger, SheetClose, SheetContent, Sheet} from "@/components/ui/sheet"
 import Link from "next/link"
 import {useRouter} from "next/navigation";
+import { ProfileDropdown } from "@/components/component/profile-dropdown";
 import {useAuth} from "@/context/authContext";
-import {BriefcaseIcon} from "@/components/icons/BriefcaseIcon";
 import {XIcon} from "@/components/icons/XIcon";
 import {MenuIcon} from "@/components/icons/MenuIcon";
-import {HomeIcon} from "@/components/icons/HomeIcon";
-import {MailIcon} from "@/components/icons/MailIcon";
-import {InfoIcon} from "@/components/icons/InfoIcon";
 import {EcovoitLogo} from "@/components/logos/EcovoitLogo";
 
 // @ts-ignore
@@ -18,6 +15,7 @@ export function Navbar() {
 
     const router = useRouter();
     const {isAuthenticated, logout} = useAuth();
+
 
 
     const redirectToLogin = () => {
@@ -31,7 +29,7 @@ export function Navbar() {
                 <SheetTrigger asChild>
                     <Button className="md:hidden" size="icon" variant="outline">
                         <MenuIcon className="h-6 w-6"/>
-                        <span className="sr-only">Toggle navigation menu</span>
+                        <span className="sr-only">Menu</span>
                     </Button>
                 </SheetTrigger>
                 <SheetContent className="w-[300px] bg-white shadow-lg dark:bg-gray-950" side="left">
@@ -61,33 +59,27 @@ export function Navbar() {
                                     className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
                                     href={"/home"}
                                 >
-                                    <HomeIcon className="h-5 w-5"/>
-                                    Accueil
+                                    <CalendarDaysIcon className="h-5 w-5"/>
+                                    Reserver un trajet
                                 </Link>
                                 <Link
                                     className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
                                     href={"/mytrips"}
                                 >
-                                    <InfoIcon className="h-5 w-5"/>
+                                    <TargetIcon className="h-5 w-5"/>
                                     Mes trajets
                                 </Link>
                                 <Link
                                     className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
                                     href="#"
                                 >
-                                    <BriefcaseIcon className="h-5 w-5"/>
-                                    Services
-                                </Link>
-                                <Link
-                                    className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                                    href="#"
-                                >
-                                    <MailIcon className="h-5 w-5"/>
-                                    Contact
+                                    <UsersIcon className="h-5 w-5"/>
+                                    M&apos;e-co-voit
                                 </Link>
 
-                                <Button onClick={logout}
-                                        className="transition-colors hover:text-gray-900 dark:hover:text-gray-50">Déconnexion</Button>
+                                <div className="flex items-center gap-2">
+                                    <ProfileDropdown onLogout={logout} size="small"></ProfileDropdown>
+                                </div>
                             </>
                         ) : (
                             <Button onClick={redirectToLogin}
@@ -108,22 +100,16 @@ export function Navbar() {
             <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
                 {isAuthenticated ? (
                     <>
-                        <Link
-                            className="transition-colors hover:text-gray-500 dark:hover:text-gray-50 text-black" href={"/home"}>
-                            Accueil
+                        <Link className="p-2 transition-colors rounded-xl border-2 border-cyan-500 bg-white text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-gray-50/90" href="#">
+                            Reserver un trajet
                         </Link>
-                        <Link className="transition-colors hover:text-gray-500 dark:hover:text-gray-50" href={"/mytrips"}>
+                        <Link className="p-2 transition-colors rounded-xl border-2 border-cyan-500 bg-white text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-gray-50/90" href="#">
                             Mes trajets
                         </Link>
-                        <Link className="transition-colors hover:text-gray-500 dark:hover:text-gray-50" href="#">
-                            Services
+                        <Link className="p-2 transition-colors rounded-xl border-2 border-cyan-500 bg-white text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-gray-50/90" href="#">
+                            M&apos;e-co-voit
                         </Link>
-                        <Link className="transition-colors hover:text-gray-500 dark:hover:text-gray-50" href="#">
-                            Contact
-                        </Link>
-
-                        <Button onClick={logout}
-                                className="transition-colors hover:text-gray-500 dark:hover:text-gray-50">Déconnexion</Button>
+                        <ProfileDropdown onLogout={logout}/>
                     </>
                 ) : (
                     <Button onClick={redirectToLogin}
@@ -133,3 +119,79 @@ export function Navbar() {
         </header>
     )
 }
+
+// @ts-ignore
+function CalendarDaysIcon(props) {
+    return (
+      <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M8 2v4" />
+        <path d="M16 2v4" />
+        <rect width="18" height="18" x="3" y="4" rx="2" />
+        <path d="M3 10h18" />
+        <path d="M8 14h.01" />
+        <path d="M12 14h.01" />
+        <path d="M16 14h.01" />
+        <path d="M8 18h.01" />
+        <path d="M12 18h.01" />
+        <path d="M16 18h.01" />
+      </svg>
+    )
+  }
+
+
+// @ts-ignore
+function TargetIcon(props) {
+    return (
+      <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="6" />
+        <circle cx="12" cy="12" r="2" />
+      </svg>
+    )
+  }
+
+
+// @ts-ignore
+function UsersIcon(props) {
+    return (
+      <svg
+        {...props}
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    )
+  }
