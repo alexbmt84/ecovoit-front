@@ -17,7 +17,6 @@ const useCSRFToken = () => {
                 console.error('Unable to fetch CSRF token:', error);
             }
         }
-
         fetchCSRFToken();
 
     }, []);
