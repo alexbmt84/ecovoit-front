@@ -121,7 +121,7 @@ export function MyProfil() {
               alt="Profile Avatar"
               className="rounded-full w-full h-full object-cover"
               height={128}
-              src="/img/sticker2.jpg"
+              src={`/img/${userData?.avatar}`}
               style={{ aspectRatio: "128/128", objectFit: "cover" }}
               width={128}
             />
