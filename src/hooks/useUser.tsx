@@ -1,7 +1,8 @@
 import {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
-import { VehicleData } from "@/hooks/useVehicle";
+import {VehicleData} from "@/hooks/useVehicle";
 import axios from 'axios';
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const useUser = () => {
@@ -21,49 +22,38 @@ const useUser = () => {
     const router = useRouter();
 
     useEffect(() => {
-
         const fetchUserData = async () => {
-
             const token = sessionStorage.getItem('access_token');
-
             if (!token) {
-                setTimeout(() => {
-                    if (!sessionStorage.getItem('access_token')) {
-                        router.push('/login');
-                    }
-                }, 1000);
+                console.log('No token found, redirecting to login...');
+                router.push('/login');
                 return;
             }
 
             try {
-
                 const response = await axios.post(`${apiUrl}/api/me`, undefined, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-
                 setUserData(response.data);
-
             } catch (error) {
-                console.error('Erreur lors de la récupération des données utilisateur', error);
+                console.error('Error fetching user data', error);
                 router.push('/login');
-
             } finally {
                 setLoading(false);
             }
-
         };
 
         fetchUserData();
-
     }, [router]);
+
 
     const updateUser = async (id: number, updatedData: Partial<UserData>) => {
         const token = sessionStorage.getItem('access_token');
         if (!token) {
             router.push('/login');
-            return { ok: false, error: 'No token found' };
+            return {ok: false, error: 'No token found'};
         }
 
         try {
@@ -76,20 +66,19 @@ const useUser = () => {
 
             if (response.status === 200) {
                 setUserData(response.data);
-               return { ok: true };
+                return {ok: true};
             } else {
-                return { ok: false, error: 'Failed to update user' };
+                return {ok: false, error: 'Failed to update user'};
             }
 
         } catch (error) {
             console.error('Erreur lors de la mise à jour des données utilisateur', error);
-            return { ok: false, error: 'Failed to update user' };
+            return {ok: false, error: 'Failed to update user'};
         }
     };
 
-   
 
-    return { userData, loading, updateUser};
+    return {userData, loading, updateUser};
 
 };
 
