@@ -20,15 +20,15 @@ const useUser = () => {
     const [userData, setUserData] = useState<UserData | null>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
-    const token = sessionStorage.getItem('access_token');
-
+    const [token, setToken] = useState<string | null>(null);
 
     useEffect(() => {
 
         const fetchUserData = async () => {
 
+            setToken(sessionStorage.getItem('access_token'));
+
             if (!token) {
-                setLoading(false);
                 router.push('/login');
                 return;
             }
