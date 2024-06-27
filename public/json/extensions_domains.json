@@ -1,0 +1,10 @@
+{
+    "extensions": [
+        ".com", 
+        ".org", 
+        ".net", 
+        ".edu", 
+        ".gov", 
+        ".fr"
+    ]
+}
