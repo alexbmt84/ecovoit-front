@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
 import {VehicleData} from "@/hooks/useVehicle";
 import axios from 'axios';
+import useCSRFToken from "@/hooks/useCSRFToken";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -20,6 +21,8 @@ const useUser = () => {
     const [userData, setUserData] = useState<UserData | null>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
+
+    useCSRFToken();
 
     useEffect(() => {
         const fetchUserData = async () => {
