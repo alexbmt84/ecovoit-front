@@ -6,12 +6,8 @@ import Link from "next/link"
 import {useRouter} from "next/navigation";
 import { ProfileDropdown } from "@/components/component/profile-dropdown";
 import {useAuth} from "@/context/authContext";
-import {BriefcaseIcon} from "@/components/icons/BriefcaseIcon";
 import {XIcon} from "@/components/icons/XIcon";
 import {MenuIcon} from "@/components/icons/MenuIcon";
-import {HomeIcon} from "@/components/icons/HomeIcon";
-import {MailIcon} from "@/components/icons/MailIcon";
-import {InfoIcon} from "@/components/icons/InfoIcon";
 import {EcovoitLogo} from "@/components/logos/EcovoitLogo";
 
 // @ts-ignore
@@ -176,100 +172,3 @@ function TargetIcon(props) {
     )
   }
 
-
-// @ts-ignore
-function UsersIcon(props) {
-    return (
-      <svg
-        {...props}
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-    )
-  }
-
-
-// @ts-ignore
-function MailIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <rect width="20" height="16" x="2" y="4" rx="2"/>
-            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-        </svg>
-    )
-}
-
-
-// @ts-ignore
-function MenuIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <line x1="4" x2="20" y1="12" y2="12"/>
-            <line x1="4" x2="20" y1="6" y2="6"/>
-            <line x1="4" x2="20" y1="18" y2="18"/>
-        </svg>
-    )
-}
-
-
-function EcovoitLogo() {
-    return (
-        <Image src={"/img/logo.png"} alt={"ecovoit logo"} width={50} height={50}/>
-    )
-}
-
-
-// @ts-ignore
-function XIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M18 6 6 18"/>
-            <path d="m6 6 12 12"/>
-        </svg>
-    )
-}
