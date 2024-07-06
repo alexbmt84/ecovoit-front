@@ -8,6 +8,8 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const useUser = () => {
 
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
     type UserData = {
         id: number;
         first_name: string;
@@ -60,7 +62,7 @@ const useUser = () => {
         }
 
         try {
-            const response = await axios.put(`https://api.ecovoit.tech/api/users/${id}`, updatedData, {
+            const response = await axios.put(`${apiUrl}/api/users/${id}`, updatedData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
