@@ -129,13 +129,12 @@ export function ListTrips() {
                                             }
                                         </div>
                                     </div>
-                                    {trip.users && trip.users.length > 0 && (
+                                     {trip.users && trip.users.length > 0 && (
                                         <div className={"flex flex-row \"text-sm text-gray-500 space-x-2"}>
-
-                                            <UserIcon className="w-4 h-4 mt-1"/>
+                                            <UserIcon className="w-4 h-4 mt-1" />
                                             <ul>
-                                                <Link href="#">
-                                                    <li>{trip.users[0].first_name}</li>
+                                                <Link href={`/profil/${trip.users[0].id}`} legacyBehavior>
+                                                    <li>{trip.users[0].first_name} {trip.users[0].last_name}</li>
                                                 </Link>
                                             </ul>
                                         </div>
@@ -150,5 +149,5 @@ export function ListTrips() {
                 )}
             </CardContent>
         </Card>
-    )
+    );
 }
