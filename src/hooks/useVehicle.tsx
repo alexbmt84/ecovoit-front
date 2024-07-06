@@ -13,6 +13,7 @@ export type VehicleData = {
 const useVehicle = () => {
     const [vehicleData, setVehicleData] = useState<VehicleData[]>([]);
     const router = useRouter();
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     // Fonction pour ajouter un nouveau véhicule
     const addVehicle = async (newVehicle: Partial<VehicleData>) => {
@@ -23,7 +24,7 @@ const useVehicle = () => {
         }
 
         try {
-            const response = await axios.post('https://api.ecovoit.tech/api/vehicles', newVehicle, {
+            const response = await axios.post(`${apiUrl}/api/vehicles`, newVehicle, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -87,14 +88,13 @@ const useVehicle = () => {
         }
 
         try {
-            const response = await axios.delete(`https://api.ecovoit.tech/api/vehicles/${vehicleId}`, {
+            const response = await axios.delete(`${apiUrl}/api/vehicles/${vehicleId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
 
-            if (response.status === 204) {
-                // Supprimer le véhicule localement
+            if (response.status === 200) {
                 setVehicleData(prevVehicleData =>
                     prevVehicleData.filter(vehicle => vehicle.id !== vehicleId)
                 );
