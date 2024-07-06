@@ -15,6 +15,7 @@ export default function ProfilPage() {
     const [user, setUser] = useState(null); // State pour stocker les données de l'utilisateur
     const [loading, setLoading] = useState(true); // State pour gérer l'état de chargement
     const [error, setError] = useState<string | null>(null); // State pour gérer les erreurs
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     // Effectue une requête pour récupérer les données de l'utilisateur
     useEffect(() => {
@@ -27,7 +28,7 @@ export default function ProfilPage() {
             }
 
             try {
-                const response = await axios.get(`https://api.ecovoit.tech/api/users/${params.id}`, {
+                const response = await axios.get(`${apiUrl}/api/users/${params.id}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
