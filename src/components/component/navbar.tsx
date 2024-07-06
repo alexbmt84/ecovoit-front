@@ -34,7 +34,10 @@ export function Navbar() {
                 <SheetContent className="w-[300px] bg-white shadow-lg dark:bg-gray-950" side="left">
                     {isAuthenticated ? (
                         <div className="flex h-16 items-center justify-between px-4">
-                            <Link className="flex items-center gap-2 text-lg font-semibold" href={"/home"}>
+                            <Link
+                                className="flex items-center gap-2 text-lg font-semibold"
+                                href={"/home"}
+                                legacyBehavior>
                                 <EcovoitLogo/>
                             </Link>
                             <SheetClose>
@@ -43,7 +46,10 @@ export function Navbar() {
                         </div>
                     ) : (
                         <div className="flex h-16 items-center justify-between px-4">
-                            <Link className="flex items-center gap-2 text-lg font-semibold" href="/">
+                            <Link
+                                className="flex items-center gap-2 text-lg font-semibold"
+                                href="/"
+                                legacyBehavior>
                                 <EcovoitLogo/>
                             </Link>
                             <SheetClose>
@@ -88,11 +94,17 @@ export function Navbar() {
                 </SheetContent>
             </Sheet>
             {isAuthenticated ? (
-                <Link className="flex items-center gap-2 text-lg font-semibold" href={"/home"}>
+                <Link
+                    className="flex items-center gap-2 text-lg font-semibold"
+                    href={"/home"}
+                    legacyBehavior>
                     <EcovoitLogo/>
                 </Link>
             ) : (
-                <Link className="flex items-center gap-2 text-lg font-semibold" href="/">
+                <Link
+                    className="flex items-center gap-2 text-lg font-semibold"
+                    href="/"
+                    legacyBehavior>
                     <EcovoitLogo/>
                 </Link>
             )}
