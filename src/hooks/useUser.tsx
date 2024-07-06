@@ -56,7 +56,6 @@ const useUser = () => {
 
     const updateUser = async (id: number, updatedData: Partial<UserData>) => {
         const token = sessionStorage.getItem('access_token');
-        console.log(token)
         if (!token) {
             router.push('/login');
             return {ok: false, error: 'No token found'};
