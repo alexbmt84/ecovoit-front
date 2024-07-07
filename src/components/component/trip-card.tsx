@@ -1,8 +1,9 @@
 import {Card, CardHeader, CardContent} from "@/components/ui/card"
 import {MapPinIcon} from "@/components/icons/MapPinIcon";
 import useUser from "@/hooks/useUser";
+import { AwaitedReactNode, JSX, JSXElementConstructor, ReactElement, ReactNode, ReactPortal, SVGProps} from "react";
 
-export function TripCard(props) {
+export function TripCard(props: { trip: { departure: string, destination: string, departure_time: string }}) {
     const {userData} = useUser();
     return (
         <Card className="shadow-md rounded-lg max-w-md mx-auto lg:min-w-[350px] mt-5 mb-3">
@@ -59,7 +60,7 @@ export function TripCard(props) {
     )
 }
 
-function ArrowRightIcon(props) {
+function ArrowRightIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
     return (
         <svg
             {...props}
@@ -80,7 +81,7 @@ function ArrowRightIcon(props) {
 }
 
 
-function CalendarIcon(props) {
+function CalendarIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
     return (
         <svg
             {...props}
@@ -103,7 +104,7 @@ function CalendarIcon(props) {
 }
 
 
-function CarIcon(props) {
+function CarIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
     return (
         <svg
             {...props}
@@ -127,7 +128,7 @@ function CarIcon(props) {
 }
 
 
-function ClockIcon(props) {
+function ClockIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
     return (
         <svg
             {...props}
@@ -148,7 +149,7 @@ function ClockIcon(props) {
 }
 
 
-function UserIcon(props) {
+function UserIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
     return (
         <svg
             {...props}
@@ -169,7 +170,7 @@ function UserIcon(props) {
 }
 
 
-function UsersIcon(props) {
+function UsersIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
     return (
         <svg
             {...props}
