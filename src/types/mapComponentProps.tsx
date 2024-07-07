@@ -4,4 +4,5 @@ export interface MapComponentProps {
     currentArrival: string;
     currentVehicle: string | null;
     currentUser: string | null;
+    currentUserId: string | null;
 }

@@ -7,5 +7,6 @@ export interface TripInformation {
     duration: string;
     model: string | null;
     user: string | null;
+    userId: string | null;
     trips: Trip[];
 }

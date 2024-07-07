@@ -11,6 +11,7 @@ import {CarIcon} from "@/components/icons/CarIcon";
 import {DistanceIcon} from "@/components/icons/DistanceIcon";
 import {ShareIcon} from "@/components/icons/ShareIcon";
 import {Button} from "@/components/ui/button";
+import Link from "next/link";
 
 export function MapContainer() {
 
@@ -21,10 +22,11 @@ export function MapContainer() {
         duration: '',
         model: '',
         user: '',
+        userId: '',
         trips: [],
     });
 
-    const [currentTrip, setCurrentTrip] = useState({departure: '', arrival: '', vehicle: '', user: ''});
+    const [currentTrip, setCurrentTrip] = useState({departure: '', arrival: '', vehicle: '', user: '', userId: ''});
 
     const handleTripInformations = (
         departure: string,
@@ -33,11 +35,12 @@ export function MapContainer() {
         duration: string,
         trips: any[],
         model: string | null,
-        user?: string | null
+        user?: string | null,
+        userId?: string | null
     ) => {
 
         try {
-            setTripInformations({departure, arrival, distance, duration, trips, model: model ?? "", user: user ?? ""});
+            setTripInformations({departure, arrival, distance, duration, trips, model: model ?? "", user: user ?? "", userId: userId ?? ""});
         } catch (error) {
             console.log(error);
         }
@@ -50,7 +53,8 @@ export function MapContainer() {
             departure: trip.departure,
             arrival: trip.destination,
             vehicle: trip.vehicle.model,
-            user: trip.users[0].first_name
+            user: trip.users[0].first_name,
+            userId: trip.users[0].id
         });
     };
 
@@ -86,6 +90,8 @@ export function MapContainer() {
                                           currentArrival={currentTrip.arrival}
                                           currentVehicle={currentTrip.vehicle}
                                           currentUser={currentTrip.user}
+                                          currentUserId={currentTrip.userId}
+
                             />
                         </Suspense>
                     </div>
@@ -131,9 +137,11 @@ export function MapContainer() {
                                     {tripInformations.user && (
                                         <div className="mt-2 flex text-gray-500">
                                             <UserIcon className="mr-2 h-5 w-5"/>
-                                            <div className="text-sm font-bold">
-                                                <span>{tripInformations.user}</span>
-                                            </div>
+                                            <Link href={`/profil/${tripInformations.userId}`}>
+                                                <div className="text-sm font-bold">
+                                                    <span>{tripInformations.user}</span>
+                                                </div>
+                                            </Link>
                                         </div>
                                     )}
 
