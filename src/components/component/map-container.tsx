@@ -12,8 +12,32 @@ import {DistanceIcon} from "@/components/icons/DistanceIcon";
 import {ShareIcon} from "@/components/icons/ShareIcon";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
+import axios from "axios";
+import {useRouter, useSearchParams} from "next/navigation";
+import useUser from "@/hooks/useUser";
+import {VehicleSelect} from "@/components/component/vehicle-select";
+import {VehicleData} from "@/hooks/useVehicle";
 
 export function MapContainer() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const router = useRouter();
+    const csrfToken = typeof window !== 'undefined' ? localStorage.getItem('csrfToken') : null;
+    const token = sessionStorage.getItem('access_token');
+    const {userData} = useUser();
+    const [showSelect, setShowSelect] = useState(false);
+    const [showCreate, setShowCreate] = useState(true);
+    const [selectedVehicle, setSelectedVehicle] = useState<VehicleData | null>(null);
+    const searchParams = useSearchParams();
+    const startDate = searchParams.get('startDate');
+
+    if (userData) {
+        console.log(userData);
+    }
+
+    if (!token) {
+        router.push('/login');
+        return;
+    }
 
     const [tripInformations, setTripInformations] = useState<TripInformation>({
         departure: '',
@@ -28,6 +52,11 @@ export function MapContainer() {
 
     const [currentTrip, setCurrentTrip] = useState({departure: '', arrival: '', vehicle: '', user: '', userId: ''});
 
+    const handleVehicleSelect = (vehicle) => {
+        setSelectedVehicle(vehicle);
+        console.log("Selected Vehicle:", vehicle);
+    };
+
     const handleTripInformations = (
         departure: string,
         arrival: string,
@@ -40,7 +69,16 @@ export function MapContainer() {
     ) => {
 
         try {
-            setTripInformations({departure, arrival, distance, duration, trips, model: model ?? "", user: user ?? "", userId: userId ?? ""});
+            setTripInformations({
+                departure,
+                arrival,
+                distance,
+                duration,
+                trips,
+                model: model ?? "",
+                user: user ?? "",
+                userId: userId ?? ""
+            });
         } catch (error) {
             console.log(error);
         }
@@ -65,6 +103,40 @@ export function MapContainer() {
                 return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
             }
         );
+    }
+
+    const handleSelectCar = () => {
+        setShowCreate(!showCreate);
+        setShowSelect(!showSelect);
+    }
+
+    const cancelCreateTrip = () => {
+        setShowCreate(!showCreate);
+        setShowSelect(!showSelect);
+    }
+
+    const handleCreateTrip = async () => {
+        try {
+            console.log(selectedVehicle)
+            const response = await axios.post(`${apiUrl}/api/trips`, {
+                departure: tripInformations.departure,
+                destination: tripInformations.arrival,
+                distance: tripInformations.distance,
+                departure_time: startDate,
+                vehicle_id: selectedVehicle?.id
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'X-CSRF-TOKEN': csrfToken
+                }
+
+            })
+            alert("Trip successfully created")
+            console.log(response);
+        } catch (error) {
+            console.log("Error while creating trip")
+            console.error(error);
+        }
     }
 
     return (
@@ -133,34 +205,44 @@ export function MapContainer() {
                                     ) : (
                                         <div></div>
                                     )}
-
-                                    {tripInformations.user && (
-                                        <div className="mt-2 flex text-gray-500">
-                                            <UserIcon className="mr-2 h-5 w-5"/>
-                                            <Link href={`/profil/${tripInformations.userId}`}>
-                                                <div className="text-sm font-bold">
-                                                    <span>{tripInformations.user}</span>
-                                                </div>
-                                            </Link>
-                                        </div>
-                                    )}
-
-                                    {tripInformations.model ? (
-                                        <div className="mt-2 flex text-gray-500">
-                                            <CarIcon className="mr-2 h-5 w-5"/>
-                                            <div className="text-sm font-bold">
-                                                <span>{tripInformations.model}</span>
+                                    {showCreate && tripInformations.user && tripInformations.model && (
+                                        <>
+                                            <div className="mt-2 flex text-gray-500">
+                                                <UserIcon className="mr-2 h-5 w-5"/>
+                                                <Link href={`/profil/${tripInformations.userId}`}>
+                                                    <div className="text-sm font-bold">
+                                                        <span>{tripInformations.user}</span>
+                                                    </div>
+                                                </Link>
                                             </div>
-                                        </div>
 
-                                    ) : (
-                                        <div></div>
+
+                                            <div className="mt-2 flex text-gray-500">
+                                                <CarIcon className="mr-2 h-5 w-5"/>
+                                                <div className="text-sm font-bold">
+                                                    <span>{tripInformations.model}</span>
+                                                </div>
+                                            </div>
+
+
+                                            <Button className="w-full mt-5" size="lg" onClick={handleSelectCar}>
+                                                <CarIcon className="mr-2 h-5 w-5"/>
+                                                Créer ce trajet
+                                            </Button>
+                                        </>
                                     )}
-
-                                    <Button className="w-full mt-5" size="lg">
-                                        <CarIcon className="mr-2 h-5 w-5"/>
-                                        Créer ce trajet
-                                    </Button>
+                                    {showSelect && (
+                                        <>
+                                            <VehicleSelect userVehiclesProps={userData?.vehicles} onSelectVehicle={handleVehicleSelect} />                                            <div className={"flex flex-row gap-2"}>
+                                                <Button className="w-full mt-3 mb-3" size="lg" onClick={handleCreateTrip}>
+                                                    Valider
+                                                </Button>
+                                                <Button className="w-full mt-3 mb-3" size="lg" onClick={cancelCreateTrip}>
+                                                    Annuler
+                                                </Button>
+                                            </div>
+                                        </>
+                                    )}
                                     <Button className="w-full" size="lg" variant="outline">
                                         <ShareIcon className="mr-2 h-5 w-5"/>
                                         Partager ce trajet
@@ -222,7 +304,8 @@ export function MapContainer() {
                                             </div>
                                         ))
                                     ) : (
-                                        <div className={"mx-auto text-gray-500 font-bold"}>Aucun trajet n&apos;a été trouvé</div>
+                                        <div className={"mx-auto text-gray-500 font-bold"}>Aucun trajet n&apos;a été
+                                            trouvé</div>
                                     )}
                                 </div>
                             </>
