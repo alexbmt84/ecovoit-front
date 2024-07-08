@@ -18,6 +18,16 @@ import useUser from "@/hooks/useUser";
 import {VehicleSelect} from "@/components/component/vehicle-select";
 import {VehicleData} from "@/hooks/useVehicle";
 
+interface Vehicle {
+    id: number;
+    model: string;
+    immatriculation: string;
+    places: number;
+    picture: string;
+
+    [key: string]: any;
+}
+
 export function MapContainer() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
@@ -54,7 +64,7 @@ export function MapContainer() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [currentTrip, setCurrentTrip] = useState({departure: '', arrival: '', vehicle: '', user: '', userId: ''});
 
-    const handleVehicleSelect = (vehicle: React.SetStateAction<VehicleData | null>) => {
+    const handleVehicleSelect = (vehicle: Vehicle | null) => {
         setSelectedVehicle(vehicle);
         console.log("Selected Vehicle:", vehicle);
     };
@@ -118,12 +128,16 @@ export function MapContainer() {
     }
 
     const handleCreateTrip = async () => {
+        if (!startDate) {
+            alert("Please select a date and time for your trip")
+            return;
+        }
         try {
             console.log(selectedVehicle)
             const response = await axios.post(`${apiUrl}/api/trips`, {
                 departure: tripInformations.departure,
                 destination: tripInformations.arrival,
-                distance: tripInformations.distance,
+                distance: parseInt(tripInformations.distance),
                 departure_time: startDate,
                 vehicle_id: selectedVehicle?.id
             }, {
@@ -135,6 +149,7 @@ export function MapContainer() {
             })
             alert("Trip successfully created")
             console.log(response);
+            router.push('/mytrips')
         } catch (error) {
             console.log("Error while creating trip")
             console.error(error);
@@ -210,7 +225,28 @@ export function MapContainer() {
                                     ) : (
                                         <div></div>
                                     )}
-                                    {showCreate && tripInformations.user && tripInformations.model && (
+
+                                    {showSelect ? (
+                                        <>
+
+                                            <VehicleSelect
+                                                userVehiclesProps={userData?.vehicles ? [userData.vehicles] : undefined}
+                                                onSelectVehicle={handleVehicleSelect}
+                                            />
+                                            <div className={"flex flex-row gap-2"}>
+                                                <Button className="w-full mt-3 mb-3"
+                                                        size="lg"
+                                                        onClick={handleCreateTrip}
+                                                >
+                                                    Valider
+                                                </Button>
+                                                <Button className="w-full mt-3 mb-3" size="lg"
+                                                        onClick={cancelCreateTrip}>
+                                                    Annuler
+                                                </Button>
+                                            </div>
+                                        </>
+                                    ) : tripInformations.user && tripInformations.model ? (
                                         <>
                                             <div className="mt-2 flex text-gray-500">
                                                 <UserIcon className="mr-2 h-5 w-5"/>
@@ -228,25 +264,16 @@ export function MapContainer() {
                                                     <span>{tripInformations.model}</span>
                                                 </div>
                                             </div>
-
-
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )}
+                                    {showCreate && (
+                                        <>
                                             <Button className="w-full mt-5" size="lg" onClick={handleSelectCar}>
                                                 <CarIcon className="mr-2 h-5 w-5"/>
                                                 Créer ce trajet
                                             </Button>
-                                        </>
-                                    )}
-                                    {showSelect && (
-                                        <>
-
-                                            <VehicleSelect userVehiclesProps={userData?.vehicles} onSelectVehicle={handleVehicleSelect} />                                            <div className={"flex flex-row gap-2"}>
-                                                <Button className="w-full mt-3 mb-3" size="lg" onClick={handleCreateTrip}>
-                                                    Valider
-                                                </Button>
-                                                <Button className="w-full mt-3 mb-3" size="lg" onClick={cancelCreateTrip}>
-                                                    Annuler
-                                                </Button>
-                                            </div>
                                         </>
                                     )}
                                     <Button className="w-full" size="lg" variant="outline">
@@ -277,13 +304,13 @@ export function MapContainer() {
                                                         </p>
                                                     </div>
 
-                                                    <div className={"flex space-x-1"}>
-                                                        <DistanceIcon
-                                                            className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-1"/>
-                                                        <p>
-                                                            {trip.distance} km
-                                                        </p>
-                                                    </div>
+                                                    {/*<div className={"flex space-x-1"}>*/}
+                                                    {/*    <DistanceIcon*/}
+                                                    {/*        className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-1"/>*/}
+                                                    {/*    <p>*/}
+                                                    {/*        {trip.distance} km*/}
+                                                    {/*    </p>*/}
+                                                    {/*</div>*/}
                                                     <div className={"flex space-x-1"}>
                                                         <CarIcon
                                                             className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-0.5"/>

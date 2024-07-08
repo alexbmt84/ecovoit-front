@@ -5,17 +5,21 @@ interface Vehicle {
     id: number;
     model: string;
     immatriculation: string;
+    places:number,
+    picture: string;
     [key: string]: any;
 }
 
 interface VehicleSelectProps {
-    userVehiclesProps: Vehicle[];
+    userVehiclesProps: Vehicle[] | undefined;
     onSelectVehicle: (vehicle: Vehicle | null) => void;
 }
 
 export function VehicleSelect({ userVehiclesProps, onSelectVehicle }: VehicleSelectProps) {
     const handleSelectedVehicle = (vehicleId: number) => {
-        const selected = userVehiclesProps.find(vehicle => vehicle.id === vehicleId);
+        // Flatten the array to ensure it's a single-level array of vehicle objects
+        const flatUserVehiclesProps = userVehiclesProps?.flat();
+        const selected = flatUserVehiclesProps?.find(vehicle => vehicle.id === vehicleId);
         onSelectVehicle(selected || null);
     };
 
@@ -26,14 +30,16 @@ export function VehicleSelect({ userVehiclesProps, onSelectVehicle }: VehicleSel
             </SelectTrigger>
             <SelectContent className="bg-white">
                 <SelectGroup>
-                    {userVehiclesProps.map((vehicle) => (
-                        <SelectItem key={vehicle.id} value={vehicle.id.toString()} className="cursor-pointer">
-                            <div className="flex flex-row">
-                                <CarIcon className="mr-2 h-5 w-5"/>
-                                {vehicle.model} ({vehicle.immatriculation})
-                            </div>
-                        </SelectItem>
-                    ))}
+                    {userVehiclesProps?.flat().map((vehicle) => (
+                        vehicle.id ? (
+                            <SelectItem key={vehicle.id} value={vehicle.id.toString()} className="cursor-pointer">
+                                <div className="flex flex-row">
+                                    <CarIcon className="mr-2 h-5 w-5"/>
+                                    {vehicle.model} ({vehicle.immatriculation})
+                                </div>
+                            </SelectItem>
+                        ) : null
+                    )) || <SelectItem value="no-vehicles" className="cursor-not-allowed">Aucun véhicule disponible</SelectItem>}
                 </SelectGroup>
             </SelectContent>
         </Select>

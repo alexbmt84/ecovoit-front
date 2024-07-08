@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JetClientState">
+    <option name="folders">
+      <list>
+        <folderState>
+          <option name="description" value="Ecovoit API routes" />
+          <option name="environmentGroups">
+            <list>
+              <environmentGroupState>
+                <option name="environments">
+                  <list>
+                    <environmentState>
+                      <option name="name" value="DEV" />
+                    </environmentState>
+                    <environmentState>
+                      <option name="name" value="PROD" />
+                    </environmentState>
+                  </list>
+                </option>
+                <option name="name" value="Default" />
+              </environmentGroupState>
+            </list>
+          </option>
+          <option name="folders">
+            <list>
+              <folderState>
+                <option name="auth">
+                  <authState>
+                    <option name="bearer">
+                      <lc>
+                        <option name="token" value="{{access_token}}" />
+                      </lc>
+                    </option>
+                    <option name="type" value="BEARER" />
+                  </authState>
+                </option>
+                <option name="folders">
+                  <list>
+                    <folderState>
+                      <option name="id" value="1bd7a93d-30c1-427e-ba96-8e72325afdee" />
+                      <option name="name" value="Users" />
+                      <option name="requests">
+                        <list>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#13;&#10;    &quot;password&quot;: &quot;ecovoit84&quot;,&#13;&#10;    &quot;first_name&quot;: &quot;MC&quot;,&#13;&#10;    &quot;last_name&quot;: &quot;Bordeaux&quot;,&#13;&#10;    &quot;email&quot;: &quot;mc@gmail.com&quot;,&#13;&#10;    &quot;phone_number&quot;: &quot;0606060660&quot;,&#13;&#10;    &quot;role_id&quot;: 1,&#13;&#10;    &quot;establishment_id&quot;: 1,&#13;&#10;    &quot;avatar&quot;: &quot;avatar.png&quot;&#13;&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/api/register" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                                <headerState>
+                                  <option name="disabled" value="true" />
+                                  <option name="key" value="X-XSRF-TOKEN" />
+                                  <option name="value" value="{{xsrf-token}}" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="6be5ef81-c49d-4e53-b7c4-e92269ae679d" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Register User" />
+                            <option name="sortWeight" value="1000000" />
+                            <option name="url" value="{{base_url_local}}/api/register" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="formData">
+                                  <list>
+                                    <formDataParameterState>
+                                      <option name="key" value="email" />
+                                      <option name="value" value="alexis@gmail.com" />
+                                    </formDataParameterState>
+                                    <formDataParameterState>
+                                      <option name="key" value="password" />
+                                      <option name="value" value="password" />
+                                    </formDataParameterState>
+                                  </list>
+                                </option>
+                                <option name="type" value="FORM_DATA" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="/api/login" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="49eb41ec-a89f-4eef-a689-c4d3d98f4c14" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Login User" />
+                            <option name="sortWeight" value="2000000" />
+                            <option name="url" value="{{base_url_local}}/api/login" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="localhost:8000/api/me" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                                <headerState />
+                              </list>
+                            </option>
+                            <option name="id" value="0ece39fe-d018-4a8c-befc-279bde5f26bb" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Get User" />
+                            <option name="sortWeight" value="3000000" />
+                            <option name="url" value="{{base_url_local}}/api/me" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="localhost:8000/api/users/99" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="30e04bc4-cc70-4e1d-99f0-1d3111614554" />
+                            <option name="method" value="DELETE" />
+                            <option name="name" value="Delete User" />
+                            <option name="sortWeight" value="5000000" />
+                            <option name="url" value="{{base_url_local}}/api/users/99" />
+                          </requestState>
+                          <requestState>
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="323d77a1-447d-429e-a54c-0a795dadcbcd" />
+                            <option name="method" value="PUT" />
+                            <option name="name" value="Update User" />
+                            <option name="sortWeight" value="6000000" />
+                            <option name="url" value="{{base_url_local}}/api/users/99" />
+                          </requestState>
+                        </list>
+                      </option>
+                      <option name="sortWeight" value="1000000" />
+                    </folderState>
+                    <folderState>
+                      <option name="description" value="{{base_url}}/api/trips" />
+                      <option name="id" value="bb84aa37-6907-498c-8aec-8411e9bf41d8" />
+                      <option name="name" value="Trips" />
+                      <option name="requests">
+                        <list>
+                          <requestState>
+                            <option name="description" value="{{base_url}}/api/trips" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="f0a8129e-e50d-4e7b-af08-1b4a37bd9d28" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Get trips" />
+                            <option name="sortWeight" value="1000000" />
+                            <option name="url" value="{{base_url}}/api/trips" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="{{base_url}}/api/trips/1" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="adc0ed23-9b75-4545-a2b8-4fa51a119e00" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Get trip id" />
+                            <option name="sortWeight" value="2000000" />
+                            <option name="url" value="{{base_url}}/api/trips/1" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="{{base_url}}/api/trips/1" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="9d8c6130-6f0b-4be1-af36-59908001ca8f" />
+                            <option name="method" value="DELETE" />
+                            <option name="name" value="Delete Trip" />
+                            <option name="sortWeight" value="3000000" />
+                            <option name="url" value="{{base_url}}/api/trips/1" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#13;&#10;    &quot;departure&quot;: &quot;Carpentras&quot;,&#13;&#10;    &quot;destination&quot;: &quot;Avignon&quot;,&#13;&#10;    &quot;distance&quot;: &quot;30.50&quot;,&#13;&#10;    &quot;departure_time&quot;: &quot;2024-04-19 08:00:00&quot;,&#13;&#10;    &quot;vehicle_id&quot;: 48&#13;&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/api/trips" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="a9740a5c-25fa-4053-9cb8-6163d8c1324d" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Add Trip" />
+                            <option name="sortWeight" value="4000000" />
+                            <option name="url" value="{{base_url}}/api/trips" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#13;&#10;    &quot;departure&quot;: &quot;Marseille&quot;,&#13;&#10;    &quot;destination&quot;: &quot;Pertuis&quot;,&#13;&#10;    &quot;distance&quot;: &quot;1100.50&quot;,&#13;&#10;    &quot;status&quot;: 0,&#13;&#10;    &quot;departure_time&quot;: &quot;2024-04-18 08:00:00&quot;,&#13;&#10;    &quot;vehicle_id&quot;: 48&#13;&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/api/trips/101" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="6afd96fc-1f55-4ef4-beef-0196970b8bda" />
+                            <option name="method" value="PUT" />
+                            <option name="name" value="Update trip" />
+                            <option name="sortWeight" value="5000000" />
+                            <option name="url" value="{{base_url}}/api/trips/101" />
+                          </requestState>
+                        </list>
+                      </option>
+                      <option name="sortWeight" value="2000000" />
+                    </folderState>
+                    <folderState>
+                      <option name="id" value="4705763d-f16c-43b5-b784-27a6e7c19cdd" />
+                      <option name="name" value="Chat" />
+                      <option name="requests">
+                        <list>
+                          <requestState>
+                            <option name="auth">
+                              <authState>
+                                <option name="bearer">
+                                  <lc>
+                                    <option name="token" value="16|wvqO4AFpcaKXNJlRV3RA8de5JPfZkis73IUzRTB84f1418a6" />
+                                  </lc>
+                                </option>
+                                <option name="type" value="BEARER" />
+                              </authState>
+                            </option>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#10;    &quot;socket_id&quot;: &quot;9013.50262712&quot;,&#10;    &quot;channel_name&quot;: &quot;private-chatify&quot;&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="127.0.0.1:8000/chatify/api/chat/auth" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                                <headerState>
+                                  <option name="key" value="XSRF-TOKEN" />
+                                  <option name="value" value="PrJGKu8i8zLhOqVEcjRvKQB1caJwF7Dev2as8gkC" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="f2ffd7ff-429b-43e1-8be5-018ab9c5abeb" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Auth Endpoint" />
+                            <option name="sortWeight" value="1000000" />
+                            <option name="url" value="127.0.0.1:8000/chatify/api/chat/auth" />
+                          </requestState>
+                          <requestState>
+                            <option name="auth">
+                              <authState>
+                                <option name="bearer">
+                                  <lc>
+                                    <option name="token" value="16|wvqO4AFpcaKXNJlRV3RA8de5JPfZkis73IUzRTB84f1418a6" />
+                                  </lc>
+                                </option>
+                                <option name="type" value="BEARER" />
+                              </authState>
+                            </option>
+                            <option name="body">
+                              <bodyState>
+                                <option name="formData">
+                                  <list>
+                                    <formDataParameterState>
+                                      <option name="key" value="id" />
+                                      <option name="value" value="1" />
+                                    </formDataParameterState>
+                                    <formDataParameterState>
+                                      <option name="key" value="type" />
+                                      <option name="value" value="user" />
+                                    </formDataParameterState>
+                                    <formDataParameterState>
+                                      <option name="key" value="message" />
+                                      <option name="value" value="hi there" />
+                                    </formDataParameterState>
+                                    <formDataParameterState>
+                                      <option name="key" value="temporaryMsgId" />
+                                      <option name="value" value="temp_1" />
+                                    </formDataParameterState>
+                                  </list>
+                                </option>
+                                <option name="type" value="FORM_DATA" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="127.0.0.1:8000/chatify/api/sendMessage" />
+                            <option name="id" value="4f35466a-dd83-44c4-98ce-519dc9352ca0" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Send Message" />
+                            <option name="sortWeight" value="2000000" />
+                            <option name="url" value="127.0.0.1:8000/chatify/api/sendMessage" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#10;    &quot;id&quot;:1&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/chatify/api/fetchMessages" />
+                            <option name="id" value="b4cc4b60-cd8b-481d-b81d-b973e1bb5c74" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Fetch User's Messages" />
+                            <option name="sortWeight" value="3000000" />
+                            <option name="url" value="{{base_url}}/chatify/api/fetchMessages" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="{{base_url}}/download/file-name-here" />
+                            <option name="id" value="2bed1101-dc8b-40e7-9f7e-6163605a7a52" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Download File" />
+                            <option name="sortWeight" value="4000000" />
+                            <option name="url" value="{{base_url}}/download/file-name-here" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#10;    &quot;id&quot;:1&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/makeSeen" />
+                            <option name="id" value="65e6ba40-12e6-438b-8804-e9b2a71d5d00" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Make Message Seen" />
+                            <option name="sortWeight" value="5000000" />
+                            <option name="url" value="{{base_url}}/makeSeen" />
+                          </requestState>
+                          <requestState>
+                            <option name="auth">
+                              <authState>
+                                <option name="bearer">
+                                  <lc>
+                                    <option name="token" value="16|wvqO4AFpcaKXNJlRV3RA8de5JPfZkis73IUzRTB84f1418a6" />
+                                  </lc>
+                                </option>
+                                <option name="type" value="BEARER" />
+                              </authState>
+                            </option>
+                            <option name="description" value="127.0.0.1:8000/api/getContacts" />
+                            <option name="id" value="c269719d-e5b4-4677-be10-4554492b24bd" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Get Contacts" />
+                            <option name="sortWeight" value="6000000" />
+                            <option name="url" value="127.0.0.1:8000/api/getContacts" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="{{base_url}}/favorites" />
+                            <option name="id" value="7f0a2748-55b4-455d-96c6-43e2495b4f5f" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Get Favorites" />
+                            <option name="sortWeight" value="7000000" />
+                            <option name="url" value="{{base_url}}/favorites" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#10;    &quot;user_id&quot;:1&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/star" />
+                            <option name="id" value="9d61480b-d665-4ae2-8369-2142aea50512" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Star a user (make as favorite)" />
+                            <option name="sortWeight" value="8000000" />
+                            <option name="url" value="{{base_url}}/star" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="{{base_url}}/search" />
+                            <option name="id" value="6c5fcc1d-1dbd-4468-a3e7-9bc42063eb35" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Search" />
+                            <option name="queryParams">
+                              <list>
+                                <queryParamState>
+                                  <option name="key" value="input" />
+                                  <option name="value" value="blah" />
+                                </queryParamState>
+                              </list>
+                            </option>
+                            <option name="sortWeight" value="9000000" />
+                            <option name="url" value="{{base_url}}/search?input=blah" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#10;    &quot;user_id&quot;:1&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/shared" />
+                            <option name="id" value="6c617c94-f1d5-422b-9b52-a02749a8483a" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Get Shared Photos" />
+                            <option name="sortWeight" value="10000000" />
+                            <option name="url" value="{{base_url}}/shared" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#10;    &quot;user_id&quot;:1&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/deleteConversation" />
+                            <option name="id" value="dd1325ee-bc97-438c-8153-823ac549f52e" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Delete Conversation" />
+                            <option name="sortWeight" value="11000000" />
+                            <option name="url" value="{{base_url}}/deleteConversation" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="formData">
+                                  <list>
+                                    <formDataParameterState>
+                                      <option name="key" value="messengerColor" />
+                                      <option name="value" value="messengerColor-2" />
+                                    </formDataParameterState>
+                                    <formDataParameterState>
+                                      <option name="key" value="dark_mode" />
+                                      <option name="value" value="dark" />
+                                    </formDataParameterState>
+                                  </list>
+                                </option>
+                                <option name="type" value="FORM_DATA" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/updateSettings" />
+                            <option name="id" value="e575be9a-88b5-4456-8ea5-0d745332806f" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Update User's Settings" />
+                            <option name="sortWeight" value="12000000" />
+                            <option name="url" value="{{base_url}}/updateSettings" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#10;    &quot;user_id&quot;:1,&#10;    &quot;status&quot;: 1&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/setActiveStatus" />
+                            <option name="id" value="858297d9-c574-4ff1-8338-df477c668009" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Set User's Active Status" />
+                            <option name="sortWeight" value="13000000" />
+                            <option name="url" value="{{base_url}}/setActiveStatus" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#10;    &quot;id&quot;:1,&#10;    &quot;type&quot;: &quot;user&quot;&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/idInfo" />
+                            <option name="id" value="d4246cd0-4c43-45cf-893f-5eb9859158a4" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Fetch User/Group By ID &amp; Type" />
+                            <option name="sortWeight" value="14000000" />
+                            <option name="url" value="{{base_url}}/idInfo" />
+                          </requestState>
+                        </list>
+                      </option>
+                      <option name="sortWeight" value="3000000" />
+                    </folderState>
+                    <folderState>
+                      <option name="id" value="000ad6ff-03eb-42d4-87f4-5b55be85ca2e" />
+                      <option name="name" value="Roles" />
+                      <option name="requests">
+                        <list>
+                          <requestState>
+                            <option name="description" value="localhost:8000/api/roles" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="5d9b0dba-fd6f-49a4-9731-b95b41f5f4dc" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Get Roles" />
+                            <option name="sortWeight" value="1000000" />
+                            <option name="url" value="localhost:8000/api/roles" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#13;&#10;    &quot;label&quot;: &quot;super admin&quot;&#13;&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/api/roles" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="048a492b-4f0d-44f2-b39f-632bfe60e86e" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Add Role" />
+                            <option name="sortWeight" value="2000000" />
+                            <option name="url" value="{{base_url}}/api/roles" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="{{base_url}}/api/roles/1" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="b8c0d459-7770-40d2-a3b5-5ca3c882629e" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Get Role id" />
+                            <option name="sortWeight" value="3000000" />
+                            <option name="url" value="{{base_url}}/api/roles/1" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#13;&#10;    &quot;label&quot;: &quot;admin&quot;&#13;&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url}}/api/roles/1" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="db92b7dd-2410-426b-b56e-143392e62685" />
+                            <option name="method" value="PUT" />
+                            <option name="name" value="Update Role" />
+                            <option name="sortWeight" value="4000000" />
+                            <option name="url" value="{{base_url}}/api/roles/1" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="{{base_url}}/api/roles/1" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="2e924407-50d5-41dd-b05a-9a3e49c6bce7" />
+                            <option name="method" value="DELETE" />
+                            <option name="name" value="New Request" />
+                            <option name="sortWeight" value="5000000" />
+                            <option name="url" value="{{base_url}}/api/roles/1" />
+                          </requestState>
+                        </list>
+                      </option>
+                      <option name="sortWeight" value="4000000" />
+                    </folderState>
+                    <folderState>
+                      <option name="description" value="{{base_url_local}}/api/establishments" />
+                      <option name="id" value="d8b8c95e-daf0-4ec0-bd9a-132285cb9e52" />
+                      <option name="name" value="Establishments" />
+                      <option name="requests">
+                        <list>
+                          <requestState>
+                            <option name="description" value="{{base_url_local}}/api/establishments" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="d37684cc-1260-49aa-b393-b8cb6a7c7249" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Get all Establishments" />
+                            <option name="sortWeight" value="1000000" />
+                            <option name="url" value="{{base_url_local}}/api/establishments" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="{{base_url_local}}/api/establishments/1" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="091913a5-c7d2-4221-a803-febfeb4b7562" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Get Establishment" />
+                            <option name="sortWeight" value="2000000" />
+                            <option name="url" value="{{base_url_local}}/api/establishments/1" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#13;&#10;    &quot;name&quot;: &quot;Nextech Avignon&quot;,&#13;&#10;    &quot;phone_number&quot;: &quot;064343434343&quot;,&#13;&#10;    &quot;adress&quot;: &quot;Blablabla rue de Blablabla&quot;,&#13;&#10;    &quot;postal_code&quot;: &quot;84000&quot;,&#13;&#10;    &quot;city&quot;: &quot;fdp&quot;&#13;&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url_local}}/api/establishments" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="87e33000-fb89-48ce-b823-5e9a274ae1f1" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Store Establishment" />
+                            <option name="queryParams">
+                              <list>
+                                <queryParamState>
+                                  <option name="disabled" value="true" />
+                                  <option name="value" value="" />
+                                </queryParamState>
+                              </list>
+                            </option>
+                            <option name="sortWeight" value="3000000" />
+                            <option name="url" value="{{base_url_local}}/api/establishments" />
+                          </requestState>
+                          <requestState>
+                            <option name="description" value="{{base_url_local}}/api/establishments/3" />
+                            <option name="id" value="fbf3d52a-9614-4548-8491-d7553be65d51" />
+                            <option name="method" value="DELETE" />
+                            <option name="name" value="Delete Establishment" />
+                            <option name="sortWeight" value="4000000" />
+                            <option name="url" value="{{base_url_local}}/api/establishments/3" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#13;&#10;    &quot;name&quot;: &quot;Nextech Montfavet&quot;,&#13;&#10;    &quot;phone_number&quot;: &quot;064343434343&quot;,&#13;&#10;    &quot;adress&quot;: &quot;Blablabla rue de Blablabla&quot;,&#13;&#10;    &quot;postal_code&quot;: &quot;84000&quot;,&#13;&#10;    &quot;city&quot;: &quot;fdp&quot;&#13;&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="description" value="{{base_url_local}}/api/establishments/3" />
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="dc69fd9d-8798-4d3c-8108-3af084489587" />
+                            <option name="method" value="PUT" />
+                            <option name="name" value="Update Establishment" />
+                            <option name="sortWeight" value="5000000" />
+                            <option name="url" value="{{base_url_local}}/api/establishments/3" />
+                          </requestState>
+                        </list>
+                      </option>
+                      <option name="sortWeight" value="5000000" />
+                    </folderState>
+                    <folderState>
+                      <option name="id" value="e0f7a076-52b3-442b-8a7a-7b9f000be68c" />
+                      <option name="name" value="Vehicles" />
+                      <option name="requests">
+                        <list>
+                          <requestState>
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="f35496f3-261e-4ab7-86fb-f11700578f7e" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Get Vehicles" />
+                            <option name="sortWeight" value="1000000" />
+                            <option name="url" value="{{base_url_local}}/api/vehicles" />
+                          </requestState>
+                          <requestState>
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="44aa87ca-6694-435e-ba28-85fd984bdd8e" />
+                            <option name="method" value="GET" />
+                            <option name="name" value="Get Vehicle" />
+                            <option name="sortWeight" value="2000000" />
+                            <option name="url" value="{{base_url_local}}/api/vehicles/101" />
+                          </requestState>
+                          <requestState>
+                            <option name="body">
+                              <bodyState>
+                                <option name="raw" value="{&#10;  &quot;model&quot;: &quot;Oulles Mobile&quot;,&#10;  &quot;immatriculation&quot;: &quot;JM-000-OU&quot;,&#10;  &quot;places&quot;: 1,&#10;  &quot;user_id&quot;: 625&#10;}" />
+                                <option name="type" value="JSON" />
+                              </bodyState>
+                            </option>
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                                <headerState>
+                                  <option name="key" value="Content-Type" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="d51d5ca5-8a95-4c15-9f55-bb877cc900af" />
+                            <option name="method" value="POST" />
+                            <option name="name" value="Post Vehicle" />
+                            <option name="sortWeight" value="3000000" />
+                            <option name="url" value="{{base_url_local}}/api/vehicles" />
+                          </requestState>
+                          <requestState>
+                            <option name="id" value="8ac8cf4a-0da6-4051-a520-8d169de4bf52" />
+                            <option name="method" value="PUT" />
+                            <option name="name" value="Update Vehicle" />
+                            <option name="sortWeight" value="4000000" />
+                            <option name="url" value="{{base_url_local}}/api/vehicles/108" />
+                          </requestState>
+                          <requestState>
+                            <option name="headers">
+                              <list>
+                                <headerState>
+                                  <option name="key" value="Accept" />
+                                  <option name="value" value="application/json" />
+                                </headerState>
+                              </list>
+                            </option>
+                            <option name="id" value="6c590cc5-eb1c-4a0e-a790-a65b64d598b9" />
+                            <option name="method" value="DELETE" />
+                            <option name="name" value="Delete Vehicle" />
+                            <option name="sortWeight" value="5000000" />
+                            <option name="url" value="{{base_url_local}}/api/vehicles/102" />
+                          </requestState>
+                        </list>
+                      </option>
+                      <option name="sortWeight" value="6000000" />
+                    </folderState>
+                  </list>
+                </option>
+                <option name="headers">
+                  <list>
+                    <headerState>
+                      <option name="key" value="Accept" />
+                      <option name="value" value="application/json" />
+                    </headerState>
+                  </list>
+                </option>
+                <option name="id" value="52f235b5-4343-47a6-a170-9c0c137f7d2e" />
+                <option name="name" value="ecovoit" />
+                <option name="sortWeight" value="1000000" />
+              </folderState>
+            </list>
+          </option>
+          <option name="id" value="a9dc4652-fcda-4238-bf1e-f41399c3b6e3" />
+          <option name="name" value="ecovoit_local" />
+          <option name="selectedEnvironmentIds">
+            <map>
+              <entry key="default" value="dev" />
+            </map>
+          </option>
+          <option name="syncProperties">
+            <synchronizationPropertiesState>
+              <option name="autoSync" value="true" />
+              <option name="folderPath" value="C:\Users\alexi\Desktop\ecovoit_front\.jetclient" />
+            </synchronizationPropertiesState>
+          </option>
+        </folderState>
+      </list>
+    </option>
+    <option name="id" value="b1c708ff-9146-4151-850b-ef36a5675fa1" />
+    <option name="version" value="3" />
+  </component>
+</project>
