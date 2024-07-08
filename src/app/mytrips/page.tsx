@@ -6,6 +6,7 @@ import {TripCard} from "@/components/component/trip-card";
 import useUser from "@/hooks/useUser";
 import {useRouter} from "next/navigation";
 import {SpinnerWheel} from "@/components/component/spinner-wheel";
+
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Page() {
@@ -74,9 +75,9 @@ export default function Page() {
 
     return (
         <>
-            <main className="flex min-h-screen flex-col items-center p-24">
-                <div className="container mx-auto px-4 md:px-6 lg:px-8">
-                    <div className="max-w-2xl mx-auto text-center">
+            <main className="flex min-h-screen flex-col items-center p-24 w-[100%]">
+                <div className="container mx-auto px-4 md:px-6 lg:px-8 w-full">
+                    <div className="max-w-2xl mx-auto text-center min-w-[100%]">
                         {!loading && !userLoading ? (
                             <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 md:text-4xl">
                                 {userData?.first_name}, voici vos trajets
@@ -87,9 +88,13 @@ export default function Page() {
                         {error ? (
                             <p className="text-gray-500">{error}</p>
                         ) : (
-                            trips.map(trip => (
-                                <TripCard key={trip.id} trip={trip}/>
-                            ))
+                            <div
+                                className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full justify-center">
+
+                                {trips.map(trip => (
+                                    <TripCard key={trip.id} trip={trip}/>
+                                ))}
+                            </div>
                         )}
                     </div>
                 </div>

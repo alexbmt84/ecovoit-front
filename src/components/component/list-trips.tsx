@@ -31,8 +31,9 @@ export function ListTrips() {
         users: UserData[];
     };
 
-    const router = useRouter();
     const [trips, setTrips] = useState<TripData[]>([]);
+
+    const router = useRouter();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -134,13 +135,13 @@ export function ListTrips() {
                                             <UserIcon className="w-4 h-4 mt-1" />
                                             <ul>
                                                 <Link href={`/profil/${trip.users[0].id}`} legacyBehavior>
-                                                    <li>{trip.users[0].first_name} {trip.users[0].last_name}</li>
+                                                    <li  className="cursor-pointer">{trip.users[0].first_name} {trip.users[0].last_name}</li>
                                                 </Link>
                                             </ul>
                                         </div>
                                     )}
                                 </div>
-                                <Button size="sm" variant="outline" onClick={() => handleSubmit(trip.departure, trip.destination, trip.departure_time, trip.vehicle.model, trip.users[0].first_name)}>
+                                <Button size="sm" variant="outline" onClick={() => handleSubmit(trip.departure, trip.destination, trip.departure_time, trip.vehicle.model, trip.users[0].id)}>
                                     Voir
                                 </Button>
                             </div>

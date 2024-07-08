@@ -3,7 +3,11 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import {Trip} from '@/types/trips';
+
 import Link from "next/link";
+import {useState} from "react";
+import {Loader} from "@/components/component/loader";
 
 interface UserData {
     establishment_id: number;
@@ -11,8 +15,8 @@ interface UserData {
     first_name: string;
     last_name: string;
     email: string;
-    
-    model: string;
+    vehicle_id: number;
+
 }
 
 interface ProfilProps {
@@ -42,6 +46,7 @@ export const Profil: React.FC<ProfilProps> = ({ user }) => {
                 </div>
             </div>
             <Separator className="my-6" />
+
             <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
                     <div className="text-sm font-medium text-gray-500 dark:text-gray-400">First Name</div>
@@ -57,7 +62,7 @@ export const Profil: React.FC<ProfilProps> = ({ user }) => {
                 </div>
                 <div className="space-y-2">
                     <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Car Model</div>
-                    <div>{user.model}</div>
+                    <div>{user.vehicle_id}</div>
                 </div>
                 <div className="space-y-2">
                     <div className="text-sm font-medium text-gray-500 dark:text-gray-400">truc</div>
@@ -68,7 +73,7 @@ export const Profil: React.FC<ProfilProps> = ({ user }) => {
                     <div>{getEstablishmentName(user.establishment_id)}</div>
                 </div>
             </div>
-            <Separator className="my-6" />
+                     <Separator className="my-6" />
             <Link
                 href="#"
                 passHref

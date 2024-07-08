@@ -18,7 +18,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
                                                        currentDeparture,
                                                        currentArrival,
                                                        currentVehicle,
-                                                       currentUser
+                                                       currentUser,
+                                                       currentUserId
                                                    }) => {
 
     const {isLoaded} = useJsApiLoader({
@@ -26,7 +27,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
         googleMapsApiKey: "AIzaSyDxnbqlXcwX93UYD9GqYzX2g_-N01zL33c"
     });
 
-    const {directions} = useMapData(tripInformations, currentDeparture, currentArrival, currentVehicle, currentUser);
+    const {directions} = useMapData(tripInformations, currentDeparture, currentArrival, currentVehicle, currentUser, currentUserId);
 
     const onLoad = useCallback((mapInstance: google.maps.Map) => {
         const bounds = new google.maps.LatLngBounds(center);

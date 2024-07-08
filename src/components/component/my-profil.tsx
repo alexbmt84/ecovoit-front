@@ -4,6 +4,7 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import useUser from "@/hooks/useUser";
 import useVehicle, {VehicleData} from "@/hooks/useVehicle";
+import {SpinnerWheel} from "@/components/component/spinner-wheel";
 
 export function MyProfil() {
     const {userData, updateUser} = useUser();
@@ -72,7 +73,7 @@ export function MyProfil() {
         return modifiedFields;
     };
 
-    const   handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (userData?.id) {
             const modifiedData = getModifiedFields(userData, formData);
@@ -137,6 +138,15 @@ export function MyProfil() {
             setSuccess("Vehicle updated successfully.");
         }
     };
+
+    if (!userData) {
+        return (<main className="flex min-h-screen flex-col items-center justify-between p-24">
+                <div className="fixed inset-0 flex items-center justify-center">
+                    <SpinnerWheel/>
+                </div>
+            </main>
+        )
+    }
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[100dvh] bg-gray-100 dark:bg-gray-900 p-6">
