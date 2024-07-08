@@ -1,4 +1,4 @@
-import React, {useState, Suspense} from 'react';
+import React, {useState, Suspense, useEffect} from 'react';
 import {Trip} from '@/types/trips';
 import {TripInformation} from "@/types/tripInformation";
 import MapComponent from "@/components/component/map";
@@ -32,7 +32,8 @@ export function MapContainer() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
     const csrfToken = typeof window !== 'undefined' ? localStorage.getItem('csrfToken') : null;
-    const token = sessionStorage.getItem('access_token');
+
+    const [token, setToken] = useState<string | null>(null);
     const {userData} = useUser();
     const [showSelect, setShowSelect] = useState(false);
     const [showCreate, setShowCreate] = useState(true);
@@ -40,14 +41,20 @@ export function MapContainer() {
     const searchParams = useSearchParams();
     const startDate = searchParams.get('startDate');
 
-    if (userData) {
-        console.log(userData);
-    }
+    useEffect(() => {
+        const accessToken = sessionStorage.getItem('access_token');
+        setToken(accessToken);
 
-    if (!token) {
-        router.push('/login');
-        return;
-    }
+        if (!accessToken) {
+            router.push('/login');
+        }
+    }, [router]);
+
+    useEffect(() => {
+        if (userData) {
+            console.log(userData);
+        }
+    }, [userData]);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [tripInformations, setTripInformations] = useState<TripInformation>({
