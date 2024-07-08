@@ -5,6 +5,7 @@ export interface TripInformation {
     arrival: string;
     distance: string;
     duration: string;
+    startDate: string;
     model: string | null;
     user: string | null;
     userId: string | null;

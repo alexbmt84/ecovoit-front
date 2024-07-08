@@ -9,8 +9,6 @@ const useCSRFToken = () => {
         async function fetchCSRFToken() {
             try {
                 const response = await axios.get(`${apiUrl}/csrf-token`);
-                console.log(apiUrl);
-
                 const csrfToken = response.data.csrf_token;
                 localStorage.setItem('csrfToken', csrfToken);
             } catch (error) {

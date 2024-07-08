@@ -38,8 +38,6 @@ export function MapContainer() {
     const [showSelect, setShowSelect] = useState(false);
     const [showCreate, setShowCreate] = useState(true);
     const [selectedVehicle, setSelectedVehicle] = useState<VehicleData | null>(null);
-    const searchParams = useSearchParams();
-    const startDate = searchParams.get('startDate');
 
     useEffect(() => {
         const accessToken = sessionStorage.getItem('access_token');
@@ -65,11 +63,12 @@ export function MapContainer() {
         model: '',
         user: '',
         userId: '',
+        startDate: '',
         trips: [],
     });
-
+console.log(tripInformations)
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [currentTrip, setCurrentTrip] = useState({departure: '', arrival: '', vehicle: '', user: '', userId: ''});
+    const [currentTrip, setCurrentTrip] = useState({departure: '', arrival: '', vehicle: '', user: '', userId: '', startDate: ''});
 
     const handleVehicleSelect = (vehicle: Vehicle | null) => {
         setSelectedVehicle(vehicle);
@@ -84,7 +83,8 @@ export function MapContainer() {
         trips: any[],
         model: string | null,
         user?: string | null,
-        userId?: string | null
+        userId?: string | null,
+        startDate?: string | null,
     ) => {
 
         try {
@@ -96,6 +96,7 @@ export function MapContainer() {
                 trips,
                 model: model ?? "",
                 user: user ?? "",
+                startDate: startDate ?? "",
                 userId: userId ?? ""
             });
         } catch (error) {
@@ -111,7 +112,8 @@ export function MapContainer() {
             arrival: trip.destination,
             vehicle: trip.vehicle.model,
             user: trip.users[0].first_name,
-            userId: trip.users[0].id
+            userId: trip.users[0].id,
+            startDate: trip.departure_time,
         });
     };
 
@@ -135,7 +137,7 @@ export function MapContainer() {
     }
 
     const handleCreateTrip = async () => {
-        if (!startDate) {
+        if (!tripInformations.startDate) {
             alert("Please select a date and time for your trip")
             return;
         }
@@ -145,7 +147,7 @@ export function MapContainer() {
                 departure: tripInformations.departure,
                 destination: tripInformations.arrival,
                 distance: parseInt(tripInformations.distance),
-                departure_time: startDate,
+                departure_time: tripInformations.startDate,
                 vehicle_id: selectedVehicle?.id
             }, {
                 headers: {

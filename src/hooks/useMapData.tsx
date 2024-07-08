@@ -5,7 +5,7 @@ import axios from "axios";
 
 type DirectionsResult = google.maps.DirectionsResult | null;
 
-export const useMapData = (tripInformations: (departure: string, arrival: string, distance: string, duration: string, trips: any[], vehicle: (string | null), user: (string | null), currentUserId: (string | null)) => void, currentDeparture: string, currentArrival: string, currentVehicle: string | null, currentUser: string | null, currentUserId: string | null) => {
+export const useMapData = (tripInformations: (departure: string, arrival: string, distance: string, duration: string, trips: any[], vehicle: (string | null), user: (string | null), currentUserId: (string | null), startDate: string | null) => void, currentDeparture: string, currentArrival: string, currentVehicle: string | null, currentUser: string | null, currentUserId: string | null) => {
 
     const [directions, setDirections] = useState<DirectionsResult | null>(null);
     const [trips, setTrips] = useState<[]>([]);
@@ -81,7 +81,7 @@ export const useMapData = (tripInformations: (departure: string, arrival: string
                             setTrips(tripsData || []);
                             console.log('user : ', user);
                             // @ts-ignore
-                            tripInformations(departure || '', arrival || '', leg.distance.text.replace("km", ""), formattedDuration, tripsData || [], vehicle, user?.first_name, user?.id);
+                            tripInformations(departure || '', arrival || '', leg.distance.text.replace("km", ""), formattedDuration, tripsData || [], vehicle, user?.first_name, user?.id, startDate);
                         }
                     } else {
                         console.log("No trips found");
@@ -118,7 +118,7 @@ export const useMapData = (tripInformations: (departure: string, arrival: string
             if (result) {
                 const leg = result.routes[0].legs[0];
                 if (leg.distance && leg.duration) {
-                    tripInformations(departure, arrival || '', leg.distance.text.replace("km", ""), formatDuration(leg.duration.text), trips, currentVehicle, currentUser, currentUserId);
+                    tripInformations(departure, arrival || '', leg.distance.text.replace("km", ""), formatDuration(leg.duration.text), trips, currentVehicle, currentUser, currentUserId, startDate || '');
                 }
                 setDirections(result);
             }
