@@ -85,15 +85,17 @@ export default function Page() {
                         ) : (
                             <h1></h1>
                         )}
-                        <div
-                            className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full justify-center">                            {error ? (
+                        {error ? (
                             <p className="text-gray-500">{error}</p>
                         ) : (
-                            trips.map(trip => (
-                                <TripCard key={trip.id} trip={trip}/>
-                            ))
+                            <div
+                                className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full justify-center">
+
+                                {trips.map(trip => (
+                                    <TripCard key={trip.id} trip={trip}/>
+                                ))}
+                            </div>
                         )}
-                        </div>
                     </div>
                 </div>
             </main>
