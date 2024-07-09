@@ -6,6 +6,7 @@ import {TripCard} from "@/components/component/trip-card";
 import useUser from "@/hooks/useUser";
 import {useRouter} from "next/navigation";
 import {SpinnerWheel} from "@/components/component/spinner-wheel";
+import {VehicleData} from "@/hooks/useVehicle";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -24,6 +25,11 @@ export default function Page() {
         distance: number;
         status: number;
         departure_time: string;
+        totalPassengers: number;
+        driverName: string;
+        driverId: number;
+        driverLastName: string;
+        vehicle: VehicleData;
         users: UserData[];
     };
 
@@ -32,6 +38,7 @@ export default function Page() {
     const [trips, setTrips] = useState<TripData[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [userId, setUserId] = useState<number | null>(null);
 
     useEffect(() => {
         const token = sessionStorage.getItem('access_token');
@@ -51,6 +58,7 @@ export default function Page() {
                 .then(response => {
                     setTrips(response.data);
                     setLoading(false);
+                    setUserId(userData.id);
                 })
                 .catch(err => {
                     setLoading(false);
@@ -79,7 +87,7 @@ export default function Page() {
                 <div className="container mx-auto px-4 md:px-6 lg:px-8 w-full">
                     <div className="max-w-2xl mx-auto text-center min-w-[100%]">
                         {!loading && !userLoading ? (
-                            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 md:text-4xl">
+                            <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-10 pb-8 md:text-4xl">
                                 {userData?.first_name}, voici vos trajets
                             </h1>
                         ) : (
@@ -92,7 +100,7 @@ export default function Page() {
                                 className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full justify-center">
 
                                 {trips.map(trip => (
-                                    <TripCard key={trip.id} trip={trip}/>
+                                    <TripCard key={trip.id} trip={trip} userId={userId}/>
                                 ))}
                             </div>
                         )}
