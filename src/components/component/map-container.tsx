@@ -38,6 +38,10 @@ export function MapContainer() {
     const [showSelect, setShowSelect] = useState(false);
     const [showCreate, setShowCreate] = useState(true);
     const [selectedVehicle, setSelectedVehicle] = useState<VehicleData | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const route = useRouter();
+    const [displayJoinButton, setDisplayJoinButton] = useState<boolean>(true);
+    const [disableJoinButton, setDisableJoinButton] = useState<boolean>(false);
 
     useEffect(() => {
         const accessToken = sessionStorage.getItem('access_token');
@@ -66,9 +70,16 @@ export function MapContainer() {
         startDate: '',
         trips: [],
     });
-console.log(tripInformations)
+    console.log(tripInformations)
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [currentTrip, setCurrentTrip] = useState({departure: '', arrival: '', vehicle: '', user: '', userId: '', startDate: ''});
+    const [currentTrip, setCurrentTrip] = useState({
+        departure: '',
+        arrival: '',
+        vehicle: '',
+        user: '',
+        userId: '',
+        startDate: ''
+    });
 
     const handleVehicleSelect = (vehicle: Vehicle | null) => {
         setSelectedVehicle(vehicle);
@@ -164,6 +175,35 @@ console.log(tripInformations)
             console.error(error);
         }
     }
+
+    const handleJoinTrip = async (tripId: number) => {
+        try {
+            const response = await axios.post(`${apiUrl}/api/trips/${tripId}/join`, {}, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            });
+            console.log(response);
+            alert("Trip joined successfully");
+            route.push('/mytrips');
+        } catch (Response: Array<string> | any) {
+            alert(Response.response.data.message);
+        }
+    }
+
+    useEffect(() => {
+
+        if (tripInformations.trips.length > 0) {
+            tripInformations.trips.forEach((trip) => {
+                if (trip.isJoined) {
+                    setDisableJoinButton(true);
+                }
+            })
+        }
+
+
+    }, [tripInformations, userData, currentTrip]);
+
 
     // @ts-ignore
     // @ts-ignore
@@ -307,8 +347,8 @@ console.log(tripInformations)
 
                                                     <div className={"flex space-x-1"}>
                                                         <ArrowDownIcon
-                                                            className="w-4 h-4 text-gray-500 dark:text-gray-400 mt-1"/>
-                                                        <p>
+                                                            className="w-4 h-4 text-gray-500 dark:text-gray-400 mt-2.5"/>
+                                                        <p className={"mt-1.5"}>
                                                             {toTitleCase(trip.destination)}
                                                         </p>
                                                     </div>
@@ -322,27 +362,28 @@ console.log(tripInformations)
                                                     {/*</div>*/}
                                                     <div className={"flex space-x-1"}>
                                                         <CarIcon
-                                                            className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-0.5"/>
-                                                        <p>
+                                                            className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-2"/>
+                                                        <p className={"mt-1.5"}>
                                                             {trip.vehicle?.model}
                                                         </p>
                                                     </div>
+                                                </div>
+                                                <div className={"flex flex-col gap-2"}>
+                                                    <Button size="sm" variant="outline"
+                                                            onClick={() => handleTripButtonClick(trip)}>
+                                                        Voir
+                                                    </Button>
 
                                                     {trip.isFull ? (
-                                                        <div className={"flex space-x-1"}>
-                                                            <p className={"text-teal-600 font-bold"}>
-                                                                Trajet complet
-                                                            </p>
-                                                        </div>
+                                                        <Button size="sm" disabled={true}
+                                                                onClick={() => handleJoinTrip(trip.id)}>Complet</Button>
                                                     ) : (
-                                                        <p>Places disponibles : </p>
+                                                        displayJoinButton && (
+                                                            <Button size="sm" disabled={disableJoinButton}
+                                                                    onClick={() => handleJoinTrip(trip.id)}>{disableJoinButton ? 'Rejoint' : 'Rejoindre'}</Button>
+                                                        )
                                                     )}
-
                                                 </div>
-                                                <Button size="sm" variant="outline"
-                                                        onClick={() => handleTripButtonClick(trip)}>
-                                                    Voir
-                                                </Button>
                                             </div>
                                         ))
                                     ) : (

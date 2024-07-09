@@ -44,7 +44,7 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger asChild className={"cursor-pointer"}>
                 {userData?.avatar && (
                     <div className="flex items-center gap-2 cursor-pointer">
                         <Avatar className={`${avatarSizeClass}`}>
@@ -56,7 +56,7 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
                 )}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 p-2">
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={redirectToProfil} className={"cursor-pointer"}>
                     <div className="flex items-center gap-2">
                         <Avatar className="h-8 w-8">
                             <AvatarImage alt="avatar" src={`/img/${userData?.avatar}`}/>
@@ -69,11 +69,11 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
                     </div>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator/>
-                <DropdownMenuItem onClick={redirectToProfil}>
+                <DropdownMenuItem onClick={redirectToProfil} className={"cursor-pointer"}>
                     <SettingsIcon className="h-4 w-4 mr-2"/>
                     <span>Modifier</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={onLogout}>
+                <DropdownMenuItem onClick={onLogout} className={"cursor-pointer"}>
                     <LogOutIcon className="h-4 w-4 mr-2"/>
                     <span>Logout</span>
                 </DropdownMenuItem>

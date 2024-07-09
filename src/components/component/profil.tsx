@@ -26,9 +26,9 @@ interface ProfilProps {
 export const Profil: React.FC<ProfilProps> = ({ user }) => {
     const getEstablishmentName = (id: number) => {
         if (id === 1) {
-            return "Avignon tête de fion";
+            return "Nextech Avignon";
         } else {
-            return "Pertuis ptit kiki";
+            return "Nextech Pertuis";
         }
     };
     return (

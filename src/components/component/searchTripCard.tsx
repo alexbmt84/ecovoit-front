@@ -124,7 +124,7 @@ export function SearchTripCard() {
                                 </div>
                             }
                             {!showReturnDate && (
-                                <Button className="justify-start text-blue-600" variant="ghost"
+                                <Button className="justify-start text-gray-500 ml-6" variant="ghost"
                                         onClick={handleAddReturnClick}>
                                     Ajouter un retour
                                 </Button>
