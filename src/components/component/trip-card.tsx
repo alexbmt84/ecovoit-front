@@ -1,33 +1,36 @@
 import {Card, CardHeader, CardContent} from "@/components/ui/card"
-import {MapPinIcon} from "@/components/icons/MapPinIcon";
 import useUser from "@/hooks/useUser";
 import React, {
-    AwaitedReactNode,
     JSX,
-    JSXElementConstructor,
-    ReactElement,
-    ReactNode,
-    ReactPortal,
-    SVGProps
+    SVGProps, useState
 } from "react";
 import Link from "next/link";
 import {VehicleData} from "@/hooks/useVehicle";
 import {Button} from "@/components/ui/button";
+import axios from "axios";
+import {useRouter} from "next/navigation";
 
 export function TripCard(props: {
     trip: {
+        id: number,
         departure: string,
         destination: string,
         departure_time: string,
         totalPassengers: number,
         driverName: string,
+        started_at: string,
+        ended_at: string,
         driverId: number
         vehicle: VehicleData;
     },
-    userId: number | null
+    userId: number | null,
+    handleDeletedTrip: (tripId: number) => void
 }) {
 
-    const {userData} = useUser();
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const router = useRouter();
+    const [isTripStarted, setIsTripStarted] = useState<boolean>(false);
+    const [isTripEnded, setIsTripEnded] = useState<boolean>(false);
 
     function toTitleCase(str: string) {
         return str.replace(
@@ -38,7 +41,149 @@ export function TripCard(props: {
         );
     }
 
-    console.log(props)
+    function formatDate(date: Date) {
+        return date.getFullYear() + "-" +
+            ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+            ("0" + date.getDate()).slice(-2) + " " +
+            ("0" + date.getHours()).slice(-2) + ":" +
+            ("0" + date.getMinutes()).slice(-2) + ":" +
+            ("0" + date.getSeconds()).slice(-2);
+    }
+
+
+    const startTrip = async (trip: {
+        id: number;
+        departure: string;
+        destination: string;
+        departure_time: string;
+        totalPassengers?: number;
+        driverName?: string;
+        driverId?: number;
+        vehicle: VehicleData;
+        distance?: number;
+    }) => {
+
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return {ok: false, error: 'No token found'};
+        }
+
+        try {
+            const response = await axios.put(`${apiUrl}/api/trips/${trip.id}`, {
+                departure: trip.departure,
+                destination: trip.destination,
+                distance: trip.distance,
+                vehicle_id: trip.vehicle.id,
+                departure_time: trip.departure_time,
+                status: 1,
+                started_at: formatDate(new Date()),
+                ended_at: null
+
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 200) {
+                console.log(response.data)
+                setIsTripStarted(true);
+                return {ok: true};
+            } else {
+                return {ok: false, error: 'Failed to update trip'};
+            }
+
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du trajet', error);
+            return {ok: false, error: 'Failed to update trip'};
+        }
+    };
+
+    const endTrip = async (trip: {
+        id: number;
+        departure: string;
+        destination: string;
+        departure_time: string;
+        totalPassengers?: number;
+        driverName?: string;
+        driverId?: number;
+        vehicle: VehicleData;
+        distance?: number;
+        started_at: string
+    }) => {
+
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return {ok: false, error: 'No token found'};
+        }
+
+        try {
+            const response = await axios.put(`${apiUrl}/api/trips/${trip.id}`, {
+                departure: trip.departure,
+                destination: trip.destination,
+                distance: trip.distance,
+                vehicle_id: trip.vehicle.id,
+                departure_time: trip.departure_time,
+                status: 2,
+                started_at: trip.started_at,
+                ended_at: formatDate(new Date())
+
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 200) {
+                console.log(response.data)
+                setIsTripEnded(true);
+                return {ok: true};
+            } else {
+                return {ok: false, error: 'Failed to end trip'};
+            }
+
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du trajet', error);
+            return {ok: false, error: 'Failed to end trip'};
+        }
+    };
+
+
+    const deleteTrip = async (tripId: number) => {
+
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return {ok: false, error: 'No token found'};
+        }
+
+        try {
+            const response = await axios.delete(`${apiUrl}/api/trips/${tripId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.status === 200) {
+                console.log(response);
+                return props.handleDeletedTrip(tripId);
+            } else {
+                return {ok: false, error: 'Failed to delete trip'};
+            }
+
+        } catch (error) {
+            console.error('Erreur lors de la suppression du trajet', error);
+            return {ok: false, error: 'Failed to delete trip'};
+        }
+    };
+
 
     return (
         <Card className="shadow-md rounded-lg max-w-md mx-auto lg:min-w-[350px]">
@@ -113,14 +258,27 @@ export function TripCard(props: {
                         </span>
                     </div>
                 </div>
-                {props.userId === props.trip.driverId ? (
-                    <>
-                        <Button className={"w-[70%] mt-3"}>Démarrer le trajet</Button>
-                        <Button className={"w-[70%] mb-3"}>Annuler le trajet</Button>
-                    </>
-                ) : (
-                    <Button className={"mt-3 mb-3"}>Quitter le trajet</Button>
-                )}
+                {
+                    props.userId === props.trip.driverId ? (
+                        <>
+                            {
+                                (props.trip.started_at || isTripStarted) && !props.trip.ended_at && !isTripEnded ? (
+                                    <>
+                                        <Button className="w-[70%] mt-3" onClick={() => endTrip(props.trip)}>Terminer le trajet</Button>
+                                    </>
+                                ) : (props.trip.ended_at || isTripEnded) ? (
+                                    <span className="text-muted-foreground">Trajet terminé</span>
+                                ) : (
+                                    <Button className="w-[70%] mt-3" onClick={() => startTrip(props.trip)}>Démarrer le trajet</Button>
+                                )
+                            }
+                            <Button className="w-[70%] mb-3" onClick={() => deleteTrip(props.trip.id)}>Annuler le trajet</Button>
+                        </>
+                    ) : (
+                        <Button className="mt-3 mb-3">Quitter le trajet</Button>
+                    )
+                }
+
             </CardContent>
         </Card>
     )

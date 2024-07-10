@@ -39,6 +39,7 @@ export default function Page() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [userId, setUserId] = useState<number | null>(null);
+    const [isTripStarted, setIsTripStarted] = useState<boolean>(false);
 
     useEffect(() => {
         const token = sessionStorage.getItem('access_token');
@@ -73,6 +74,10 @@ export default function Page() {
         }
     }, [userData]);
 
+    const handleDeletedTrip = (tripId: number) => {
+        setTrips(trips.filter(trip => trip.id !== tripId));
+    }
+
     if (userLoading || loading) {
         return <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <div className="fixed inset-0 flex items-center justify-center">
@@ -100,7 +105,7 @@ export default function Page() {
                                 className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full justify-center">
 
                                 {trips.map(trip => (
-                                    <TripCard key={trip.id} trip={trip} userId={userId}/>
+                                    <TripCard key={trip.id} trip={trip} userId={userId} handleDeletedTrip={handleDeletedTrip}/>
                                 ))}
                             </div>
                         )}
