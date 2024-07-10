@@ -22,18 +22,17 @@ import {Button} from "@/components/ui/button"
 import {VehicleData} from "@/hooks/useVehicle";
 
 interface AlertBoxProps {
-    deleteTrip: (tripId: number) => void
+    createTrip: () => void
     trip: {
-        id: number;
-        departure: string;
-        destination: string;
-        departure_time: string;
-        totalPassengers: number;
-        driverName: string;
-        started_at: string;
-        ended_at: string;
-        driverId: number;
-        vehicle: VehicleData
+        departure: string,
+        arrival: string,
+        distance: string,
+        duration: string,
+        trips: any[],
+        model: string | null,
+        user?: string | null,
+        userId?: string | null,
+        startDate?: string | null,
     }
 }
 
@@ -47,7 +46,7 @@ export function AlertBoxCreatedTrip(props: AlertBoxProps) {
                         <p className="text-muted-foreground">Votre trajet à été créé avec succès !</p>
                     </div>
                     <div className="flex w-full justify-center gap-4">
-                        <Button onClick={() => props.deleteTrip(props.trip.id)}>Continuer</Button>
+                        <Button onClick={() => props.createTrip()}>Continuer</Button>
                     </div>
                 </div>
             </DialogContent>
