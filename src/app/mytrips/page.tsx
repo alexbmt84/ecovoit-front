@@ -59,14 +59,17 @@ export default function Page() {
             };
             axios.get(`${apiUrl}/api/users/${userData.id}/trips`, config)
                 .then(response => {
-                    setTrips(response.data);
+                    const uniqueTrips = Array.from(new Set(response.data.map((trip: { id: number; }) => trip.id)))
+                        .map(id => {
+                            return response.data.find((trip: { id: number; }) => trip.id === id);
+                        });
+                    setTrips(uniqueTrips);
                     setLoading(false);
                     setUserId(userData.id);
                 })
                 .catch(err => {
                     setLoading(false);
                     if (err.response && err.response.status === 404) {
-                        // Gérer spécifiquement l'erreur 404
                         setError('Vous n\'avez actuellement pas de trajet.');
                     } else {
                         console.error(err);
@@ -107,7 +110,8 @@ export default function Page() {
                                 className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 w-full justify-center">
 
                                 {trips.map(trip => (
-                                    <TripCard key={trip.id} trip={trip} userId={userId} handleDeletedTrip={handleDeletedTrip}/>
+                                    <TripCard key={trip.id} trip={trip} userId={userId}
+                                              handleDeletedTrip={handleDeletedTrip}/>
                                 ))}
                             </div>
                         )}
