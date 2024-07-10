@@ -29,6 +29,8 @@ export default function Page() {
         driverName: string;
         driverId: number;
         driverLastName: string;
+        started_at: string;
+        ended_at: string;
         vehicle: VehicleData;
         users: UserData[];
     };
