@@ -1,33 +1,41 @@
 import {Card, CardHeader, CardContent} from "@/components/ui/card"
-import {MapPinIcon} from "@/components/icons/MapPinIcon";
 import useUser from "@/hooks/useUser";
 import React, {
-    AwaitedReactNode,
     JSX,
-    JSXElementConstructor,
-    ReactElement,
-    ReactNode,
-    ReactPortal,
-    SVGProps
+    SVGProps, useState
 } from "react";
 import Link from "next/link";
 import {VehicleData} from "@/hooks/useVehicle";
 import {Button} from "@/components/ui/button";
+import axios from "axios";
+import {useRouter} from "next/navigation";
+import {AlertBoxLeaveTrip} from "@/components/component/alert-box-leave-trip";
+import {AlertBoxDeleteTrip} from "@/components/component/alert-box-delete-trip";
 
 export function TripCard(props: {
     trip: {
+        id: number,
         departure: string,
         destination: string,
         departure_time: string,
         totalPassengers: number,
         driverName: string,
+        started_at: string,
+        ended_at: string,
         driverId: number
         vehicle: VehicleData;
     },
-    userId: number | null
+    userId: number | null,
+    handleDeletedTrip: (tripId: number) => void
 }) {
 
-    const {userData} = useUser();
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const router = useRouter();
+    const [isTripStarted, setIsTripStarted] = useState<boolean>(false);
+    const [isTripEnded, setIsTripEnded] = useState<boolean>(false);
+    const [displayAlertBox, setDisplayAlertBox] = useState<boolean>(false);
+    const [displayAlertDeleteBox, setDisplayAlertDeleteBox] = useState<boolean>(false);
+    const [isTripLeft, setIsTripLeft] = useState<boolean>(false);
 
     function toTitleCase(str: string) {
         return str.replace(
@@ -38,56 +46,236 @@ export function TripCard(props: {
         );
     }
 
-    console.log(props)
+    function formatDate(date: Date) {
+        return date.getFullYear() + "-" +
+            ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+            ("0" + date.getDate()).slice(-2) + " " +
+            ("0" + date.getHours()).slice(-2) + ":" +
+            ("0" + date.getMinutes()).slice(-2) + ":" +
+            ("0" + date.getSeconds()).slice(-2);
+    }
+
+
+    const startTrip = async (trip: {
+        id: number;
+        departure: string;
+        destination: string;
+        departure_time: string;
+        totalPassengers?: number;
+        driverName?: string;
+        driverId?: number;
+        vehicle: VehicleData;
+        distance?: number;
+    }) => {
+
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return {ok: false, error: 'No token found'};
+        }
+
+        try {
+            const response = await axios.put(`${apiUrl}/api/trips/${trip.id}`, {
+                departure: trip.departure,
+                destination: trip.destination,
+                distance: trip.distance,
+                vehicle_id: trip.vehicle.id,
+                departure_time: trip.departure_time,
+                status: 1,
+                started_at: formatDate(new Date()),
+                ended_at: null
+
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 200) {
+                console.log(response.data)
+                setIsTripStarted(true);
+                return {ok: true};
+            } else {
+                return {ok: false, error: 'Failed to update trip'};
+            }
+
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du trajet', error);
+            return {ok: false, error: 'Failed to update trip'};
+        }
+    };
+
+    const endTrip = async (trip: {
+        id: number;
+        departure: string;
+        destination: string;
+        departure_time: string;
+        totalPassengers?: number;
+        driverName?: string;
+        driverId?: number;
+        vehicle: VehicleData;
+        distance?: number;
+        started_at: string
+    }) => {
+
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return {ok: false, error: 'No token found'};
+        }
+
+        try {
+            const response = await axios.put(`${apiUrl}/api/trips/${trip.id}`, {
+                departure: trip.departure,
+                destination: trip.destination,
+                distance: trip.distance,
+                vehicle_id: trip.vehicle.id,
+                departure_time: trip.departure_time,
+                status: 2,
+                started_at: trip.started_at,
+                ended_at: formatDate(new Date())
+
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.status === 200) {
+                console.log(response.data)
+                setIsTripEnded(true);
+                return {ok: true};
+            } else {
+                return {ok: false, error: 'Failed to end trip'};
+            }
+
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du trajet', error);
+            return {ok: false, error: 'Failed to end trip'};
+        }
+    };
+
+
+    const handleDeleteTrip = () => {
+        setDisplayAlertDeleteBox(true);
+    }
+
+    const deleteTrip = async (tripId: number) => {
+
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return {ok: false, error: 'No token found'};
+        }
+
+        try {
+            const response = await axios.delete(`${apiUrl}/api/trips/${tripId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.status === 200) {
+                console.log(response);
+                return props.handleDeletedTrip(tripId);
+            } else {
+                return {ok: false, error: 'Failed to delete trip'};
+            }
+
+        } catch (error) {
+            console.error('Erreur lors de la suppression du trajet', error);
+            return {ok: false, error: 'Failed to delete trip'};
+        }
+    };
+
+    const handleLeaveTrip = () => {
+        setDisplayAlertBox(true);
+    }
+
+    const leaveTrip = async (tripId: number) => {
+
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return {ok: false, error: 'No token found'};
+        }
+
+        try {
+            const response = await axios.delete(`${apiUrl}/api/trip-users/${tripId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (response.status === 200) {
+                console.log(response);
+                setIsTripLeft(true);
+                return props.handleDeletedTrip(tripId);
+            } else {
+                return {ok: false, error: 'Failed to leave trip'};
+            }
+
+        } catch (error) {
+            console.error('Erreur lors de la suppression du trajet', error);
+            return {ok: false, error: 'Failed to leave trip'};
+        }
+    }
 
     return (
-        <Card className="shadow-md rounded-lg max-w-md mx-auto lg:min-w-[350px]">
-            <CardHeader
-                className="bg-[#F3F4F6] text-primary-foreground p-4 flex flex-col items-center rounded-t-md justify-center">
-                <div className={"flex mb-3"}>
-                    <div className="flex items-center gap-2">
-                        {/*<CarIcon className="w-5 h-5 mt-1"/>*/}
-                        <span className="font-medium">{toTitleCase(props.trip.departure)}</span>
+        <>
+            <Card className="shadow-md rounded-lg max-w-md mx-auto lg:min-w-[350px]">
+                <CardHeader
+                    className="bg-[#F3F4F6] text-primary-foreground p-4 flex flex-col items-center rounded-t-md justify-center">
+                    <div className={"flex mb-3"}>
+                        <div className="flex items-center gap-2">
+                            {/*<CarIcon className="w-5 h-5 mt-1"/>*/}
+                            <span className="font-medium">{toTitleCase(props.trip.departure)}</span>
+                        </div>
+                        <ArrowRightIcon className="w-5 h-5 mr-2 ml-2 mt-1"/>
+                        <div className="flex items-center gap-2">
+                            <span className="font-medium">{toTitleCase(props.trip.destination)}</span>
+                            {/*<MapPinIcon className="w-5 h-5"/>*/}
+                        </div>
                     </div>
-                    <ArrowRightIcon className="w-5 h-5 mr-2 ml-2 mt-1"/>
-                    <div className="flex items-center gap-2">
-                        <span className="font-medium">{toTitleCase(props.trip.destination)}</span>
-                        {/*<MapPinIcon className="w-5 h-5"/>*/}
-                    </div>
-                </div>
-                <div className={"flex"}>
-                    <SteeringWheelIcon className="w-5 h-5 text-muted-foreground mr-1 mt-0.5"/>
-                    <span className="text-muted-foreground mr-4 font-semibold text-gray-500">
+                    <div className={"flex"}>
+                        <SteeringWheelIcon className="w-5 h-5 text-muted-foreground mr-1 mt-0.5"/>
+                        <span className="text-muted-foreground mr-4 font-semibold text-gray-500">
                     <Link href={`/profil/${props.trip.driverId}`}>
                         {props.trip.driverName}
                     </Link>
                 </span>
-                </div>
+                    </div>
 
-            </CardHeader>
-            <CardContent className="p-6 flex flex-col items-center justify-center gap-4">
-                <div className="flex items-center justify-between">
+                </CardHeader>
+                <CardContent className="p-6 flex flex-col items-center justify-center gap-4">
+                    <div className="flex items-center justify-between">
 
-                    <div className="flex items-center">
                         <div className="flex items-center">
-                            <CarIcon className="w-5 h-5 text-muted-foreground mr-1"/>
-                            <span className="text-muted-foreground mr-4">{props.trip.vehicle.model}</span>
-                        </div>
-                        <UsersIcon className="w-5 h-5 text-muted-foreground mr-1"/>
-                        <span className="text-muted-foreground">
+                            <div className="flex items-center">
+                                <CarIcon className="w-5 h-5 text-muted-foreground mr-1"/>
+                                <span className="text-muted-foreground mr-4">{props.trip.vehicle.model}</span>
+                            </div>
+                            <UsersIcon className="w-5 h-5 text-muted-foreground mr-1"/>
+                            <span className="text-muted-foreground">
                             {
                                 props.trip.totalPassengers > 1 ?
                                     props.trip.totalPassengers + ' Passagers' :
                                     props.trip.totalPassengers + ' Passager'
                             }
                         </span>
+                        </div>
                     </div>
-                </div>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center">
+                    <div className="flex items-center justify-between">
                         <div className="flex items-center">
-                            <CalendarIcon className="w-5 h-5 text-muted-foreground mr-1"/>
-                            <span className="text-muted-foreground mr-4">
+                            <div className="flex items-center">
+                                <CalendarIcon className="w-5 h-5 text-muted-foreground mr-1"/>
+                                <span className="text-muted-foreground mr-4">
                             {
                                 new Date(props.trip.departure_time).toLocaleDateString("fr", {
                                     year: 'numeric',
@@ -96,33 +284,58 @@ export function TripCard(props: {
                                 })
                             }
                              </span>
-                        </div>
-                        <ClockIcon className="w-5 h-5 text-muted-foreground mr-1"/>
-                        <span className="text-muted-foreground">
+                            </div>
+                            <ClockIcon className="w-5 h-5 text-muted-foreground mr-1"/>
+                            <span className="text-muted-foreground">
                               {
                                   new Date(props.trip.departure_time).getUTCHours() < 10 ?
                                       "0" + new Date(props.trip.departure_time).getUTCHours() :
                                       new Date(props.trip.departure_time).getUTCHours()
                               }
-                            h
-                            {
-                                new Date(props.trip.departure_time).getMinutes() === 0 ?
-                                    new Date(props.trip.departure_time).getMinutes() + "0" :
-                                    new Date(props.trip.departure_time).getMinutes()
-                            }
+                                h
+                                {
+                                    new Date(props.trip.departure_time).getMinutes() === 0 ?
+                                        new Date(props.trip.departure_time).getMinutes() + "0" :
+                                        new Date(props.trip.departure_time).getMinutes()
+                                }
                         </span>
+                        </div>
                     </div>
-                </div>
-                {props.userId === props.trip.driverId ? (
-                    <>
-                        <Button className={"w-[70%] mt-3"}>Démarrer le trajet</Button>
-                        <Button className={"w-[70%] mb-3"}>Annuler le trajet</Button>
-                    </>
-                ) : (
-                    <Button className={"mt-3 mb-3"}>Quitter le trajet</Button>
-                )}
-            </CardContent>
-        </Card>
+                    {
+                        props.userId === props.trip.driverId ? (
+                            <>
+                                {
+                                    (props.trip.started_at || isTripStarted) && !props.trip.ended_at && !isTripEnded ? (
+                                        <>
+                                            <Button className="w-[70%] mt-3" onClick={() => endTrip(props.trip)}>Terminer
+                                                le trajet</Button>
+                                        </>
+                                    ) : (props.trip.ended_at || isTripEnded) ? (
+                                        <span className="text-muted-foreground">Trajet terminé</span>
+                                    ) : (
+                                        <Button className="w-[70%] mt-3" onClick={() => startTrip(props.trip)}>Démarrer
+                                            le trajet</Button>
+                                    )
+                                }
+                                <Button className="w-[70%] mb-3" onClick={() => handleDeleteTrip()}>Annuler le
+                                    trajet</Button>
+                            </>
+                        ) : (!isTripLeft &&
+                            <Button className="mt-3 mb-3" onClick={() => handleLeaveTrip()}>Quitter le
+                                trajet</Button>
+                        )
+                    }
+
+                </CardContent>
+            </Card>
+
+            {displayAlertBox && (
+                <AlertBoxLeaveTrip key={props.trip.id} trip={props.trip} leaveTrip={() => leaveTrip(props.trip.id)}/>
+            )}
+            {displayAlertDeleteBox && (
+                <AlertBoxDeleteTrip key={props.trip.id} trip={props.trip} deleteTrip={() => deleteTrip(props.trip.id)}/>
+            )}
+        </>
     )
 }
 

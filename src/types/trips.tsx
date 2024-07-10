@@ -10,6 +10,7 @@ export interface Trip {
     vehicle: { model: string };
     user: string;
     userId: string;
+    totalPassengers: number;
     departure_time: string;
     users: User[];
     isFull: boolean;
