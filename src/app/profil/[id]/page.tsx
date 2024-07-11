@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import Profil from "@/components/component/profil"; // Importer le composant Profil
-import { Loader } from "@/components/component/loader"; // Importer un composant Loader
+import { Loader } from "@/components/component/loader";
+import {SpinnerWheel} from "@/components/component/spinner-wheel"; // Importer un composant Loader
 
 // Composant de la page de profil
 export default function ProfilPage() {
@@ -53,7 +54,7 @@ export default function ProfilPage() {
         return (
             <main className="flex min-h-screen flex-col items-center justify-between p-24">
                 <div className="fixed inset-0 flex items-center justify-center">
-                    <Loader />
+                    <SpinnerWheel/>
                 </div>
             </main>
         );
