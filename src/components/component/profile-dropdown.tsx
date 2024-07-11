@@ -48,7 +48,7 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
                 {userData?.avatar && (
                     <div className="flex items-center gap-2 cursor-pointer">
                         <Avatar className={`${avatarSizeClass}`}>
-                            <AvatarImage alt="avatar" src={`/img/${userData?.avatar}`}/>
+                            <AvatarImage alt="avatar" src={`/avatar/${userData?.avatar}`}/>
                             <AvatarFallback>{userData?.first_name}</AvatarFallback>
                         </Avatar>
                         {size === 'small' && <p className="text-sm font-medium">Mon Profil</p>}

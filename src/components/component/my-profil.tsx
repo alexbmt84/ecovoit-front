@@ -9,8 +9,10 @@ import {SpinnerWheel} from "@/components/component/spinner-wheel";
 export function MyProfil() {
     const {userData, updateUser} = useUser();
     const {addVehicle, updateVehicle, deleteVehicle, vehicleData} = useVehicle();
+    const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
 
     type FormData = {
+        avatar: string;
         last_name: string;
         first_name: string;
         email: string;
@@ -27,6 +29,7 @@ export function MyProfil() {
     };
 
     const [formData, setFormData] = useState<FormData>({
+        avatar: "",
         last_name: "",
         first_name: "",
         email: "",
@@ -40,6 +43,7 @@ export function MyProfil() {
     useEffect(() => {
         if (userData) {
             setFormData({
+                avatar: userData.avatar,
                 last_name: userData.last_name,
                 first_name: userData.first_name,
                 email: userData.email,
@@ -60,6 +64,46 @@ export function MyProfil() {
                 ...formData,
                 [e.target.id]: e.target.value
             });
+        }
+    };
+
+    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedAvatar(file);
+            // Mettre à jour l'URL de l'avatar dans l'état local directement
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                avatar: URL.createObjectURL(file)
+            }));
+        }
+    };
+
+    const handleUploadAvatar = async () => {
+        if (!selectedAvatar) return;
+
+        const formData = new FormData();
+        formData.append('avatar', selectedAvatar);
+
+        try {
+            const response = await fetch('/api/upload/avatar', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const { avatarUrl } = await response.json(); // Supposons que l'API retourne l'URL de l'avatar
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    avatar: avatarUrl,
+                }));
+                setSuccess('Avatar mis à jour avec succès.');
+            } else {
+                setError('Échec de la mise à jour de l\'avatar.');
+            }
+        } catch (error) {
+            console.error('Erreur lors du téléchargement de l\'avatar :', error);
+            setError('Échec de la mise à jour de l\'avatar.');
         }
     };
 
@@ -118,14 +162,11 @@ export function MyProfil() {
 
                 setSuccess("Vehicle deleted successfully.");
 
-
                 return {
                     ...prevState,
                     vehicles: filteredVehicles,
                 };
-
             });
-
         }
     };
 
@@ -157,20 +198,28 @@ export function MyProfil() {
                             alt="Profile Avatar"
                             className="rounded-full w-full h-full object-cover"
                             height={128}
-                            src={`/img/${userData?.avatar}`}
+                            src={formData.avatar || `/avatar/${userData?.avatar}`}
                             style={{aspectRatio: "128/128", objectFit: "cover"}}
                             width={128}
                         />
                         <div
-                            className="absolute bottom-0 right-0 bg-gray-900 dark:bg-gray-700 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer">
+                            className="absolute bottom-0 right-0 bg-gray-900 dark:bg-gray-700 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer"
+                            onClick={() => document.getElementById('fileInput')?.click()}
+                        >
                             <FilePenIcon className="w-5 h-5"/>
+                            <input
+                                type="file"
+                                id="fileInput"
+                                style={{display: 'none'}}
+                                onChange={handleAvatarChange}
+                            />
                         </div>
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Edit Profile</h2>
                 </div>
                 <form className="space-y-4" onSubmit={handleSubmit}>
                     <div>
-                        <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="last_name">
+                    <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="last_name">
                             Nom
                         </Label>
                         <Input
