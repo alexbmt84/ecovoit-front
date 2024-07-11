@@ -138,8 +138,8 @@ export function SearchTripCard() {
                             </div>
                         </div>
                     </CardContent>
-                    <CardFooter>
-                        <Button type={"submit"} className="w-full mt-5 mb-3">Go !</Button>
+                    <CardFooter className="flex justify-end">
+                        <Button type={"submit"} className="w-2/5 mt-5 mb-3 p-2 transition-colors rounded-md border border-cyan-700 bg-cyan-100 text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-cyan-500/50">Go !</Button>
                     </CardFooter>
                 </form>
             </Card>
