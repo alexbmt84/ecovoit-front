@@ -5,11 +5,15 @@ import {Button} from "@/components/ui/button";
 import useUser from "@/hooks/useUser";
 import useVehicle, {VehicleData} from "@/hooks/useVehicle";
 import {SpinnerWheel} from "@/components/component/spinner-wheel";
+import {useRouter} from "next/navigation";
+import axios from "axios";
 
 export function MyProfil() {
     const {userData, updateUser} = useUser();
     const {addVehicle, updateVehicle, deleteVehicle, vehicleData} = useVehicle();
     const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const router = useRouter();
 
     type FormData = {
         avatar: string;
@@ -70,6 +74,7 @@ export function MyProfil() {
         const file = e.target.files?.[0];
         if (file) {
             setSelectedAvatar(file);
+            setAvatarPreview(URL.createObjectURL(file));
             setFormData(prevFormData => ({
                 ...prevFormData,
                 avatar: file.name
@@ -89,35 +94,40 @@ export function MyProfil() {
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+
         e.preventDefault();
         if (userData?.id) {
             const modifiedData = getModifiedFields(userData, formData);
-            console.log(modifiedData);
             if (Object.keys(modifiedData).length > 0) {
                 try {
                     const response = await updateUser(userData.id, modifiedData);
-                    if (response.ok) {
-                        if (selectedAvatar) {
-                            try {
-                                const filePath = `/avatar/${modifiedData.avatar}`;
-                                // Créer un FormData pour envoyer l'image au backend
-                                const formData = new FormData();
+                    if (response.ok && selectedAvatar) {
+                        const formData = new FormData();
+                        formData.append('file', selectedAvatar);
+                        try {
+                            const uploadResponse = await axios.post('http://localhost:8000/api/upload', formData, {
+                                headers: {
+                                    'Authorization': `Bearer ${token}`,
+                                }
+                            });
 
-                                formData.append('file', selectedAvatar.name);
-                                formData.append('avatar_path', filePath);
-                                formData.append('user_id', userData.id.toString());
-
-                            } catch (err) {
-                                console.error('Erreur lors de la création du Blob ou de la gestion du téléchargement :', err);
-                                // Gérer l'erreur ici, par exemple :
-                                console.log('Échec du téléchargement du fichier');
-                            }
+                        } catch (err) {
+                            console.error('Error during the file upload:', err);
                         }
-
-                        setSuccess("User updated successfully.");
-                    } else {
-                        setError(`Failed to update user: ${response.error}`);
                     }
+
+                    setSuccess("User data updated successfully.");
+                    setTimeout(() => {
+                        setSuccess('');
+                    }, 1000);
+
                 } catch (error) {
                     console.error('Error updating user:', error);
                     setError('Failed to update user');
@@ -145,7 +155,7 @@ export function MyProfil() {
             setFormData(prevState => {
 
                 const filteredVehicles = prevState.vehicles.filter(vehicle => {
-                    console.log("Checking vehicle ID: ", vehicle.id);
+
                     return vehicle.id !== vehicleId;
                 });
 
@@ -187,7 +197,7 @@ export function MyProfil() {
                             alt="Profile Avatar"
                             className="rounded-full w-full h-full object-cover"
                             height={128}
-                            src={formData.avatar || `/avatar/${userData?.avatar}`}
+                            src={avatarPreview || `${userData?.avatar}`}
                             style={{aspectRatio: "128/128", objectFit: "cover"}}
                             width={128}
                         />
@@ -208,7 +218,7 @@ export function MyProfil() {
                 </div>
                 <form className="space-y-4" onSubmit={handleSubmit}>
                     <div>
-                    <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="last_name">
+                        <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="last_name">
                             Nom
                         </Label>
                         <Input

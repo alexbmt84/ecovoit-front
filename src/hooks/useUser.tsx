@@ -30,7 +30,6 @@ const useUser = () => {
         const fetchUserData = async () => {
             const token = sessionStorage.getItem('access_token');
             if (!token) {
-                console.log('No token found, redirecting to login...');
                 router.push('/login');
                 return;
             }
@@ -43,7 +42,6 @@ const useUser = () => {
                 });
                 setUserData(response.data);
             } catch (error) {
-                console.error('Error fetching user data', error);
                 router.push('/login');
             } finally {
                 setLoading(false);
@@ -55,7 +53,6 @@ const useUser = () => {
 
 
     const updateUser = async (id: number, updatedData: Partial<UserData>) => {
-        console.log(updatedData);
         const token = sessionStorage.getItem('access_token');
         if (!token) {
             router.push('/login');
