@@ -5,19 +5,19 @@ import {Button} from "@/components/ui/button";
 import useUser from "@/hooks/useUser";
 import useVehicle, {VehicleData} from "@/hooks/useVehicle";
 import {SpinnerWheel} from "@/components/component/spinner-wheel";
+import {useRouter} from "next/navigation";
+import axios from "axios";
 
 export function MyProfil() {
     const {userData, updateUser} = useUser();
     const {addVehicle, updateVehicle, deleteVehicle, vehicleData} = useVehicle();
-<<<<<<< Updated upstream
-=======
     const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
     const router = useRouter();
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
->>>>>>> Stashed changes
 
     type FormData = {
+        avatar: string;
         last_name: string;
         first_name: string;
         email: string;
@@ -34,6 +34,7 @@ export function MyProfil() {
     };
 
     const [formData, setFormData] = useState<FormData>({
+        avatar: "",
         last_name: "",
         first_name: "",
         email: "",
@@ -47,6 +48,7 @@ export function MyProfil() {
     useEffect(() => {
         if (userData) {
             setFormData({
+                avatar: userData.avatar,
                 last_name: userData.last_name,
                 first_name: userData.first_name,
                 email: userData.email,
@@ -54,7 +56,6 @@ export function MyProfil() {
                 vehicles: Array.isArray(userData.vehicles) ? userData.vehicles : []
             });
         }
-        console.log(formData)
     }, [userData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number | null = null, field: string | null = null) => {
@@ -70,6 +71,19 @@ export function MyProfil() {
         }
     };
 
+    const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedAvatar(file);
+            setAvatarPreview(URL.createObjectURL(file));
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                avatar: file.name
+            }));
+
+        }
+    };
+
     const getModifiedFields = (original: any, updated: any) => {
         const modifiedFields: any = {};
         for (const key in updated) {
@@ -81,18 +95,20 @@ export function MyProfil() {
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+
         e.preventDefault();
         if (userData?.id) {
             const modifiedData = getModifiedFields(userData, formData);
             if (Object.keys(modifiedData).length > 0) {
                 try {
                     const response = await updateUser(userData.id, modifiedData);
-<<<<<<< Updated upstream
-                    if (response.ok) {
-                        setSuccess("User updated successfully.");
-                    } else {
-                        setError(`Failed to update user: ${response.error}`);
-=======
                     if (response.ok && selectedAvatar) {
                         const formData = new FormData();
                         formData.append('file', selectedAvatar);
@@ -106,8 +122,13 @@ export function MyProfil() {
                         } catch (err) {
                             console.error('Error during the file upload:', err);
                         }
->>>>>>> Stashed changes
                     }
+
+                    setSuccess("User data updated successfully.");
+                    setTimeout(() => {
+                        setSuccess('');
+                    }, 1000);
+
                 } catch (error) {
                     console.error('Error updating user:', error);
                     setError('Failed to update user');
@@ -135,20 +156,17 @@ export function MyProfil() {
             setFormData(prevState => {
 
                 const filteredVehicles = prevState.vehicles.filter(vehicle => {
-                    console.log("Checking vehicle ID: ", vehicle.id);
+
                     return vehicle.id !== vehicleId;
                 });
 
                 setSuccess("Vehicle deleted successfully.");
 
-
                 return {
                     ...prevState,
                     vehicles: filteredVehicles,
                 };
-
             });
-
         }
     };
 
@@ -180,13 +198,21 @@ export function MyProfil() {
                             alt="Profile Avatar"
                             className="rounded-full w-full h-full object-cover"
                             height={128}
-                            src={`/img/${userData?.avatar}`}
+                            src={avatarPreview || `${userData?.avatar}`}
                             style={{aspectRatio: "128/128", objectFit: "cover"}}
                             width={128}
                         />
                         <div
-                            className="absolute bottom-0 right-0 bg-gray-900 dark:bg-gray-700 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer">
+                            className="absolute bottom-0 right-0 bg-gray-900 dark:bg-gray-700 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer"
+                            onClick={() => document.getElementById('fileInput')?.click()}
+                        >
                             <FilePenIcon className="w-5 h-5"/>
+                            <input
+                                type="file"
+                                id="fileInput"
+                                style={{display: 'none'}}
+                                onChange={handleAvatarChange}
+                            />
                         </div>
                     </div>
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Edit Profile</h2>
