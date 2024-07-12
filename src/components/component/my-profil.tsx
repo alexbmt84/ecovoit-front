@@ -9,6 +9,13 @@ import {SpinnerWheel} from "@/components/component/spinner-wheel";
 export function MyProfil() {
     const {userData, updateUser} = useUser();
     const {addVehicle, updateVehicle, deleteVehicle, vehicleData} = useVehicle();
+<<<<<<< Updated upstream
+=======
+    const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
+    const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+    const router = useRouter();
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+>>>>>>> Stashed changes
 
     type FormData = {
         last_name: string;
@@ -80,10 +87,26 @@ export function MyProfil() {
             if (Object.keys(modifiedData).length > 0) {
                 try {
                     const response = await updateUser(userData.id, modifiedData);
+<<<<<<< Updated upstream
                     if (response.ok) {
                         setSuccess("User updated successfully.");
                     } else {
                         setError(`Failed to update user: ${response.error}`);
+=======
+                    if (response.ok && selectedAvatar) {
+                        const formData = new FormData();
+                        formData.append('file', selectedAvatar);
+                        try {
+                            const uploadResponse = await axios.post(`${apiUrl}/api/upload`, formData, {
+                                headers: {
+                                    'Authorization': `Bearer ${token}`,
+                                }
+                            });
+
+                        } catch (err) {
+                            console.error('Error during the file upload:', err);
+                        }
+>>>>>>> Stashed changes
                     }
                 } catch (error) {
                     console.error('Error updating user:', error);
