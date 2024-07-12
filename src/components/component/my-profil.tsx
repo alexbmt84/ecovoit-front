@@ -14,6 +14,7 @@ export function MyProfil() {
     const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
     const router = useRouter();
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     type FormData = {
         avatar: string;
@@ -112,7 +113,7 @@ export function MyProfil() {
                         const formData = new FormData();
                         formData.append('file', selectedAvatar);
                         try {
-                            const uploadResponse = await axios.post('http://localhost:8000/api/upload', formData, {
+                            const uploadResponse = await axios.post(`${apiUrl}/api/upload`, formData, {
                                 headers: {
                                     'Authorization': `Bearer ${token}`,
                                 }
