@@ -55,6 +55,7 @@ const useUser = () => {
 
 
     const updateUser = async (id: number, updatedData: Partial<UserData>) => {
+        console.log(updatedData);
         const token = sessionStorage.getItem('access_token');
         if (!token) {
             router.push('/login');
@@ -72,6 +73,7 @@ const useUser = () => {
             if (response.status === 200) {
                 setUserData(response.data);
                 return {ok: true};
+
             } else {
                 return {ok: false, error: 'Failed to update user'};
             }

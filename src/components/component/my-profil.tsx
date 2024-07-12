@@ -51,7 +51,6 @@ export function MyProfil() {
                 vehicles: Array.isArray(userData.vehicles) ? userData.vehicles : []
             });
         }
-        console.log(formData)
     }, [userData]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number | null = null, field: string | null = null) => {
@@ -71,39 +70,11 @@ export function MyProfil() {
         const file = e.target.files?.[0];
         if (file) {
             setSelectedAvatar(file);
-            // Mettre à jour l'URL de l'avatar dans l'état local directement
             setFormData(prevFormData => ({
                 ...prevFormData,
-                avatar: URL.createObjectURL(file)
+                avatar: file.name
             }));
-        }
-    };
 
-    const handleUploadAvatar = async () => {
-        if (!selectedAvatar) return;
-
-        const formData = new FormData();
-        formData.append('avatar', selectedAvatar);
-
-        try {
-            const response = await fetch('/api/upload/avatar', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (response.ok) {
-                const { avatarUrl } = await response.json(); // Supposons que l'API retourne l'URL de l'avatar
-                setFormData(prevFormData => ({
-                    ...prevFormData,
-                    avatar: avatarUrl,
-                }));
-                setSuccess('Avatar mis à jour avec succès.');
-            } else {
-                setError('Échec de la mise à jour de l\'avatar.');
-            }
-        } catch (error) {
-            console.error('Erreur lors du téléchargement de l\'avatar :', error);
-            setError('Échec de la mise à jour de l\'avatar.');
         }
     };
 
@@ -121,10 +92,28 @@ export function MyProfil() {
         e.preventDefault();
         if (userData?.id) {
             const modifiedData = getModifiedFields(userData, formData);
+            console.log(modifiedData);
             if (Object.keys(modifiedData).length > 0) {
                 try {
                     const response = await updateUser(userData.id, modifiedData);
                     if (response.ok) {
+                        if (selectedAvatar) {
+                            try {
+                                const filePath = `/avatar/${modifiedData.avatar}`;
+                                // Créer un FormData pour envoyer l'image au backend
+                                const formData = new FormData();
+
+                                formData.append('file', selectedAvatar.name);
+                                formData.append('avatar_path', filePath);
+                                formData.append('user_id', userData.id.toString());
+
+                            } catch (err) {
+                                console.error('Erreur lors de la création du Blob ou de la gestion du téléchargement :', err);
+                                // Gérer l'erreur ici, par exemple :
+                                console.log('Échec du téléchargement du fichier');
+                            }
+                        }
+
                         setSuccess("User updated successfully.");
                     } else {
                         setError(`Failed to update user: ${response.error}`);
