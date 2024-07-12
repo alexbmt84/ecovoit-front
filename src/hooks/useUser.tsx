@@ -30,7 +30,6 @@ const useUser = () => {
         const fetchUserData = async () => {
             const token = sessionStorage.getItem('access_token');
             if (!token) {
-                console.log('No token found, redirecting to login...');
                 router.push('/login');
                 return;
             }
@@ -43,7 +42,6 @@ const useUser = () => {
                 });
                 setUserData(response.data);
             } catch (error) {
-                console.error('Error fetching user data', error);
                 router.push('/login');
             } finally {
                 setLoading(false);
@@ -72,6 +70,7 @@ const useUser = () => {
             if (response.status === 200) {
                 setUserData(response.data);
                 return {ok: true};
+
             } else {
                 return {ok: false, error: 'Failed to update user'};
             }
