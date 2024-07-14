@@ -6,6 +6,7 @@ import useUser from "@/hooks/useUser";
 import useVehicle, {VehicleData} from "@/hooks/useVehicle";
 import {SpinnerWheel} from "@/components/component/spinner-wheel";
 import {useRouter} from "next/navigation";
+import {FilePenIcon} from "@/components/icons/Filepenicon";
 import axios from "axios";
 
 export function MyProfil() {
@@ -15,6 +16,8 @@ export function MyProfil() {
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
     const router = useRouter();
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const nameRegex ="/^[A-Za-zÀ-ÖØ-öø-ÿ'\-\s]+$/";
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
     type FormData = {
         avatar: string;
@@ -44,6 +47,7 @@ export function MyProfil() {
 
     const [success, setSuccess] = useState('');
     const [error, setError] = useState<string | undefined>('');
+    const [profilIsModified, setProfilIsModified] = useState(false);
 
     useEffect(() => {
         if (userData) {
@@ -59,8 +63,9 @@ export function MyProfil() {
     }, [userData]);
 
     // Fonction pour déterminer si le formulaire est modifié
-    const isModified = (modifiedFields: any) => {
-        setIsModified(Object.keys(modifiedFields).length > 0);
+    const isModified = () => {
+        const modifiedData = getModifiedFields(userData, formData);
+        return Object.keys(modifiedData).length > 0;
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number | null = null, field: string | null = null) => {
@@ -146,6 +151,51 @@ export function MyProfil() {
         }
     };
 
+
+    const handleVehicleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const token = sessionStorage.getItem('access_token');
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+
+        if (userData?.id) {
+            try {
+                // Ajout d'un nouveau véhicule
+                const newVehicleData = {
+                    model: 'Modèle du véhicule',
+                    immatriculation: 'Numéro d\'immatriculation',
+                    places: 4,
+                    picture: 'URL de l\'image',
+                };
+
+                const { addVehicle } = useVehicle(); // Utilisation du hook useVehicle
+
+                const addVehicleResponse = await addVehicle(newVehicleData);
+
+                if (addVehicleResponse.ok) {
+                    setSuccess("Vehicle added successfully.");
+                    setTimeout(() => {
+                        setSuccess('');
+                    }, 1000);
+                } else {
+                    setError('Failed to add vehicle');
+                }
+
+            } catch (error) {
+                console.error('Error adding vehicle:', error);
+                setError('Failed to add vehicle');
+            }
+        } else {
+            setError("User ID is missing.");
+        }
+    };
+
+
     const handleAddVehicle = () => {
         setFormData({
             ...formData,
@@ -153,27 +203,27 @@ export function MyProfil() {
         });
     };
 
-    const handleDeleteVehicle = async (vehicleId: number) => {
-        const response = await deleteVehicle(vehicleId);
-        if (!response.ok) {
-            setError(response.error);
-        } else {
-            setFormData(prevState => {
-
-                const filteredVehicles = prevState.vehicles.filter(vehicle => {
-
-                    return vehicle.id !== vehicleId;
-                });
-
-                setSuccess("Vehicle deleted successfully.");
-
-                return {
-                    ...prevState,
-                    vehicles: filteredVehicles,
-                };
-            });
-        }
-    };
+    // const handleDeleteVehicle = async (vehicleId: number) => {
+    //     const response = await deleteVehicle(vehicleId);
+    //     if (!response.ok) {
+    //         setError(response.error);
+    //     } else {
+    //         setFormData(prevState => {
+    //
+    //             const filteredVehicles = prevState.vehicles.filter(vehicle => {
+    //
+    //                 return vehicle.id !== vehicleId;
+    //             });
+    //
+    //             setSuccess("Vehicle deleted successfully.");
+    //
+    //             return {
+    //                 ...prevState,
+    //                 vehicles: filteredVehicles,
+    //             };
+    //         });
+    //     }
+    // };
 
 
     const handleUpdateVehicle = async (vehicleId: number, updatedData: Partial<VehicleData>) => {
@@ -233,7 +283,7 @@ export function MyProfil() {
                             placeholder={userData?.last_name}
                             type="text"
                             value={formData.last_name}
-                            pattern="^[A-Za-zÀ-ÖØ-öø-ÿ'-\s]+$"
+                            pattern={nameRegex}
                             onChange={handleChange}
                         />
                     </div>
@@ -247,7 +297,7 @@ export function MyProfil() {
                             placeholder={userData?.first_name}
                             type="text"
                             value={formData.first_name}
-                            pattern="^[A-Za-zÀ-ÖØ-öø-ÿ'-\s]+$"
+                            pattern={nameRegex}
                             onChange={handleChange}
                         />
                     </div>
@@ -260,7 +310,7 @@ export function MyProfil() {
                             id="email"
                             placeholder={userData?.email}
                             type="email"
-                            pattern="^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"
+                            pattern={emailRegex.source}
                             value={formData.email}
                             onChange={handleChange}
                         />
@@ -283,13 +333,17 @@ export function MyProfil() {
                     <Button
                         className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                         type="submit"
+                        disabled={!isModified()}
                     >
                         Modifier
                     </Button>
 
-                    <hr/>
+                </form>
 
-                    <div>Mes véhicules:</div>
+                <form className="space-y-4" onSubmit={handleVehicleSubmit}>
+                    <div className="pt-3 flex justify-center">
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Mes véhicules</h2>
+                    </div>
 
                     {formData.vehicles.map((vehicle) => (
 
@@ -301,8 +355,8 @@ export function MyProfil() {
                                 </Label>
                                 <Input
                                     className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    id={`model-${vehicle.id}`}
-                                    placeholder={vehicle.model}
+                                    id={`vehicle_${vehicle.id}_model`}
+                                    placeholder='SIAN FKP 37'
                                     type="text"
                                     value={vehicle.model}
                                     onChange={(e) => handleChange(e, vehicle.id, 'model')}
@@ -315,8 +369,8 @@ export function MyProfil() {
                                 </Label>
                                 <Input
                                     className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    id={`immatriculation-${vehicle.id}`}
-                                    placeholder={vehicle.immatriculation}
+                                    id={`vehicle_${vehicle.id}_immatriculation`}
+                                    placeholder="YY-000-YY"
                                     type="text"
                                     value={vehicle.immatriculation}
                                     onChange={(e) => handleChange(e, vehicle.id, 'immatriculation')}
@@ -329,8 +383,8 @@ export function MyProfil() {
                                 </Label>
                                 <Input
                                     className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    id={`places-${vehicle.id}`}
-                                    placeholder="2"
+                                    id={`vehicle_${vehicle.id}_places`}
+                                    placeholder="..."
                                     type="number"
                                     min="1"
                                     max="10"
@@ -366,24 +420,4 @@ export function MyProfil() {
     );
 }
 
-// @ts-ignore
-function FilePenIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10"/>
-            <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-            <path d="M10.4 12.6a2 2 0 1 1 3 3L8 21l-4 1 1-4Z"/>
-        </svg>
-    );
-}
+

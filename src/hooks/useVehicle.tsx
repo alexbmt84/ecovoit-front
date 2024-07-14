@@ -11,7 +11,7 @@ export type VehicleData = {
 };
 
 const useVehicle = () => {
-    const [vehicleData, setVehicleData] = useState<VehicleData[]>([]);
+    const [vehicleData, setVehicleData] = useState<VehicleData | null>(null);
     const router = useRouter();
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -32,8 +32,8 @@ const useVehicle = () => {
             });
 
             if (response.status === 201) {
-                // Ajouter le nouveau véhicule localement
-                setVehicleData(prevVehicleData => [...prevVehicleData, response.data]);
+                // Mettre à jour les données du véhicule localement
+                setVehicleData(response.data); // Mettez à jour l'état local avec le nouveau véhicule ajouté
                 return { ok: true };
             } else {
                 return { ok: false, error: 'Failed to add vehicle' };
@@ -54,7 +54,7 @@ const useVehicle = () => {
         }
 
         try {
-            const response = await axios.put(`https://api.ecovoit.tech/api/vehicles/${vehicleId}`, updatedData, {
+            const response = await axios.put(`${apiUrl}/api/vehicles/${vehicleId}`, updatedData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -64,9 +64,7 @@ const useVehicle = () => {
             if (response.status === 200) {
                 // Mettre à jour les données du véhicule localement
                 setVehicleData(prevVehicleData =>
-                    prevVehicleData.map(vehicle =>
-                        vehicle.id === vehicleId ? { ...vehicle, ...response.data } : vehicle
-                    )
+                    prevVehicleData ? { ...prevVehicleData, ...response.data } : null
                 );
                 return { ok: true };
             } else {
@@ -95,8 +93,9 @@ const useVehicle = () => {
             });
 
             if (response.status === 200) {
+                // Supprimer le véhicule de l'état local
                 setVehicleData(prevVehicleData =>
-                    prevVehicleData.filter(vehicle => vehicle.id !== vehicleId)
+                    prevVehicleData && prevVehicleData.id === vehicleId ? null : prevVehicleData
                 );
                 return { ok: true };
             } else {
@@ -111,4 +110,5 @@ const useVehicle = () => {
 
     return { vehicleData, addVehicle, updateVehicle, deleteVehicle };
 };
+
 export default useVehicle;
