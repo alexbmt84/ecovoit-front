@@ -58,6 +58,11 @@ export function MyProfil() {
         }
     }, [userData]);
 
+    // Fonction pour déterminer si le formulaire est modifié
+    const isModified = (modifiedFields: any) => {
+        setIsModified(Object.keys(modifiedFields).length > 0);
+    };
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number | null = null, field: string | null = null) => {
         if (index !== null && field !== null) {
             const newVehicles = [...formData.vehicles];
@@ -215,7 +220,7 @@ export function MyProfil() {
                             />
                         </div>
                     </div>
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Edit Profile</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Mon Profile</h2>
                 </div>
                 <form className="space-y-4" onSubmit={handleSubmit}>
                     <div>
@@ -274,6 +279,17 @@ export function MyProfil() {
                             onChange={handleChange}
                         />
                     </div>
+
+                    <Button
+                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                        type="submit"
+                    >
+                        Modifier
+                    </Button>
+
+                    <hr/>
+
+                    <div>Mes véhicules:</div>
 
                     {formData.vehicles.map((vehicle) => (
 
@@ -342,12 +358,6 @@ export function MyProfil() {
                         Ajouter un véhicule
                     </Button>
 
-                    <Button
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                        type="submit"
-                    >
-                        Modifier
-                    </Button>
                     {error && <p className="mt-4 text-center text-red-500">{error}</p>}
                     {success && <p className="mt-4 text-center text-green-500">{success}</p>}
                 </form>
