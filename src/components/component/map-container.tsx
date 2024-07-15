@@ -17,6 +17,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import useUser from "@/hooks/useUser";
 import {VehicleSelect} from "@/components/component/vehicle-select";
 import {VehicleData} from "@/hooks/useVehicle";
+import {AlertBoxCreatedTrip} from "@/components/component/alert-box-created-trip";
 
 interface Vehicle {
     id: number;
@@ -42,6 +43,7 @@ export function MapContainer() {
     const route = useRouter();
     const [displayJoinButton, setDisplayJoinButton] = useState<boolean>(true);
     const [disableJoinButton, setDisableJoinButton] = useState<boolean>(false);
+    const [displayCreatedModal, setDisplayCreatedModal] = useState<boolean>(false);
 
     useEffect(() => {
         const accessToken = sessionStorage.getItem('access_token');
@@ -147,7 +149,11 @@ export function MapContainer() {
         setShowSelect(!showSelect);
     }
 
-    const handleCreateTrip = async () => {
+    const handleCreateTrip = () => {
+        setDisplayCreatedModal(true);
+    }
+
+    const createTrip = async () => {
         if (!tripInformations.startDate) {
             alert("Please select a date and time for your trip")
             return;
@@ -167,7 +173,6 @@ export function MapContainer() {
                 }
 
             })
-            alert("Trip successfully created")
             console.log(response);
             router.push('/mytrips')
         } catch (error) {
@@ -209,192 +214,199 @@ export function MapContainer() {
     // @ts-ignore
     // @ts-ignore
     return (
-        <div className="flex w-full flex-col">
-            <div className="flex flex-row">
-                {tripInformations.departure && tripInformations.arrival ? (
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 md:text-4xl flex flex-row">
-                        <MapPinIcon className="w-7 h-7 mt-1 mr-2"/>
-                        <span>{toTitleCase(tripInformations.departure)}</span>
-                        <ArrowRightIcon className="w-7 h-7 mt-2 mx-2"/>
-                        <span>{toTitleCase(tripInformations.arrival)}</span>
-                    </h1>
-                ) : (
-                    <ThreeDots color="#38BDC8"/>
-                )}
-            </div>
-            <div className="flex h-[700px] flex-row">
-                <div className="flex-1 bg-gray-100 dark:bg-gray-900">
-                    <div className="relative h-full w-full">
-                        <Suspense fallback={<div>Loading Map...</div>}>
-                            <MapComponent tripInformations={handleTripInformations}
-                                          currentDeparture={currentTrip.departure}
-                                          currentArrival={currentTrip.arrival}
-                                          currentVehicle={currentTrip.vehicle}
-                                          currentUser={currentTrip.user}
-                                          currentUserId={currentTrip.userId}
-
-                            />
-                        </Suspense>
-                    </div>
+        <>
+            <div className="flex w-full flex-col">
+                <div className="flex flex-row">
+                    {tripInformations.departure && tripInformations.arrival ? (
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 md:text-4xl flex flex-row">
+                            <MapPinIcon className="w-7 h-7 mt-1 mr-2"/>
+                            <span>{toTitleCase(tripInformations.departure)}</span>
+                            <ArrowRightIcon className="w-7 h-7 mt-2 mx-2"/>
+                            <span>{toTitleCase(tripInformations.arrival)}</span>
+                        </h1>
+                    ) : (
+                        <ThreeDots color="#38BDC8"/>
+                    )}
                 </div>
-                <div className="flex w-80 flex-col gap-6 bg-white p-6 dark:bg-gray-950">
-                    {
-                        !tripInformations.departure &&
-                        !tripInformations.arrival &&
-                        !tripInformations.distance &&
-                        tripInformations.trips.length <= 0 &&
-                        !tripInformations.model &&
-                        !tripInformations.user ? (
-                            <div className={"flex justify-center"}>
-                                <ThreeDots color="#38BDC8"/>
-                            </div>
-                        ) : (
+                <div className="flex h-[700px] flex-row">
+                    <div className="flex-1 bg-gray-100 dark:bg-gray-900">
+                        <div className="relative h-full w-full">
+                            <Suspense fallback={<div>Loading Map...</div>}>
+                                <MapComponent tripInformations={handleTripInformations}
+                                              currentDeparture={currentTrip.departure}
+                                              currentArrival={currentTrip.arrival}
+                                              currentVehicle={currentTrip.vehicle}
+                                              currentUser={currentTrip.user}
+                                              currentUserId={currentTrip.userId}
 
-                            <>
-                                <div className="grid gap-2">
-                                    <div className="grid gap-1">
-                                        <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Distance
-                                        </div>
-                                        <div className="text-3xl font-bold">
+                                />
+                            </Suspense>
+                        </div>
+                    </div>
+                    <div className="flex w-80 flex-col gap-6 bg-white p-6 dark:bg-gray-950">
+                        {
+                            !tripInformations.departure &&
+                            !tripInformations.arrival &&
+                            !tripInformations.distance &&
+                            tripInformations.trips.length <= 0 &&
+                            !tripInformations.model &&
+                            !tripInformations.user ? (
+                                <div className={"flex justify-center"}>
+                                    <ThreeDots color="#38BDC8"/>
+                                </div>
+                            ) : (
 
-                                            <span>{tripInformations.distance} kilomètres</span>
-                                        </div>
-                                    </div>
-
-                                    {tripInformations.duration ? (
-                                        <div className="grid gap-1 mt-2">
-                                            <div className="text-sm font-medium text-gray-500 dark:text-gray-400">Durée
-                                                du trajet
+                                <>
+                                    <div className="grid gap-2">
+                                        <div className="grid gap-1">
+                                            <div
+                                                className="text-sm font-medium text-gray-500 dark:text-gray-400">Distance
                                             </div>
                                             <div className="text-3xl font-bold">
-                                                <span>{tripInformations.duration}</span>
+
+                                                <span>{tripInformations.distance} kilomètres</span>
                                             </div>
                                         </div>
 
-                                    ) : (
-                                        <div></div>
-                                    )}
-
-                                    {showSelect ? (
-                                        <>
-
-                                            <VehicleSelect
-                                                userVehiclesProps={userData?.vehicles ? [userData.vehicles] : undefined}
-                                                onSelectVehicle={handleVehicleSelect}
-                                            />
-                                            <div className={"flex flex-row gap-2"}>
-                                                <Button className="w-full mt-3 mb-3"
-                                                        size="lg"
-                                                        onClick={handleCreateTrip}
-                                                >
-                                                    Valider
-                                                </Button>
-                                                <Button className="w-full mt-3 mb-3" size="lg"
-                                                        onClick={cancelCreateTrip}>
-                                                    Annuler
-                                                </Button>
-                                            </div>
-                                        </>
-                                    ) : tripInformations.user && tripInformations.model ? (
-                                        <>
-                                            <div className="mt-2 flex text-gray-500">
-                                                <UserIcon className="mr-2 h-5 w-5"/>
-                                                <Link href={`/profil/${tripInformations.userId}`}>
-                                                    <div className="text-sm font-bold">
-                                                        <span>{tripInformations.user}</span>
-                                                    </div>
-                                                </Link>
-                                            </div>
-
-
-                                            <div className="mt-2 flex text-gray-500">
-                                                <CarIcon className="mr-2 h-5 w-5"/>
-                                                <div className="text-sm font-bold">
-                                                    <span>{tripInformations.model}</span>
+                                        {tripInformations.duration ? (
+                                            <div className="grid gap-1 mt-2">
+                                                <div
+                                                    className="text-sm font-medium text-gray-500 dark:text-gray-400">Durée
+                                                    du trajet
+                                                </div>
+                                                <div className="text-3xl font-bold">
+                                                    <span>{tripInformations.duration}</span>
                                                 </div>
                                             </div>
-                                        </>
-                                    ) : (
-                                        <></>
-                                    )}
-                                    {showCreate && (
-                                        <>
-                                            <Button className="w-full mt-5" size="lg" onClick={handleSelectCar}>
-                                                <CarIcon className="mr-2 h-5 w-5"/>
-                                                Créer ce trajet
-                                            </Button>
-                                        </>
-                                    )}
-                                    <Button className="w-full" size="lg" variant="outline">
-                                        <ShareIcon className="mr-2 h-5 w-5"/>
-                                        Partager ce trajet
-                                    </Button>
-                                </div>
-                                <div className="flex flex-col gap-6 bg-white dark:bg-gray-950 overflow-y-auto"
-                                     style={{maxHeight: '500px'}}>
-                                    {tripInformations.trips.length > 0 ? (
-                                        tripInformations.trips.map((trip) => (
-                                            <div key={trip.id} className={"flex justify-between"}>
-                                                <div className={"flex flex-col"}>
 
-                                                    <div className={"flex space-x-1"}>
-                                                        <MapPinIcon
-                                                            className="w-4 h-4 text-gray-500 dark:text-gray-400 mt-1"/>
-                                                        <p>
-                                                            {toTitleCase(trip.departure)}
-                                                        </p>
-                                                    </div>
+                                        ) : (
+                                            <div></div>
+                                        )}
 
-                                                    <div className={"flex space-x-1"}>
-                                                        <ArrowDownIcon
-                                                            className="w-4 h-4 text-gray-500 dark:text-gray-400 mt-2.5"/>
-                                                        <p className={"mt-1.5"}>
-                                                            {toTitleCase(trip.destination)}
-                                                        </p>
-                                                    </div>
+                                        {showSelect ? (
+                                            <>
 
-                                                    {/*<div className={"flex space-x-1"}>*/}
-                                                    {/*    <DistanceIcon*/}
-                                                    {/*        className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-1"/>*/}
-                                                    {/*    <p>*/}
-                                                    {/*        {trip.distance} km*/}
-                                                    {/*    </p>*/}
-                                                    {/*</div>*/}
-                                                    <div className={"flex space-x-1"}>
-                                                        <CarIcon
-                                                            className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-2"/>
-                                                        <p className={"mt-1.5"}>
-                                                            {trip.vehicle?.model}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <div className={"flex flex-col gap-2"}>
-                                                    <Button size="sm" variant="outline"
-                                                            onClick={() => handleTripButtonClick(trip)}>
-                                                        Voir
+                                                <VehicleSelect
+                                                    userVehiclesProps={userData?.vehicles ? [userData.vehicles] : undefined}
+                                                    onSelectVehicle={handleVehicleSelect}
+                                                />
+                                                <div className={"flex flex-row gap-2"}>
+                                                    <Button className="w-full mt-3 mb-3"
+                                                            size="lg"
+                                                            onClick={handleCreateTrip}
+                                                    >
+                                                        Valider
                                                     </Button>
-
-                                                    {trip.isFull ? (
-                                                        <Button size="sm" disabled={true}
-                                                                onClick={() => handleJoinTrip(trip.id)}>Complet</Button>
-                                                    ) : (
-                                                        displayJoinButton && (
-                                                            <Button size="sm" disabled={disableJoinButton}
-                                                                    onClick={() => handleJoinTrip(trip.id)}>{disableJoinButton ? 'Rejoint' : 'Rejoindre'}</Button>
-                                                        )
-                                                    )}
+                                                    <Button className="w-full mt-3 mb-3" size="lg"
+                                                            onClick={cancelCreateTrip}>
+                                                        Annuler
+                                                    </Button>
                                                 </div>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div className={"mx-auto text-gray-500 font-bold"}>Aucun trajet n&apos;a été
-                                            trouvé</div>
-                                    )}
-                                </div>
-                            </>
-                        )}
+                                            </>
+                                        ) : tripInformations.user && tripInformations.model ? (
+                                            <>
+                                                <div className="mt-2 flex text-gray-500">
+                                                    <UserIcon className="mr-2 h-5 w-5"/>
+                                                    <Link href={`/profil/${tripInformations.userId}`}>
+                                                        <div className="text-sm font-bold">
+                                                            <span>{tripInformations.user}</span>
+                                                        </div>
+                                                    </Link>
+                                                </div>
+
+
+                                                <div className="mt-2 flex text-gray-500">
+                                                    <CarIcon className="mr-2 h-5 w-5"/>
+                                                    <div className="text-sm font-bold">
+                                                        <span>{tripInformations.model}</span>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <></>
+                                        )}
+                                        {showCreate && (
+                                            <>
+                                                <Button className="w-full mt-5" size="lg" onClick={handleSelectCar}>
+                                                    <CarIcon className="mr-2 h-5 w-5"/>
+                                                    Créer ce trajet
+                                                </Button>
+                                            </>
+                                        )}
+                                        <Button className="w-full" size="lg" variant="outline">
+                                            <ShareIcon className="mr-2 h-5 w-5"/>
+                                            Partager ce trajet
+                                        </Button>
+                                    </div>
+                                    <div className="flex flex-col gap-6 bg-white dark:bg-gray-950 overflow-y-auto"
+                                         style={{maxHeight: '500px'}}>
+                                        {tripInformations.trips.length > 0 ? (
+                                            tripInformations.trips.map((trip) => (
+                                                <div key={trip.id} className={"flex justify-between"}>
+                                                    <div className={"flex flex-col"}>
+
+                                                        <div className={"flex space-x-1"}>
+                                                            <MapPinIcon
+                                                                className="w-4 h-4 text-gray-500 dark:text-gray-400 mt-1"/>
+                                                            <p>
+                                                                {toTitleCase(trip.departure)}
+                                                            </p>
+                                                        </div>
+
+                                                        <div className={"flex space-x-1"}>
+                                                            <ArrowDownIcon
+                                                                className="w-4 h-4 text-gray-500 dark:text-gray-400 mt-2.5"/>
+                                                            <p className={"mt-1.5"}>
+                                                                {toTitleCase(trip.destination)}
+                                                            </p>
+                                                        </div>
+
+                                                        {/*<div className={"flex space-x-1"}>*/}
+                                                        {/*    <DistanceIcon*/}
+                                                        {/*        className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-1"/>*/}
+                                                        {/*    <p>*/}
+                                                        {/*        {trip.distance} km*/}
+                                                        {/*    </p>*/}
+                                                        {/*</div>*/}
+                                                        <div className={"flex space-x-1"}>
+                                                            <CarIcon
+                                                                className="w-5 h-5 text-gray-500 dark:text-gray-400 mt-2"/>
+                                                            <p className={"mt-1.5"}>
+                                                                {trip.vehicle?.model}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div className={"flex flex-col gap-2"}>
+                                                        <Button size="sm" variant="outline"
+                                                                onClick={() => handleTripButtonClick(trip)}>
+                                                            Voir
+                                                        </Button>
+
+                                                        {trip.isFull ? (
+                                                            <Button size="sm" disabled={true}
+                                                                    onClick={() => handleJoinTrip(trip.id)}>Complet</Button>
+                                                        ) : (
+                                                            displayJoinButton && (
+                                                                <Button size="sm" disabled={disableJoinButton}
+                                                                        onClick={() => handleJoinTrip(trip.id)}>{disableJoinButton ? 'Rejoint' : 'Rejoindre'}</Button>
+                                                            )
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div className={"mx-auto text-gray-500 font-bold"}>Aucun trajet n&apos;a été
+                                                trouvé</div>
+                                        )}
+                                    </div>
+                                </>
+                            )}
+                    </div>
                 </div>
             </div>
-        </div>
+            {displayCreatedModal && (
+                <AlertBoxCreatedTrip createTrip={() => createTrip()} trip={tripInformations}/>
+            )}
+        </>
     )
 }
