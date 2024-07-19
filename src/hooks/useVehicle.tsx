@@ -16,7 +16,6 @@ const useVehicle = () => {
     const router = useRouter();
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    // Fonction pour ajouter un nouveau véhicule
     const addVehicle = async (newVehicle: Partial<VehicleData>) => {
         const token = sessionStorage.getItem('access_token');
         if (!token) {
@@ -25,6 +24,7 @@ const useVehicle = () => {
         }
 
         try {
+            console.log('Cest quoi ques ce qui y a ici =>', newVehicle)
             const response = await axios.post(`${apiUrl}/api/vehicles`, newVehicle, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -33,9 +33,8 @@ const useVehicle = () => {
             });
 
             if (response.status === 201) {
-                // Mettre à jour les données du véhicule localement
-                setVehicleData(response.data); // Mettez à jour l'état local avec le nouveau véhicule ajouté
-                return { ok: true };
+                setVehicleData(response.data);
+                return { ok: true, data: response.data };
             } else {
                 return { ok: false, error: 'Failed to add vehicle' };
             }
@@ -46,7 +45,6 @@ const useVehicle = () => {
         }
     };
 
-    // Fonction pour mettre à jour un véhicule existant
     const updateVehicle = async (vehicleId: number, updatedData: Partial<VehicleData>) => {
         const token = sessionStorage.getItem('access_token');
         if (!token) {
@@ -63,7 +61,6 @@ const useVehicle = () => {
             });
 
             if (response.status === 200) {
-                // Mettre à jour les données du véhicule localement
                 setVehicleData(prevVehicleData =>
                     prevVehicleData ? { ...prevVehicleData, ...response.data } : null
                 );
@@ -78,7 +75,6 @@ const useVehicle = () => {
         }
     };
 
-    // Fonction pour supprimer un véhicule
     const deleteVehicle = async (vehicleId: number) => {
         const token = sessionStorage.getItem('access_token');
         if (!token) {
@@ -94,7 +90,6 @@ const useVehicle = () => {
             });
 
             if (response.status === 200) {
-                // Supprimer le véhicule de l'état local
                 setVehicleData(prevVehicleData =>
                     prevVehicleData && prevVehicleData.id === vehicleId ? null : prevVehicleData
                 );
@@ -112,4 +107,5 @@ const useVehicle = () => {
     return { vehicleData, addVehicle, updateVehicle, deleteVehicle };
 };
 
+// @ts-ignore
 export default useVehicle;

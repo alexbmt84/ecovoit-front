@@ -1,23 +1,21 @@
-import React, {useState, useEffect} from 'react';
-import {Label} from "@/components/ui/label";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
+import React, { useState, useEffect } from 'react';
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import useUser from "@/hooks/useUser";
-import useVehicle, {VehicleData} from "@/hooks/useVehicle";
-import {SpinnerWheel} from "@/components/component/spinner-wheel";
-import {useRouter} from "next/navigation";
-import {FilePenIcon} from "@/components/icons/Filepenicon";
+import useVehicle, { VehicleData } from "@/hooks/useVehicle";
+import { SpinnerWheel } from "@/components/component/spinner-wheel";
+import { useRouter } from "next/navigation";
+import { FilePenIcon } from "@/components/icons/Filepenicon";
 import axios from "axios";
 
-export function MyProfil() {
-    const {userData, updateUser} = useUser();
-    const {addVehicle, updateVehicle, deleteVehicle, vehicleData} = useVehicle();
+export function MyProfile() {
+    const { userData, updateUser } = useUser();
+    const { addVehicle, updateVehicle, deleteVehicle } = useVehicle();
     const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
     const router = useRouter();
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    const nameRegex ="/^[A-Za-zÀ-ÖØ-öø-ÿ'\-\s]+$/";
-    const emailRegex = "/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/";
 
     type FormData = {
         avatar: string;
@@ -29,11 +27,11 @@ export function MyProfil() {
     };
 
     type FormVehicleData = {
-        model: string,
-        immatriculation: string,
-        places: number,
-        picture: string,
-        user_id: number,
+        model: string;
+        immatriculation: string;
+        places: number;
+        picture: string;
+        user_id: number;
     };
 
     const [formData, setFormData] = useState<FormData>({
@@ -55,7 +53,6 @@ export function MyProfil() {
 
     const [success, setSuccess] = useState('');
     const [error, setError] = useState<string | undefined>('');
-    const [profilIsModified, setProfilIsModified] = useState(false);
 
     useEffect(() => {
         if (userData) {
@@ -70,35 +67,33 @@ export function MyProfil() {
         }
     }, [userData]);
 
-    useEffect(() => {
-        if (vehicleData && userData) {
-            setFormVehicleData({
-                model: vehicleData.model,
-                immatriculation: vehicleData.immatriculation,
-                places: vehicleData.places,
-                picture: vehicleData.picture,
-                user_id: userData.id,
-            });
-        }
-    }, [vehicleData]);
+    const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [id]: value
+        }));
+    };
 
-    // Fonction pour déterminer si le formulaire est modifié
     const isModified = () => {
         const modifiedData = getModifiedFields(userData, formData);
         return Object.keys(modifiedData).length > 0;
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number | null = null, field: string | null = null) => {
-        if (index !== null && field !== null) {
-            const newVehicles = [...formData.vehicles];
-            newVehicles[index] = {...newVehicles[index], [field]: e.target.value};
-            setFormData({...formData, vehicles: newVehicles});
-        } else {
-            setFormData({
-                ...formData,
-                [e.target.id]: e.target.value
-            });
-        }
+    const handleUpdateVehicle = (e: React.ChangeEvent<HTMLInputElement>, index: number, field: string) => {
+        const newVehicles = [...formData.vehicles];
+        newVehicles[index] = { ...newVehicles[index], [field]: e.target.value };
+        setFormData(prevState => ({
+            ...prevState,
+            vehicles: newVehicles
+        }));
+    };
+
+    const handleAddVehicle = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+        setFormVehicleData(prevState => ({
+            ...prevState,
+            [field]: e.target.value
+        }));
     };
 
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +105,6 @@ export function MyProfil() {
                 ...prevFormData,
                 avatar: file.name
             }));
-
         }
     };
 
@@ -125,7 +119,7 @@ export function MyProfil() {
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-
+        e.preventDefault();
         const token = sessionStorage.getItem('access_token');
 
         if (!token) {
@@ -133,7 +127,6 @@ export function MyProfil() {
             return;
         }
 
-        e.preventDefault();
         if (userData?.id) {
             const modifiedData = getModifiedFields(userData, formData);
             if (Object.keys(modifiedData).length > 0) {
@@ -148,7 +141,6 @@ export function MyProfil() {
                                     'Authorization': `Bearer ${token}`,
                                 }
                             });
-
                         } catch (err) {
                             console.error('Error during the file upload:', err);
                         }
@@ -158,7 +150,6 @@ export function MyProfil() {
                     setTimeout(() => {
                         setSuccess('');
                     }, 1000);
-
                 } catch (error) {
                     console.error('Error updating user:', error);
                     setError('Failed to update user');
@@ -171,10 +162,8 @@ export function MyProfil() {
         }
     };
 
-
     const handleVehicleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         const token = sessionStorage.getItem('access_token');
 
         if (!token) {
@@ -184,20 +173,27 @@ export function MyProfil() {
 
         if (userData?.id) {
             try {
-                const addVehicleResponse = await addVehicle(formVehicleData);
+                const newVehicle = { ...formVehicleData, user_id: userData.id };
+                const addVehicleResponse = await addVehicle(newVehicle);
 
-                if (addVehicleResponse.ok) {
-                    // Mettre à jour l'état des véhicules
+                if (addVehicleResponse.ok && addVehicleResponse.data) {
                     setFormData(prevState => ({
                         ...prevState,
                         vehicles: [...prevState.vehicles, addVehicleResponse.data]
                     }));
+                    setFormVehicleData({
+                        model: "",
+                        immatriculation: "",
+                        places: 0,
+                        picture: "",
+                        user_id: userData.id,
+                    });
                     setSuccess("Vehicle added successfully.");
                     setTimeout(() => {
                         setSuccess('');
                     }, 1000);
                 } else {
-                    setError('Failed to add vehicle');
+                    setError(addVehicleResponse.error || 'Failed to add vehicle');
                 }
             } catch (error) {
                 console.error('Error adding vehicle:', error);
@@ -208,52 +204,14 @@ export function MyProfil() {
         }
     };
 
-    const handleAddVehicle = () => {
-        setFormData(prevState => ({
-            ...prevState,
-            vehicles: [...prevState.vehicles, { id: Date.now(), model: "", immatriculation: "", places: 1, picture: "", user_id: userData?.id || 0 }]
-        }));
-    };
-
-    // const handleDeleteVehicle = async (vehicleId: number) => {
-    //     const response = await deleteVehicle(vehicleId);
-    //     if (!response.ok) {
-    //         setError(response.error);
-    //     } else {
-    //         setFormData(prevState => {
-    //
-    //             const filteredVehicles = prevState.vehicles.filter(vehicle => {
-    //
-    //                 return vehicle.id !== vehicleId;
-    //             });
-    //
-    //             setSuccess("Vehicle deleted successfully.");
-    //
-    //             return {
-    //                 ...prevState,
-    //                 vehicles: filteredVehicles,
-    //             };
-    //         });
-    //     }
-    // };
-
-
-    const handleUpdateVehicle = async (vehicleId: number, updatedData: Partial<VehicleData>) => {
-        const response = await updateVehicle(vehicleId, updatedData);
-        if (!response.ok) {
-            setError(response.error);
-        } else {
-            setSuccess("Vehicle updated successfully.");
-        }
-    };
-
     if (!userData) {
-        return (<main className="flex min-h-screen flex-col items-center justify-between p-24">
+        return (
+            <main className="flex min-h-screen flex-col items-center justify-between p-24">
                 <div className="fixed inset-0 flex items-center justify-center">
-                    <SpinnerWheel/>
+                    <SpinnerWheel />
                 </div>
             </main>
-        )
+        );
     }
 
     return (
@@ -266,18 +224,18 @@ export function MyProfil() {
                             className="rounded-full w-full h-full object-cover"
                             height={128}
                             src={avatarPreview || `${userData?.avatar}`}
-                            style={{aspectRatio: "128/128", objectFit: "cover"}}
+                            style={{ aspectRatio: "128/128", objectFit: "cover" }}
                             width={128}
                         />
                         <div
                             className="absolute bottom-0 right-0 bg-gray-900 dark:bg-gray-700 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer"
                             onClick={() => document.getElementById('fileInput')?.click()}
                         >
-                            <FilePenIcon className="w-5 h-5"/>
+                            <FilePenIcon className="w-5 h-5" />
                             <input
                                 type="file"
                                 id="fileInput"
-                                style={{display: 'none'}}
+                                style={{ display: 'none' }}
                                 onChange={handleAvatarChange}
                             />
                         </div>
@@ -295,13 +253,12 @@ export function MyProfil() {
                             placeholder={userData?.last_name}
                             type="text"
                             value={formData.last_name}
-                            pattern={nameRegex}
-                            onChange={handleChange}
+                            onChange={handleProfileChange}
                         />
                     </div>
                     <div>
                         <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="first_name">
-                            Prenom
+                            Prénom
                         </Label>
                         <Input
                             className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -309,8 +266,7 @@ export function MyProfil() {
                             placeholder={userData?.first_name}
                             type="text"
                             value={formData.first_name}
-                            pattern={nameRegex}
-                            onChange={handleChange}
+                            onChange={handleProfileChange}
                         />
                     </div>
                     <div>
@@ -322,9 +278,8 @@ export function MyProfil() {
                             id="email"
                             placeholder={userData?.email}
                             type="email"
-                            pattern={emailRegex}
                             value={formData.email}
-                            onChange={handleChange}
+                            onChange={handleProfileChange}
                         />
                     </div>
                     <div>
@@ -336,9 +291,8 @@ export function MyProfil() {
                             id="phone_number"
                             placeholder={userData?.phone_number}
                             type="tel"
-                            pattern="(\d{2}){5}"
                             value={formData.phone_number}
-                            onChange={handleChange}
+                            onChange={handleProfileChange}
                         />
                     </div>
 
@@ -349,82 +303,133 @@ export function MyProfil() {
                     >
                         Modifier
                     </Button>
-
                 </form>
 
-                <form className="space-y-4" onSubmit={handleVehicleSubmit}>
-                    <div className="pt-3 flex justify-center">
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Mes véhicules</h2>
-                    </div>
+                <div className="pt-3 flex justify-center">
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">Mes véhicules</h2>
+                </div>
 
-
-                        <div className="flex gap-4">
+                {/* Liste des véhicules de l'utilisateur */}
+                <div>
+                    {formData.vehicles.map((vehicle, index) => (
+                        <div key={index} className="flex gap-2 mb-4">
                             <div className="flex-grow">
                                 <Label className="block mb-1 text-gray-700 dark:text-gray-300"
-                                       htmlFor="model">
+                                       htmlFor={`model-${index}`}>
                                     Modèle
                                 </Label>
                                 <Input
-                                    className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    id="model"
+                                    className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    id={`model-${index}`}
                                     placeholder='SIAN FKP 37'
                                     type="text"
-                                    value={vehicleData?.model}
-                                    onChange={(e) => handleChange(e, vehicleData?.id, 'model')}
+                                    value={vehicle.model}
+                                    onChange={(e) => handleUpdateVehicle(e, index, 'model')}
                                 />
                             </div>
                             <div className="flex-grow">
                                 <Label className="block mb-1 text-gray-700 dark:text-gray-300"
-                                       htmlFor="immatriculation">
+                                       htmlFor={`immatriculation-${index}`}>
                                     Immatriculation
                                 </Label>
                                 <Input
-                                    className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    id="immatriculation"
+                                    className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    id={`immatriculation-${index}`}
                                     placeholder="YY-000-YY"
                                     type="text"
-                                    value={vehicleData?.immatriculation}
-                                    onChange={(e) => handleChange(e, vehicleData?.id, 'immatriculation')}
+                                    value={vehicle.immatriculation}
+                                    onChange={(e) => handleUpdateVehicle(e, index, 'immatriculation')}
                                 />
                             </div>
                             <div className="w-1/3">
                                 <Label className="block mb-1 text-gray-700 dark:text-gray-300"
-                                       htmlFor="places">
+                                       htmlFor={`places-${index}`}>
                                     Places
                                 </Label>
                                 <Input
-                                    className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    id="places"
+                                    className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    id={`places-${index}`}
                                     placeholder="..."
                                     type="number"
                                     min="1"
                                     max="10"
-                                    value={vehicleData?.places}
-                                    onChange={(e) => handleChange(e, vehicleData?.id, 'places')}
+                                    value={vehicle.places}
+                                    onChange={(e) => handleUpdateVehicle(e, index, 'places')}
                                 />
                             </div>
-                            {vehicleData?.id !== undefined && (
-                                <Button
-                                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 mt-4"
-                                    type="button"
-                                    //onClick={() => handleDeleteVehicle(vehicle.id!)}
-                                >
-                                    X
-                                </Button>
-                            )}
-                            <div>
-                                <Button type='submit'
-                                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
-                                >
-                                    Ok
-                                </Button>
-                            </div>
+                            <Button
+                                className="w-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
+                                type="button"
+                            >
+                                del
+                            </Button>
+                            <Button
+                                className="w-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
+                                type="button"
+                            >
+                                upd
+                            </Button>
                         </div>
+                    ))}
+                </div>
+
+                {/* Formulaire pour ajouter un véhicule */}
+                <form className="space-y-4" onSubmit={handleVehicleSubmit}>
+                    <div>Ajouter un véhicule</div>
+                    <div className="flex gap-4 mb-4">
+                        <div className="flex-grow">
+                            <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="model">
+                                Modèle
+                            </Label>
+                            <Input
+                                className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                id="model"
+                                placeholder='SIAN FKP 37'
+                                type="text"
+                                value={formVehicleData.model}
+                                onChange={(e) => handleAddVehicle(e, 'model')}
+                            />
+                        </div>
+                        <div className="flex-grow">
+                            <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="immatriculation">
+                                Immatriculation
+                            </Label>
+                            <Input
+                                className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                id="immatriculation"
+                                placeholder="YY-000-YY"
+                                type="text"
+                                value={formVehicleData.immatriculation}
+                                onChange={(e) => handleAddVehicle(e, 'immatriculation')}
+                            />
+                        </div>
+                        <div className="w-1/3">
+                            <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="places">
+                                Places
+                            </Label>
+                            <Input
+                                className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                id="places"
+                                placeholder="..."
+                                type="number"
+                                min="1"
+                                max="10"
+                                value={formVehicleData.places}
+                                onChange={(e) => handleAddVehicle(e, 'places')}
+                            />
+                        </div>
+                        <Button
+                            className="w1/5 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
+                            type="submit"
+                        >
+                            OK
+                        </Button>
+
+                    </div>
 
                     <Button
                         className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
                         type="button"
-                        onClick={handleAddVehicle}
                     >
                         Ajouter un véhicule
                     </Button>
@@ -436,5 +441,3 @@ export function MyProfil() {
         </div>
     );
 }
-
-
