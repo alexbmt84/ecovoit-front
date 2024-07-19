@@ -17,7 +17,7 @@ export function MyProfil() {
     const router = useRouter();
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const nameRegex ="/^[A-Za-zÀ-ÖØ-öø-ÿ'\-\s]+$/";
-    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    const emailRegex = "/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/";
 
     type FormData = {
         avatar: string;
@@ -28,12 +28,12 @@ export function MyProfil() {
         vehicles: VehicleData[];
     };
 
-    type VehicleData = {
-        id: number;
-        model: string;
-        immatriculation: string;
-        places: number;
-        picture: string;
+    type FormVehicleData = {
+        model: string,
+        immatriculation: string,
+        places: number,
+        picture: string,
+        user_id: number,
     };
 
     const [formData, setFormData] = useState<FormData>({
@@ -43,6 +43,14 @@ export function MyProfil() {
         email: "",
         phone_number: "",
         vehicles: [],
+    });
+
+    const [formVehicleData, setFormVehicleData] = useState<FormVehicleData>({
+        model: "",
+        immatriculation: "",
+        places: 0,
+        picture: "",
+        user_id: 0,
     });
 
     const [success, setSuccess] = useState('');
@@ -61,6 +69,18 @@ export function MyProfil() {
             });
         }
     }, [userData]);
+
+    useEffect(() => {
+        if (vehicleData && userData) {
+            setFormVehicleData({
+                model: vehicleData.model,
+                immatriculation: vehicleData.immatriculation,
+                places: vehicleData.places,
+                picture: vehicleData.picture,
+                user_id: userData.id,
+            });
+        }
+    }, [vehicleData]);
 
     // Fonction pour déterminer si le formulaire est modifié
     const isModified = () => {
@@ -156,7 +176,6 @@ export function MyProfil() {
         e.preventDefault();
 
         const token = sessionStorage.getItem('access_token');
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
         if (!token) {
             router.push('/login');
@@ -165,19 +184,14 @@ export function MyProfil() {
 
         if (userData?.id) {
             try {
-                // Ajout d'un nouveau véhicule
-                const newVehicleData = {
-                    model: 'Modèle du véhicule',
-                    immatriculation: 'Numéro d\'immatriculation',
-                    places: 4,
-                    picture: 'URL de l\'image',
-                };
-
-                const { addVehicle } = useVehicle(); // Utilisation du hook useVehicle
-
-                const addVehicleResponse = await addVehicle(newVehicleData);
+                const addVehicleResponse = await addVehicle(formVehicleData);
 
                 if (addVehicleResponse.ok) {
+                    // Mettre à jour l'état des véhicules
+                    setFormData(prevState => ({
+                        ...prevState,
+                        vehicles: [...prevState.vehicles, addVehicleResponse.data]
+                    }));
                     setSuccess("Vehicle added successfully.");
                     setTimeout(() => {
                         setSuccess('');
@@ -185,22 +199,20 @@ export function MyProfil() {
                 } else {
                     setError('Failed to add vehicle');
                 }
-
             } catch (error) {
                 console.error('Error adding vehicle:', error);
-                setError('Failed to add vehicle');
+                setError('Error adding vehicle');
             }
         } else {
             setError("User ID is missing.");
         }
     };
 
-
     const handleAddVehicle = () => {
-        setFormData({
-            ...formData,
-            vehicles: [...formData.vehicles, {id: Date.now(), model: "", immatriculation: "", places: 1, picture: ""}]
-        });
+        setFormData(prevState => ({
+            ...prevState,
+            vehicles: [...prevState.vehicles, { id: Date.now(), model: "", immatriculation: "", places: 1, picture: "", user_id: userData?.id || 0 }]
+        }));
     };
 
     // const handleDeleteVehicle = async (vehicleId: number) => {
@@ -310,7 +322,7 @@ export function MyProfil() {
                             id="email"
                             placeholder={userData?.email}
                             type="email"
-                            pattern={emailRegex.source}
+                            pattern={emailRegex}
                             value={formData.email}
                             onChange={handleChange}
                         />
@@ -345,64 +357,69 @@ export function MyProfil() {
                         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Mes véhicules</h2>
                     </div>
 
-                    {formData.vehicles.map((vehicle) => (
 
-                        <div key={vehicle.id} className="flex gap-4">
+                        <div className="flex gap-4">
                             <div className="flex-grow">
                                 <Label className="block mb-1 text-gray-700 dark:text-gray-300"
-                                       htmlFor={`vehicle_${vehicle.id}_model`}>
+                                       htmlFor="model">
                                     Modèle
                                 </Label>
                                 <Input
                                     className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    id={`vehicle_${vehicle.id}_model`}
+                                    id="model"
                                     placeholder='SIAN FKP 37'
                                     type="text"
-                                    value={vehicle.model}
-                                    onChange={(e) => handleChange(e, vehicle.id, 'model')}
+                                    value={vehicleData?.model}
+                                    onChange={(e) => handleChange(e, vehicleData?.id, 'model')}
                                 />
                             </div>
                             <div className="flex-grow">
                                 <Label className="block mb-1 text-gray-700 dark:text-gray-300"
-                                       htmlFor={`vehicle_${vehicle.id}_immatriculation`}>
+                                       htmlFor="immatriculation">
                                     Immatriculation
                                 </Label>
                                 <Input
                                     className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    id={`vehicle_${vehicle.id}_immatriculation`}
+                                    id="immatriculation"
                                     placeholder="YY-000-YY"
                                     type="text"
-                                    value={vehicle.immatriculation}
-                                    onChange={(e) => handleChange(e, vehicle.id, 'immatriculation')}
+                                    value={vehicleData?.immatriculation}
+                                    onChange={(e) => handleChange(e, vehicleData?.id, 'immatriculation')}
                                 />
                             </div>
                             <div className="w-1/3">
                                 <Label className="block mb-1 text-gray-700 dark:text-gray-300"
-                                       htmlFor={`vehicle_${vehicle.id}_places`}>
+                                       htmlFor="places">
                                     Places
                                 </Label>
                                 <Input
                                     className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    id={`vehicle_${vehicle.id}_places`}
+                                    id="places"
                                     placeholder="..."
                                     type="number"
                                     min="1"
                                     max="10"
-                                    value={vehicle.places}
-                                    onChange={(e) => handleChange(e, vehicle.id, 'places')}
+                                    value={vehicleData?.places}
+                                    onChange={(e) => handleChange(e, vehicleData?.id, 'places')}
                                 />
                             </div>
-                            {vehicle.id !== undefined && (
+                            {vehicleData?.id !== undefined && (
                                 <Button
                                     className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 mt-4"
                                     type="button"
-                                    onClick={() => handleDeleteVehicle(vehicle.id!)}
+                                    //onClick={() => handleDeleteVehicle(vehicle.id!)}
                                 >
                                     X
                                 </Button>
                             )}
+                            <div>
+                                <Button type='submit'
+                                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
+                                >
+                                    Ok
+                                </Button>
+                            </div>
                         </div>
-                    ))}
 
                     <Button
                         className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
