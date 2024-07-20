@@ -8,6 +8,7 @@ import { SpinnerWheel } from "@/components/component/spinner-wheel";
 import { useRouter } from "next/navigation";
 import { FilePenIcon } from "@/components/icons/Filepenicon";
 import axios from "axios";
+import {TrashIcon} from "@/components/icons/trashIcon";
 
 export function MyProfile() {
     const { userData, updateUser } = useUser();
@@ -53,6 +54,7 @@ export function MyProfile() {
 
     const [success, setSuccess] = useState('');
     const [error, setError] = useState<string | undefined>('');
+    const [showAddVehicleForm, setShowAddVehicleForm] = useState(false);
 
     useEffect(() => {
         if (userData) {
@@ -176,11 +178,16 @@ export function MyProfile() {
                 const newVehicle = { ...formVehicleData, user_id: userData.id };
                 const addVehicleResponse = await addVehicle(newVehicle);
 
-                if (addVehicleResponse.ok && addVehicleResponse.data) {
                     setFormData(prevState => ({
                         ...prevState,
                         vehicles: [...prevState.vehicles, addVehicleResponse.data]
                     }));
+                if (addVehicleResponse && addVehicleResponse.data) {
+                    setFormData(prevState => ({
+                        ...prevState,
+                        vehicles: [...prevState.vehicles, addVehicleResponse.data]
+                    }));
+
                     setFormVehicleData({
                         model: "",
                         immatriculation: "",
@@ -188,13 +195,17 @@ export function MyProfile() {
                         picture: "",
                         user_id: userData.id,
                     });
+
                     setSuccess("Vehicle added successfully.");
+                    setShowAddVehicleForm(false);
                     setTimeout(() => {
                         setSuccess('');
                     }, 1000);
+
                 } else {
-                    setError(addVehicleResponse.error || 'Failed to add vehicle');
+                    setError("Failed to add vehicle. Please try again.");
                 }
+
             } catch (error) {
                 console.error('Error adding vehicle:', error);
                 setError('Error adding vehicle');
@@ -216,7 +227,7 @@ export function MyProfile() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[100dvh] bg-gray-100 dark:bg-gray-900 p-6">
-            <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+            <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                 <div className="flex flex-col items-center mb-6">
                     <div className="relative w-32 h-32 mb-4">
                         <img
@@ -224,18 +235,18 @@ export function MyProfile() {
                             className="rounded-full w-full h-full object-cover"
                             height={128}
                             src={avatarPreview || `${userData?.avatar}`}
-                            style={{ aspectRatio: "128/128", objectFit: "cover" }}
+                            style={{aspectRatio: "128/128", objectFit: "cover"}}
                             width={128}
                         />
                         <div
                             className="absolute bottom-0 right-0 bg-gray-900 dark:bg-gray-700 text-white rounded-full w-8 h-8 flex items-center justify-center cursor-pointer"
                             onClick={() => document.getElementById('fileInput')?.click()}
                         >
-                            <FilePenIcon className="w-5 h-5" />
+                            <FilePenIcon className="w-5 h-5"/>
                             <input
                                 type="file"
                                 id="fileInput"
-                                style={{ display: 'none' }}
+                                style={{display: 'none'}}
                                 onChange={handleAvatarChange}
                             />
                         </div>
@@ -323,8 +334,7 @@ export function MyProfile() {
                                     id={`model-${index}`}
                                     placeholder='SIAN FKP 37'
                                     type="text"
-                                    value={vehicle.model}
-                                    onChange={(e) => handleUpdateVehicle(e, index, 'model')}
+                                    value={vehicle?.model}
                                 />
                             </div>
                             <div className="flex-grow">
@@ -337,8 +347,7 @@ export function MyProfile() {
                                     id={`immatriculation-${index}`}
                                     placeholder="YY-000-YY"
                                     type="text"
-                                    value={vehicle.immatriculation}
-                                    onChange={(e) => handleUpdateVehicle(e, index, 'immatriculation')}
+                                    value={vehicle?.immatriculation}
                                 />
                             </div>
                             <div className="w-1/3">
@@ -353,90 +362,92 @@ export function MyProfile() {
                                     type="number"
                                     min="1"
                                     max="10"
-                                    value={vehicle.places}
+                                    value={vehicle?.places}
                                     onChange={(e) => handleUpdateVehicle(e, index, 'places')}
                                 />
                             </div>
-                            <Button
-                                className="w-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
-                                type="button"
-                            >
-                                del
-                            </Button>
-                            <Button
-                                className="w-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
-                                type="button"
-                            >
-                                upd
-                            </Button>
+                            <div className='flex items-center justify-center gap-1'>
+                                <div className='flex items-center pt-4'>
+                                    <FilePenIcon/>
+                                </div>
+                                <div className='flex items-center pt-4'>|</div>
+                                <div className=' flex items-center pt-4'>
+                                    <TrashIcon className="stroke-red-500"/>
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>
 
                 {/* Formulaire pour ajouter un véhicule */}
-                <form className="space-y-4" onSubmit={handleVehicleSubmit}>
-                    <div>Ajouter un véhicule</div>
-                    <div className="flex gap-4 mb-4">
-                        <div className="flex-grow">
-                            <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="model">
-                                Modèle
-                            </Label>
-                            <Input
-                                className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                id="model"
-                                placeholder='SIAN FKP 37'
-                                type="text"
-                                value={formVehicleData.model}
-                                onChange={(e) => handleAddVehicle(e, 'model')}
-                            />
-                        </div>
-                        <div className="flex-grow">
-                            <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="immatriculation">
-                                Immatriculation
-                            </Label>
-                            <Input
-                                className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                id="immatriculation"
-                                placeholder="YY-000-YY"
-                                type="text"
-                                value={formVehicleData.immatriculation}
-                                onChange={(e) => handleAddVehicle(e, 'immatriculation')}
-                            />
-                        </div>
-                        <div className="w-1/3">
-                            <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="places">
-                                Places
-                            </Label>
-                            <Input
-                                className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                id="places"
-                                placeholder="..."
-                                type="number"
-                                min="1"
-                                max="10"
-                                value={formVehicleData.places}
-                                onChange={(e) => handleAddVehicle(e, 'places')}
-                            />
-                        </div>
-                        <Button
-                            className="w1/5 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
-                            type="submit"
-                        >
-                            OK
-                        </Button>
+                {showAddVehicleForm && (
+                    <form className="space-y-4 pt-6" onSubmit={handleVehicleSubmit}>
 
-                    </div>
+                        <div className="flex gap-4">
+                            <div className="flex-grow">
+                                <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="model">
+                                    Modèle
+                                </Label>
+                                <Input
+                                    className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    id="model"
+                                    placeholder='SIAN FKP 37'
+                                    type="text"
+                                    value={formVehicleData.model}
+                                    onChange={(e) => handleAddVehicle(e, 'model')}
+                                />
+                            </div>
+                            <div className="flex-grow">
+                                <Label className="block mb-1 text-gray-700 dark:text-gray-300"
+                                       htmlFor="immatriculation">
+                                    Immatriculation
+                                </Label>
+                                <Input
+                                    className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    id="immatriculation"
+                                    placeholder="YY-000-YY"
+                                    type="text"
+                                    value={formVehicleData.immatriculation}
+                                    onChange={(e) => handleAddVehicle(e, 'immatriculation')}
+                                />
+                            </div>
+                            <div className="w-1/3">
+                                <Label className="block mb-1 text-gray-700 dark:text-gray-300" htmlFor="places">
+                                    Places
+                                </Label>
+                                <Input
+                                    className="w-full text-center py-2 rounded-md border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    id="places"
+                                    placeholder="..."
+                                    type="number"
+                                    min="1"
+                                    max="10"
+                                    value={formVehicleData.places}
+                                    onChange={(e) => handleAddVehicle(e, 'places')}
+                                />
+                            </div>
+                            <Button
+                                className="w1/5 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
+                                type="submit"
+                            >
+                                OK
+                            </Button>
 
-                    <Button
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
-                        type="button"
-                    >
-                        Ajouter un véhicule
-                    </Button>
+                        </div>
 
-                    {error && <p className="mt-4 text-center text-red-500">{error}</p>}
-                    {success && <p className="mt-4 text-center text-green-500">{success}</p>}
-                </form>
+
+                        {error && <p className="mt-4 text-center text-red-500">{error}</p>}
+                        {success && <p className="mt-4 text-center text-green-500">{success}</p>}
+                    </form>
+                )}
+                <Button
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 mt-4"
+                    type="button"
+                    onClick={() => setShowAddVehicleForm(true)}
+                >
+                    Ajouter un véhicule
+                </Button>
+
             </div>
         </div>
     );

@@ -46,7 +46,7 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
         <DropdownMenu>
             <DropdownMenuTrigger asChild className={"cursor-pointer"}>
                 {userData?.avatar && (
-                    <div className="flex items-center gap-2 cursor-pointer">
+                    <div className="flex items-center gap-2">
                         <Avatar className={`${avatarSizeClass}`}>
                             <AvatarImage alt="avatar" src={`${userData?.avatar}`}/>
                             <AvatarFallback>{userData?.first_name}</AvatarFallback>
@@ -56,22 +56,20 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
                 )}
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 p-2">
-                <DropdownMenuItem onClick={redirectToProfil} className={"cursor-pointer"}>
-                    <div className="flex items-center gap-2">
-                        <Avatar className="h-8 w-8">
-                            <AvatarImage alt="avatar" src={`${userData?.avatar}`}/>
-                            <AvatarFallback>{userData?.first_name}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex flex-col">
-                            <p className="text-sm font-medium">{userData?.first_name} {userData?.last_name}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">{userData?.email}</p>
-                        </div>
+                <div className="flex items-center gap-2">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage alt="avatar" src={`${userData?.avatar}`}/>
+                        <AvatarFallback>{userData?.first_name}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col">
+                        <p className="text-sm font-medium">{userData?.first_name} {userData?.last_name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{userData?.email}</p>
                     </div>
-                </DropdownMenuItem>
+                </div>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem onClick={redirectToProfil} className={"cursor-pointer"}>
                     <SettingsIcon className="h-4 w-4 mr-2"/>
-                    <span>Modifier</span>
+                    <span>Mon profil</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={onLogout} className={"cursor-pointer"}>
                     <LogOutIcon className="h-4 w-4 mr-2"/>
