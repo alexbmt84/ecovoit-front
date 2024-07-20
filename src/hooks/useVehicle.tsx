@@ -12,11 +12,10 @@ export type VehicleData = {
 };
 
 const useVehicle = () => {
-    const [vehicleData, setVehicleData] = useState<VehicleData[]>([]);
+    const [vehicleData, setVehicleData] = useState<VehicleData | null>(null);
     const router = useRouter();
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    // Fonction pour ajouter un nouveau véhicule
     const addVehicle = async (newVehicle: Partial<VehicleData>) => {
         const token = sessionStorage.getItem('access_token');
         if (!token) {
@@ -25,6 +24,7 @@ const useVehicle = () => {
         }
 
         try {
+            console.log('Cest quoi ques ce qui y a ici =>', newVehicle)
             const response = await axios.post(`${apiUrl}/api/vehicles`, newVehicle, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -33,9 +33,8 @@ const useVehicle = () => {
             });
 
             if (response.status === 201) {
-                // Ajouter le nouveau véhicule localement
-                setVehicleData(prevVehicleData => [...prevVehicleData, response.data]);
-                return { ok: true };
+                setVehicleData(response.data);
+                return { ok: true, data: response.data };
             } else {
                 return { ok: false, error: 'Failed to add vehicle' };
             }
@@ -46,7 +45,6 @@ const useVehicle = () => {
         }
     };
 
-    // Fonction pour mettre à jour un véhicule existant
     const updateVehicle = async (vehicleId: number, updatedData: Partial<VehicleData>) => {
         const token = sessionStorage.getItem('access_token');
         if (!token) {
@@ -55,7 +53,7 @@ const useVehicle = () => {
         }
 
         try {
-            const response = await axios.put(`https://api.ecovoit.tech/api/vehicles/${vehicleId}`, updatedData, {
+            const response = await axios.put(`${apiUrl}/api/vehicles/${vehicleId}`, updatedData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -63,11 +61,8 @@ const useVehicle = () => {
             });
 
             if (response.status === 200) {
-                // Mettre à jour les données du véhicule localement
                 setVehicleData(prevVehicleData =>
-                    prevVehicleData.map(vehicle =>
-                        vehicle.id === vehicleId ? { ...vehicle, ...response.data } : vehicle
-                    )
+                    prevVehicleData ? { ...prevVehicleData, ...response.data } : null
                 );
                 return { ok: true };
             } else {
@@ -80,7 +75,6 @@ const useVehicle = () => {
         }
     };
 
-    // Fonction pour supprimer un véhicule
     const deleteVehicle = async (vehicleId: number) => {
         const token = sessionStorage.getItem('access_token');
         if (!token) {
@@ -97,7 +91,7 @@ const useVehicle = () => {
 
             if (response.status === 200) {
                 setVehicleData(prevVehicleData =>
-                    prevVehicleData.filter(vehicle => vehicle.id !== vehicleId)
+                    prevVehicleData && prevVehicleData.id === vehicleId ? null : prevVehicleData
                 );
                 return { ok: true };
             } else {
@@ -112,4 +106,6 @@ const useVehicle = () => {
 
     return { vehicleData, addVehicle, updateVehicle, deleteVehicle };
 };
+
+// @ts-ignore
 export default useVehicle;
