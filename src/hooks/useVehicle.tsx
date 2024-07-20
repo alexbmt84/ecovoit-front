@@ -24,7 +24,6 @@ const useVehicle = () => {
         }
 
         try {
-            console.log('Cest quoi ques ce qui y a ici =>', newVehicle)
             const response = await axios.post(`${apiUrl}/api/vehicles`, newVehicle, {
                 headers: {
                     'Authorization': `Bearer ${token}`,

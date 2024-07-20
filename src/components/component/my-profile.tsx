@@ -148,19 +148,28 @@ export function MyProfile() {
                         }
                     }
 
-                    setSuccess("User data updated successfully.");
+                    setSuccess("Votre profil a bien été mis a jour.");
                     setTimeout(() => {
                         setSuccess('');
                     }, 1000);
                 } catch (error) {
                     console.error('Error updating user:', error);
-                    setError('Failed to update user');
+                    setError('Nous n\'avons pas reussit a mettre a  jour votre profil');
+                    setTimeout(() => {
+                        setError('');
+                    }, 1000);
                 }
             } else {
-                setError("No changes to update.");
+                setError("Pas de changement.");
+                setTimeout(() => {
+                    setError('');
+                }, 1000);
             }
         } else {
-            setError("User ID is missing.");
+            setError("Utilisateur non trouvé.");
+            setTimeout(() => {
+                setError('');
+            }, 1000);
         }
     };
 
@@ -178,16 +187,6 @@ export function MyProfile() {
                 const newVehicle = { ...formVehicleData, user_id: userData.id };
                 const addVehicleResponse = await addVehicle(newVehicle);
 
-                    setFormData(prevState => ({
-                        ...prevState,
-                        vehicles: [...prevState.vehicles, addVehicleResponse.data]
-                    }));
-                if (addVehicleResponse && addVehicleResponse.data) {
-                    setFormData(prevState => ({
-                        ...prevState,
-                        vehicles: [...prevState.vehicles, addVehicleResponse.data]
-                    }));
-
                     setFormVehicleData({
                         model: "",
                         immatriculation: "",
@@ -196,22 +195,26 @@ export function MyProfile() {
                         user_id: userData.id,
                     });
 
-                    setSuccess("Vehicle added successfully.");
+
                     setShowAddVehicleForm(false);
+                    window.location.reload();
+                    setSuccess("Vehicule ajouté avec succé.");
                     setTimeout(() => {
                         setSuccess('');
                     }, 1000);
 
-                } else {
-                    setError("Failed to add vehicle. Please try again.");
-                }
-
             } catch (error) {
-                console.error('Error adding vehicle:', error);
-                setError('Error adding vehicle');
+                console.error('Error to add vehicle:', error);
+                setError('Erreur d\'ajout du véhicule');
+                setTimeout(() => {
+                    setError('');
+                }, 1000);
             }
         } else {
-            setError("User ID is missing.");
+            setError("Utilisateur non trouvé.");
+            setTimeout(() => {
+                setError('');
+            }, 1000);
         }
     };
 
@@ -335,6 +338,7 @@ export function MyProfile() {
                                     placeholder='SIAN FKP 37'
                                     type="text"
                                     value={vehicle?.model}
+                                    disabled={true}
                                 />
                             </div>
                             <div className="flex-grow">
@@ -348,6 +352,7 @@ export function MyProfile() {
                                     placeholder="YY-000-YY"
                                     type="text"
                                     value={vehicle?.immatriculation}
+                                    disabled={true}
                                 />
                             </div>
                             <div className="w-1/3">
