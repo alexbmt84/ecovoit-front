@@ -10,7 +10,7 @@ interface PageProfilProps {
     user: User;
 }
 
-export const Profil: React.FC<PageProfilProps> = ({ user }) => {
+export const Profile: React.FC<PageProfilProps> = ({ user }) => {
 
     const getEstablishmentName = (id: number) => {
         if (id === 1) {
@@ -64,4 +64,4 @@ export const Profil: React.FC<PageProfilProps> = ({ user }) => {
         </div>
 );
 };
-export default Profil;
+export default Profile;

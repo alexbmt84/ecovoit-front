@@ -1,16 +1,16 @@
-// pages/profil/[id].tsx
+// pages/profile/[id].tsx
 
 "use client";
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
-import Profil from "@/components/component/profil"; // Importer le composant Profil
+import Profile from "@/components/component/profile"; // Importer le composant Profile
 import { Loader } from "@/components/component/loader";
 import {SpinnerWheel} from "@/components/component/spinner-wheel"; // Importer un composant Loader
 
 // Composant de la page de profil
-export default function ProfilPage() {
+export default function ProfilePage() {
     const params = useParams(); // Récupère les paramètres de l'URL (ici, l'ID de l'utilisateur)
     const router = useRouter();
     const [user, setUser] = useState(null); // State pour stocker les données de l'utilisateur
@@ -76,7 +76,7 @@ export default function ProfilPage() {
         <main className="flex min-h-screen flex-col items-center p-24">
             <div className="container mx-auto px-4 md:px-6 lg:px-8">
                 {user ? (
-                    <Profil user={user} /> // Utilise le composant Profil pour afficher les données de l'utilisateur
+                    <Profile user={user} /> // Utilise le composant Profile pour afficher les données de l'utilisateur
                 ) : (
                     <div>User not found</div>
                 )}

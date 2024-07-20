@@ -38,7 +38,13 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
     const avatarSizeClass = size === 'small' ? 'h-5 w-5' : 'h-10 w-10';
     const {userData} = useUser();
 
-    const redirectToProfil = () => {
+    const redirectToProfile = () => {
+        router.push('./my-profile');
+    };
+    const redirectToMyTrips = () => {
+        router.push('./my-profil');
+    };
+    const redirectToMessages = () => {
         router.push('./my-profil');
     };
 
@@ -67,7 +73,15 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
                     </div>
                 </div>
                 <DropdownMenuSeparator/>
-                <DropdownMenuItem onClick={redirectToProfil} className={"cursor-pointer"}>
+                <DropdownMenuItem onClick={redirectToMyTrips} className={"cursor-pointer"}>
+                    <SettingsIcon className="h-4 w-4 mr-2"/>
+                    <span>Mes trajets</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={redirectToMessages} className={"cursor-pointer"}>
+                    <SettingsIcon className="h-4 w-4 mr-2"/>
+                    <span>Mes messages</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={redirectToProfile} className={"cursor-pointer"}>
                     <SettingsIcon className="h-4 w-4 mr-2"/>
                     <span>Mon profil</span>
                 </DropdownMenuItem>
