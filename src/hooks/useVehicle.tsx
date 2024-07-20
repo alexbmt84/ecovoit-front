@@ -8,6 +8,7 @@ export type VehicleData = {
     immatriculation: string;
     places: number;
     picture: string;
+    user_id: number;
 };
 
 const useVehicle = () => {

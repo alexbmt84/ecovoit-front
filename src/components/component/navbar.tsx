@@ -109,13 +109,13 @@ export function Navbar() {
                                 className="p-2 transition-colors rounded-md border border-cyan-700 bg-cyan-100 text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-cyan-500/50"
                                 href={"/mytrips"}
                             >
-                                Mes trajets
+                                M&apos;e-co-voit
                             </Link>
                             <Link
                                 className="p-2 transition-colors rounded-md border border-cyan-700 bg-cyan-100 text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-cyan-500/50"
                                 href="#"
                             >
-                                M&apos;e-co-voit
+                                M&apos;e-courier
                             </Link>
                             <ProfileDropdown onLogout={logout} />
                         </>
