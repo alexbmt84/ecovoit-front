@@ -60,10 +60,7 @@ const useVehicle = () => {
             });
 
             if (response.status === 200) {
-                setVehicleData(prevVehicleData =>
-                    prevVehicleData ? { ...prevVehicleData, ...response.data } : null
-                );
-                return { ok: true };
+                return { ok: true, data: response.data };
             } else {
                 return { ok: false, error: 'Failed to update vehicle' };
             }
@@ -73,6 +70,7 @@ const useVehicle = () => {
             return { ok: false, error: 'Failed to update vehicle' };
         }
     };
+
 
     const deleteVehicle = async (vehicleId: number) => {
         const token = sessionStorage.getItem('access_token');

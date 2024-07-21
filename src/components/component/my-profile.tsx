@@ -218,6 +218,71 @@ export function MyProfile() {
         }
     };
 
+    const handleDeleteVehicle = async (vehicleId: number) => {
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+
+        try {
+            const response = await deleteVehicle(vehicleId);
+            if (response.ok) {
+                setFormData(prevState => ({
+                    ...prevState,
+                    vehicles: prevState.vehicles.filter(vehicle => vehicle.id !== vehicleId)
+                }));
+                setSuccess("Véhicule supprimé avec succès.");
+                setTimeout(() => {
+                    setSuccess('');
+                }, 1000);
+            } else {
+                setError("Erreur lors de la suppression du véhicule.");
+                setTimeout(() => {
+                    setError('');
+                }, 1000);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression du véhicule:', error);
+            setError("Erreur lors de la suppression du véhicule.");
+            setTimeout(() => {
+                setError('');
+            }, 1000);
+        }
+    };
+
+    const handleUpdateVehiclePlaces = async (vehicleId: number, newPlaces: number) => {
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+
+        try {
+            const response = await updateVehicle(vehicleId, { places: newPlaces });
+            if (response.ok) {
+                // Update local state with the new vehicle data
+                setFormData(prevState => ({
+                    ...prevState,
+                    vehicles: prevState.vehicles.map(vehicle =>
+                        vehicle.id === vehicleId ? { ...vehicle, places: newPlaces } : vehicle
+                    )
+                }));
+                setSuccess("Nombre de places mis à jour avec succès.");
+                setTimeout(() => setSuccess(''), 1000);
+            } else {
+                setError("Erreur lors de la mise à jour du nombre de places.");
+                setTimeout(() => setError(''), 1000);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du nombre de places:', error);
+            setError("Erreur lors de la mise à jour du nombre de places.");
+            setTimeout(() => setError(''), 1000);
+        }
+    };
+
     if (!userData) {
         return (
             <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -371,13 +436,17 @@ export function MyProfile() {
                                     onChange={(e) => handleUpdateVehicle(e, index, 'places')}
                                 />
                             </div>
-                            <div className='flex items-center justify-center gap-1'>
+                            <div className='flex items-center justify-center gap-1'
+                                 onClick={() => handleUpdateVehiclePlaces(vehicle.id, vehicle.places)}
+                            >
                                 <div className='flex items-center pt-4'>
-                                    <FilePenIcon/>
+                                    <FilePenIcon className='cursor-pointer hover:stroke-blue-500'/>
                                 </div>
                                 <div className='flex items-center pt-4'>|</div>
-                                <div className=' flex items-center pt-4'>
-                                    <TrashIcon className="stroke-red-500"/>
+                                <div className=' flex items-center pt-4 '
+                                     onClick={() => handleDeleteVehicle(vehicle?.id)}
+                                >
+                                    <TrashIcon className="stroke-red-900 cursor-pointer hover:stroke-red-500"/>
                                 </div>
                             </div>
                         </div>
