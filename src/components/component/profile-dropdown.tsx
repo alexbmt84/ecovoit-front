@@ -27,6 +27,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import useUser from "@/hooks/useUser";
 import {useRouter} from "next/navigation";
+import {TripIcon} from "@/components/icons/TripIcon";
+import {MessageIcon} from "@/components/icons/MessageIcon";
+import {VehicleIcon} from "@/components/icons/VehicleIcon";
+import {LogOutIcon} from "@/components/icons/LogOutIcon";
+import {SettingsIcon} from "@/components/icons/SettingsIcon";
+import {User1Icon} from "@/components/icons/User1Icon";
 
 interface ProfileDropdownProps {
     onLogout: () => void;
@@ -42,10 +48,10 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
         router.push('./my-profile');
     };
     const redirectToMyTrips = () => {
-        router.push('./my-profil');
+        router.push('.//my-trips');
     };
     const redirectToMessages = () => {
-        router.push('./my-profil');
+        router.push('./messages');
     };
 
     return (
@@ -74,11 +80,11 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
                 </div>
                 <DropdownMenuSeparator/>
                 <DropdownMenuItem onClick={redirectToMyTrips} className={"cursor-pointer"}>
-                    <SettingsIcon className="h-4 w-4 mr-2"/>
+                    <VehicleIcon className="h-4 w-4 mr-2"/>
                     <span>Mes trajets</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={redirectToMessages} className={"cursor-pointer"}>
-                    <SettingsIcon className="h-4 w-4 mr-2"/>
+                    <MessageIcon className="h-4 w-4 mr-2"/>
                     <span>Mes messages</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={redirectToProfile} className={"cursor-pointer"}>
@@ -91,70 +97,5 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-    )
-}
-
-// @ts-ignore
-function LogOutIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-            <polyline points="16 17 21 12 16 7"/>
-            <line x1="21" x2="9" y1="12" y2="12"/>
-        </svg>
-    )
-}
-
-// @ts-ignore
-function SettingsIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path
-                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-            <circle cx="12" cy="12" r="3"/>
-        </svg>
-    )
-}
-
-// @ts-ignore
-function UserIcon(props) {
-    return (
-        <svg
-            {...props}
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-        </svg>
     )
 }

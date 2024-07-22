@@ -8,6 +8,9 @@ import { ProfileDropdown } from "@/components/component/profile-dropdown";
 import { useAuth } from "@/context/authContext";
 import { XIcon } from "@/components/icons/XIcon";
 import { MenuIcon } from "@/components/icons/MenuIcon";
+import { SearchIcon } from "@/components/icons/SearchIcon";
+import { PlusIcon } from "@/components/icons/PlusIcon";
+
 import { EcovoitLogo } from "@/components/logos/EcovoitLogo";
 
 // @ts-ignore
@@ -59,21 +62,14 @@ export function Navbar() {
                                         href={"/home"}
                                     >
                                         <CalendarDaysIcon className="h-5 w-5" />
-                                        Reserver un trajet
+                                        Réserver un trajet
                                     </Link>
                                     <Link
                                         className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                                        href={"/mytrips"}
+                                        href={"/home"}
                                     >
-                                        <TargetIcon className="h-5 w-5" />
-                                        Mes trajets
-                                    </Link>
-                                    <Link
-                                        className="flex items-center gap-2 text-sm font-medium transition-colors hover:text-gray-900 dark:hover:text-gray-50"
-                                        href="#"
-                                    >
-                                        <UsersIcon className="h-5 w-5" />
-                                        M&apos;e-co-voit
+                                        <PlusIcon className="h-5 w-5" />
+                                        Créer un trajet
                                     </Link>
 
                                     <div className="flex items-center gap-2">
@@ -100,28 +96,24 @@ export function Navbar() {
                     {isAuthenticated ? (
                         <>
                             <Link
-                                className="p-2 transition-colors rounded-md border border-cyan-700 bg-cyan-100 text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-cyan-500/50"
-                                href={"/home"}
+                                className="flex items-center p-2 transition-colors rounded-md border border-cyan-700 bg-cyan-100 text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-cyan-500/50"
+                                href="/home"
                             >
-                                Reserver un trajet
+                                <CalendarDaysIcon className="h-5 w-5 mr-2" />
+                                Réserver un trajet
                             </Link>
                             <Link
-                                className="p-2 transition-colors rounded-md border border-cyan-700 bg-cyan-100 text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-cyan-500/50"
-                                href={"/mytrips"}
+                                className="flex items-center p-2 transition-colors rounded-md border border-cyan-700 bg-cyan-100 text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-cyan-500/50"
+                                href="/create-trip"
                             >
-                                M&apos;e-co-voit
-                            </Link>
-                            <Link
-                                className="p-2 transition-colors rounded-md border border-cyan-700 bg-cyan-100 text-gray-500 font-bold hover:text-black dark:bg-black dark:text-gray-500 dark:hover:bg-cyan-500/50"
-                                href="#"
-                            >
-                                M&apos;e-courier
+                                <PlusIcon className="h-5 w-5 mr-2" />
+                                Créer un trajet
                             </Link>
                             <ProfileDropdown onLogout={logout} />
                         </>
                     ) : (
                         <Button onClick={redirectToLogin}
-                                className="transition-colors hover:text-gray-500 dark:hover:text-gray-50">Connexion</Button>
+                            className="transition-colors hover:text-gray-500 dark:hover:text-gray-50">Connexion</Button>
                     )}
                 </nav>
             </div>

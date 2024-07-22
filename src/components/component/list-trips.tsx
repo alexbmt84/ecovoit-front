@@ -134,7 +134,7 @@ export function ListTrips() {
                                         <div className={"flex flex-row \"text-sm text-gray-500 space-x-2"}>
                                             <UserIcon className="w-4 h-4 mt-1" />
                                             <ul>
-                                                <Link href={`/profil/${trip.users[0].id}`} legacyBehavior>
+                                                <Link href={`/profile/${trip.users[0].id}`} legacyBehavior>
                                                     <li  className="cursor-pointer">{trip.users[0].first_name} {trip.users[0].last_name}</li>
                                                 </Link>
                                             </ul>

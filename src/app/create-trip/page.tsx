@@ -5,6 +5,7 @@ import {SearchTripCard} from "@/components/component/search-trip-card";
 import {ListTrips} from "@/components/component/list-trips";
 import {useAuth} from "@/context/authContext";
 import {SpinnerWheel} from "@/components/component/spinner-wheel";
+import {CreateTrip} from "@/components/component/create-trip";
 
 const Home = () => {
 
@@ -30,13 +31,12 @@ const Home = () => {
 
                     <div className="max-w-2xl mx-auto text-center">
                         <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-50 mb-8 md:text-4xl">
-                            Bienvenue, {userData.first_name} {userData.last_name} !
+                            Créez votre trajet
                         </h1>
                     </div>
                 </div>
                 <div className={"flex flex-row gap-8 mt-12"}>
-                    <SearchTripCard/>
-                    <ListTrips/>
+                    <CreateTrip/>
                 </div>
 
             </main>
