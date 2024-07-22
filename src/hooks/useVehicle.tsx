@@ -24,7 +24,6 @@ const useVehicle = () => {
         }
 
         try {
-            console.log('Cest quoi ques ce qui y a ici =>', newVehicle)
             const response = await axios.post(`${apiUrl}/api/vehicles`, newVehicle, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -61,10 +60,7 @@ const useVehicle = () => {
             });
 
             if (response.status === 200) {
-                setVehicleData(prevVehicleData =>
-                    prevVehicleData ? { ...prevVehicleData, ...response.data } : null
-                );
-                return { ok: true };
+                return { ok: true, data: response.data };
             } else {
                 return { ok: false, error: 'Failed to update vehicle' };
             }
@@ -74,6 +70,7 @@ const useVehicle = () => {
             return { ok: false, error: 'Failed to update vehicle' };
         }
     };
+
 
     const deleteVehicle = async (vehicleId: number) => {
         const token = sessionStorage.getItem('access_token');

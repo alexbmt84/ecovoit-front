@@ -44,6 +44,7 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
     const avatarSizeClass = size === 'small' ? 'h-5 w-5' : 'h-10 w-10';
     const {userData} = useUser();
 
+
     const redirectToProfile = () => {
         router.push('./my-profile');
     };
@@ -52,6 +53,7 @@ export function ProfileDropdown({onLogout, size = 'normal'}: ProfileDropdownProp
     };
     const redirectToMessages = () => {
         router.push('./messages');
+
     };
 
     return (

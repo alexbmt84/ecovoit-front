@@ -148,19 +148,28 @@ export function MyProfile() {
                         }
                     }
 
-                    setSuccess("User data updated successfully.");
+                    setSuccess("Votre profil a bien été mis a jour.");
                     setTimeout(() => {
                         setSuccess('');
                     }, 1000);
                 } catch (error) {
                     console.error('Error updating user:', error);
-                    setError('Failed to update user');
+                    setError('Nous n\'avons pas reussit a mettre a  jour votre profil');
+                    setTimeout(() => {
+                        setError('');
+                    }, 1000);
                 }
             } else {
-                setError("No changes to update.");
+                setError("Pas de changement.");
+                setTimeout(() => {
+                    setError('');
+                }, 1000);
             }
         } else {
-            setError("User ID is missing.");
+            setError("Utilisateur non trouvé.");
+            setTimeout(() => {
+                setError('');
+            }, 1000);
         }
     };
 
@@ -178,16 +187,6 @@ export function MyProfile() {
                 const newVehicle = { ...formVehicleData, user_id: userData.id };
                 const addVehicleResponse = await addVehicle(newVehicle);
 
-                    setFormData(prevState => ({
-                        ...prevState,
-                        vehicles: [...prevState.vehicles, addVehicleResponse.data]
-                    }));
-                if (addVehicleResponse && addVehicleResponse.data) {
-                    setFormData(prevState => ({
-                        ...prevState,
-                        vehicles: [...prevState.vehicles, addVehicleResponse.data]
-                    }));
-
                     setFormVehicleData({
                         model: "",
                         immatriculation: "",
@@ -196,22 +195,91 @@ export function MyProfile() {
                         user_id: userData.id,
                     });
 
-                    setSuccess("Vehicle added successfully.");
+
                     setShowAddVehicleForm(false);
+                    window.location.reload();
+                    setSuccess("Vehicule ajouté avec succé.");
                     setTimeout(() => {
                         setSuccess('');
                     }, 1000);
 
-                } else {
-                    setError("Failed to add vehicle. Please try again.");
-                }
-
             } catch (error) {
-                console.error('Error adding vehicle:', error);
-                setError('Error adding vehicle');
+                console.error('Error to add vehicle:', error);
+                setError('Erreur d\'ajout du véhicule');
+                setTimeout(() => {
+                    setError('');
+                }, 1000);
             }
         } else {
-            setError("User ID is missing.");
+            setError("Utilisateur non trouvé.");
+            setTimeout(() => {
+                setError('');
+            }, 1000);
+        }
+    };
+
+    const handleDeleteVehicle = async (vehicleId: number) => {
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+
+        try {
+            const response = await deleteVehicle(vehicleId);
+            if (response.ok) {
+                setFormData(prevState => ({
+                    ...prevState,
+                    vehicles: prevState.vehicles.filter(vehicle => vehicle.id !== vehicleId)
+                }));
+                setSuccess("Véhicule supprimé avec succès.");
+                setTimeout(() => {
+                    setSuccess('');
+                }, 1000);
+            } else {
+                setError("Erreur lors de la suppression du véhicule.");
+                setTimeout(() => {
+                    setError('');
+                }, 1000);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la suppression du véhicule:', error);
+            setError("Erreur lors de la suppression du véhicule.");
+            setTimeout(() => {
+                setError('');
+            }, 1000);
+        }
+    };
+
+    const handleUpdateVehiclePlaces = async (vehicleId: number, newPlaces: number) => {
+        const token = sessionStorage.getItem('access_token');
+
+        if (!token) {
+            router.push('/login');
+            return;
+        }
+
+        try {
+            const response = await updateVehicle(vehicleId, { places: newPlaces });
+            if (response.ok) {
+                // Update local state with the new vehicle data
+                setFormData(prevState => ({
+                    ...prevState,
+                    vehicles: prevState.vehicles.map(vehicle =>
+                        vehicle.id === vehicleId ? { ...vehicle, places: newPlaces } : vehicle
+                    )
+                }));
+                setSuccess("Nombre de places mis à jour avec succès.");
+                setTimeout(() => setSuccess(''), 1000);
+            } else {
+                setError("Erreur lors de la mise à jour du nombre de places.");
+                setTimeout(() => setError(''), 1000);
+            }
+        } catch (error) {
+            console.error('Erreur lors de la mise à jour du nombre de places:', error);
+            setError("Erreur lors de la mise à jour du nombre de places.");
+            setTimeout(() => setError(''), 1000);
         }
     };
 
@@ -335,6 +403,7 @@ export function MyProfile() {
                                     placeholder='SIAN FKP 37'
                                     type="text"
                                     value={vehicle?.model}
+                                    disabled={true}
                                 />
                             </div>
                             <div className="flex-grow">
@@ -348,6 +417,7 @@ export function MyProfile() {
                                     placeholder="YY-000-YY"
                                     type="text"
                                     value={vehicle?.immatriculation}
+                                    disabled={true}
                                 />
                             </div>
                             <div className="w-1/3">
@@ -366,13 +436,17 @@ export function MyProfile() {
                                     onChange={(e) => handleUpdateVehicle(e, index, 'places')}
                                 />
                             </div>
-                            <div className='flex items-center justify-center gap-1'>
+                            <div className='flex items-center justify-center gap-1'
+                                 onClick={() => handleUpdateVehiclePlaces(vehicle.id, vehicle.places)}
+                            >
                                 <div className='flex items-center pt-4'>
-                                    <FilePenIcon/>
+                                    <FilePenIcon className='cursor-pointer hover:stroke-blue-500'/>
                                 </div>
                                 <div className='flex items-center pt-4'>|</div>
-                                <div className=' flex items-center pt-4'>
-                                    <TrashIcon className="stroke-red-500"/>
+                                <div className=' flex items-center pt-4 '
+                                     onClick={() => handleDeleteVehicle(vehicle?.id)}
+                                >
+                                    <TrashIcon className="stroke-red-900 cursor-pointer hover:stroke-red-500"/>
                                 </div>
                             </div>
                         </div>
